@@ -59,6 +59,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Assets\PlayerController.cs" />
+    <Compile Include="Assets\SwordAttack.cs" />
     <Compile Include="Assets\Enemy.cs" />
     <Compile Include="Assets\Art\Pixel Art Top Down - Basic\Script\SpriteColorAnimation.cs" />
     <Compile Include="Assets\Art\Pixel Art Top Down - Basic\Script\CameraFollow.cs" />

@@ -10,7 +10,7 @@ public class PlayerController : MonoBehaviour
     Animator animator;
     SpriteRenderer spriteRenderer;
     Rigidbody2D rb;
-    //public SwordAttack swordAttack; //import script
+    public SwordAttack swordAttack; //import script
 
     Vector2 movementInput;
     public float moveSpeed = 1f;
@@ -99,37 +99,36 @@ public class PlayerController : MonoBehaviour
         movementInput = movementValue.Get<Vector2>();
     }
 
+    void OnFire()
+    {
+        //start "Sword Attack" animation for player
+        animator.SetTrigger("swordAttack");
+    }
+    public void SwordAttack()
+    {
+        LockMovement();
+        if (spriteRenderer.flipX == true)
+        {
+            swordAttack.AttackLeft();
+        }
+        else
+        {
+            swordAttack.AttackRight();
+        }
+    }
+    public void EndSwordAttack()
+    {
+        UnlockMovement();
+        swordAttack.StopAttack();
+    }
+    public void LockMovement()
+    {
+        print("Lock movement");
+        canMove = false;
+    }
+    public void UnlockMovement()
+    {
+        print("Unlock movement");
+        canMove = true;
+    }
 }
-
-//missing functions for attack script
-//void OnFire()
-//{
-//    animator.SetTrigger("swordAttack");
-//}
-//public void SwordAttack()
-//{
-//    LockMovement();
-//    if (spriteRenderer.flipX == true)
-//    {
-//        swordAttack.AttackLeft();
-//    }
-//    else
-//    {
-//        swordAttack.AttackRight();
-//    }
-//}
-//public void EndSwordAttack()
-//{
-//    UnlockMovement();
-//    swordAttack.StopAttack();
-//}
-//public void LockMovement()
-//{
-//    print("Lock movement");
-//    canMove = false;
-//}
-//public void UnlockMovement()
-//{
-//    print("Unlock movement");
-//    canMove = true;
-//}

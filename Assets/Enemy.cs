@@ -9,6 +9,7 @@ public class Enemy : MonoBehaviour
     {
         set
         {
+            print("health is changed");
             health = value;
             if (health <= 0)
             {
