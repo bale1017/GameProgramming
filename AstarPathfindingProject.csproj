@@ -90,8 +90,8 @@
     <Compile Include="Assets\AstarPathfindingProject\Utilities\ProceduralGridMover.cs" />
     <Compile Include="Assets\AstarPathfindingProject\Core\Misc\ArrayPool.cs" />
     <Compile Include="Assets\AstarPathfindingProject\Generators\Utilities\PointKDTree.cs" />
-    <Compile Include="Assets\AstarPathfindingProject\Modifiers\Modifiers.cs" />
     <Compile Include="Assets\AstarPathfindingProject\Utilities\ProfileHelper.cs" />
+    <Compile Include="Assets\AstarPathfindingProject\Modifiers\Modifiers.cs" />
     <Compile Include="Assets\AstarPathfindingProject\Generators\NodeClasses\PointNode.cs" />
     <Compile Include="Assets\AstarPathfindingProject\PackageTools\EnumFlagAttribute.cs" />
     <Compile Include="Assets\AstarPathfindingProject\Generators\Utilities\BBTree.cs" />
@@ -164,8 +164,8 @@
     <Compile Include="Assets\AstarPathfindingProject\Utilities\Funnel.cs" />
     <Compile Include="Assets\AstarPathfindingProject\Modifiers\StartEndModifier.cs" />
     <Compile Include="Assets\AstarPathfindingProject\Utilities\AstarChecksum.cs" />
-    <Compile Include="Assets\AstarPathfindingProject\Core\Misc\WorkItemProcessor.cs" />
     <Compile Include="Assets\AstarPathfindingProject\Core\AI\Seeker.cs" />
+    <Compile Include="Assets\AstarPathfindingProject\Core\Misc\WorkItemProcessor.cs" />
     <Compile Include="Assets\AstarPathfindingProject\Core\Misc\NodeLink2.cs" />
     <Compile Include="Assets\AstarPathfindingProject\Legacy\Editor\LegacyAIPathEditor.cs" />
   </ItemGroup>
@@ -461,11 +461,11 @@
     <Reference Include="Unity.VisualScripting.TextureAssets">
       <HintPath>Library\PackageCache\com.unity.visualscripting@1.8.0\Editor\VisualScripting.Core\EditorAssetResources\Unity.VisualScripting.TextureAssets.dll</HintPath>
     </Reference>
-    <Reference Include="unityplastic">
-      <HintPath>Library\PackageCache\com.unity.collab-proxy@2.0.1\Lib\Editor\PlasticSCM\unityplastic.dll</HintPath>
-    </Reference>
     <Reference Include="Pathfinding.Ionic.Zip.Reduced">
       <HintPath>Assets\AstarPathfindingProject\Plugins\DotNetZip\Pathfinding.Ionic.Zip.Reduced.dll</HintPath>
+    </Reference>
+    <Reference Include="unityplastic">
+      <HintPath>Library\PackageCache\com.unity.collab-proxy@2.0.1\Lib\Editor\PlasticSCM\unityplastic.dll</HintPath>
     </Reference>
     <Reference Include="netstandard">
       <HintPath>C:\Program Files\Unity\Hub\Editor\2022.2.14f1\Editor\Data\NetStandard\ref\2.1.0\netstandard.dll</HintPath>

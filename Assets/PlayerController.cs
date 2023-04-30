@@ -10,6 +10,7 @@ public class PlayerController : MonoBehaviour
     SpriteRenderer spriteRenderer;
     Rigidbody2D rb;
     public SwordAttack swordAttack; //import script
+    public Health health;
 
     Vector2 movementInput;
     public float moveSpeed = 1f;
@@ -17,6 +18,7 @@ public class PlayerController : MonoBehaviour
     public ContactFilter2D movementFilter;
     List<RaycastHit2D> castCollisions = new List<RaycastHit2D>();
     bool canMove = true;
+
 
     public static PlayerController Instance { get; private set; }
 
@@ -27,6 +29,7 @@ public class PlayerController : MonoBehaviour
         animator = GetComponent<Animator>();
         spriteRenderer = GetComponent<SpriteRenderer>();
         Instance = this;
+        health = new Health(20, Defeated);
     }
 
     private void FixedUpdate()
@@ -134,8 +137,19 @@ public class PlayerController : MonoBehaviour
         canMove = true;
     }
 
+    public void Defeated()
+    {
+        animator.SetTrigger("defeated");
+    }
+
+    public void PlayerDefeated()
+    { // called from inside "death"-animation
+        //TODO implement logic for player death
+        //Destroy(gameObject);
+    }
+
     public Vector3 GetPosition() 
     {
-        return rb.position; //implicit conversion from Vector2 to Vector3
+        return transform.position;
     }
 }

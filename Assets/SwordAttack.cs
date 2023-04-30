@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class SwordAttack : MonoBehaviour
@@ -36,13 +34,13 @@ public class SwordAttack : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if (collision.tag == "EnemyController")
+        if (collision.tag == "Enemy")
         {
             //Deal damage to enemy
             EnemyController enemy = collision.GetComponent<EnemyController>();
             if (enemy != null)
             {
-                enemy.Health -= damage;
+                enemy.health.ReduceHealth(damage);
             }
         }
     }
