@@ -6409,9 +6409,24 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2351894445467350366, guid: ac8a5a8d72e441f44953033b88e8b60e,
         type: 3}
+      propertyPath: speed
+      value: 0.4
+      objectReference: {fileID: 0}
+    - target: {fileID: 2351894445467350366, guid: ac8a5a8d72e441f44953033b88e8b60e,
+        type: 3}
+      propertyPath: targetRange
+      value: 1.25
+      objectReference: {fileID: 0}
+    - target: {fileID: 2351894445467350366, guid: ac8a5a8d72e441f44953033b88e8b60e,
+        type: 3}
       propertyPath: targetPosition
       value: 
       objectReference: {fileID: 2140641646}
+    - target: {fileID: 2351894445467350366, guid: ac8a5a8d72e441f44953033b88e8b60e,
+        type: 3}
+      propertyPath: reachedEndOfPath
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 7407949557343737041, guid: ac8a5a8d72e441f44953033b88e8b60e,
         type: 3}
       propertyPath: m_RootOrder

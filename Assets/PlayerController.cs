@@ -6,7 +6,6 @@ using UnityEngine.InputSystem;
 
 public class PlayerController : MonoBehaviour
 {
-
     Animator animator;
     SpriteRenderer spriteRenderer;
     Rigidbody2D rb;
@@ -19,12 +18,15 @@ public class PlayerController : MonoBehaviour
     List<RaycastHit2D> castCollisions = new List<RaycastHit2D>();
     bool canMove = true;
 
+    public static PlayerController Instance { get; private set; }
+
     // Start is called before the first frame update
     void Start()
     {
         rb = GetComponent<Rigidbody2D>();
         animator = GetComponent<Animator>();
         spriteRenderer = GetComponent<SpriteRenderer>();
+        Instance = this;
     }
 
     private void FixedUpdate()
@@ -130,5 +132,10 @@ public class PlayerController : MonoBehaviour
     {
         print("Unlock movement");
         canMove = true;
+    }
+
+    public Vector3 GetPosition() 
+    {
+        return rb.position; //implicit conversion from Vector2 to Vector3
     }
 }
