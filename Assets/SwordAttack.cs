@@ -36,10 +36,10 @@ public class SwordAttack : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if (collision.tag == "Enemy")
+        if (collision.tag == "EnemyController")
         {
             //Deal damage to enemy
-            Enemy enemy = collision.GetComponent<Enemy>();
+            EnemyController enemy = collision.GetComponent<EnemyController>();
             if (enemy != null)
             {
                 enemy.Health -= damage;
