@@ -20,6 +20,8 @@ public class EnemyController : MonoBehaviour
     public float chaseRange = 1;
     public float attackRange = 0.15F;
     public float damage = 1;
+    private float nextAttackTime;
+    public float attackRate = 0.05F; 
 
     // values for a* algorithm
     public Transform targetPosition;
@@ -29,6 +31,7 @@ public class EnemyController : MonoBehaviour
 
     public float distanceOffset = 2;
 
+    public BatAttack attack;
     private Movement mv;
     public Health health;
 
@@ -50,37 +53,26 @@ public class EnemyController : MonoBehaviour
         {
             default:
             case State.Idle:
-                Debug.Log("Bat in idle state");
                 //animator.SetBool("isMoving", false);
                 if (Vector3.Distance(transform.position, PlayerController.Instance.GetPosition()) < chaseRange)
                 {
-                    if (Vector3.Distance(transform.position, PlayerController.Instance.GetPosition()) < attackRange)
-                    {
-                        //Player within attack range
-                        state = State.AttackTarget;
-                    } else
-                    {
-                        //Player within target range
-                        state = State.ChaseTarget;
-                    }
+                    //Player within target range
+                    state = State.ChaseTarget;
                 }
                 break;
 
             case State.AttackTarget:
-                Debug.Log("Bat in attack state");
-                if (Vector3.Distance(transform.position, PlayerController.Instance.GetPosition()) < attackRange)
+                //Player within attack range
+                if (Time.time > nextAttackTime)
                 {
-                    //Player within attack range
                     animator.SetTrigger("isAttacking");
-                }  else
-                {
-                    //Player outside of target range
-                    state = State.Idle;
+                    //animator.SetBool("test", true);
+                    nextAttackTime = Time.time + attackRate;
+                    state = State.ChaseTarget;
                 }
                 break;
 
             case State.ChaseTarget:
-                Debug.Log("Bat in chase state");
                 Vector3 dir = mv.Move(transform.position, targetPosition.position);
                 if (dir != Vector3.zero)
                 {
@@ -94,10 +86,15 @@ public class EnemyController : MonoBehaviour
                         spriteRenderer.flipX = false;
                     }
                 }
+
                 // Move the bat
                 transform.position += dir * Time.deltaTime;
 
-                if (Vector3.Distance(transform.position, PlayerController.Instance.GetPosition()) + distanceOffset > chaseRange)
+                if (Vector3.Distance(transform.position, PlayerController.Instance.GetPosition()) < attackRange)
+                {
+                    //Player inside attack range
+                    state = State.AttackTarget;
+                } else if (Vector3.Distance(transform.position, PlayerController.Instance.GetPosition()) + distanceOffset > chaseRange)
                 {
                     //Player outside of target range
                     state = State.Idle;
@@ -109,31 +106,29 @@ public class EnemyController : MonoBehaviour
 
     public void Attack()
     {
+        Debug.Log("Bat attacks");
         mv.LockMovement();
+        if (spriteRenderer.flipX == true)
+        {
+            attack.AttackLeft();
+        }
+        else
+        {
+            attack.AttackRight();
+        }
     }
 
     public void EndAttack()
     {
         mv.UnlockMovement();
-    }
-
-    private void OnTriggerEnter2D(Collider2D collision)
-    {
-        if (collision.tag == "Player")
-        {
-            //Deal damage to player
-            PlayerController player = collision.GetComponent<PlayerController>();
-            if (player != null)
-            {
-                player.health.ReduceHealth(damage);
-            }
-        }
+        attack.StopAttack();
     }
 
     public void Defeated()
     {
         animator.SetTrigger("defeated");
     }
+
     public void RemoveEnemy()
     { // called from inside "death"-animation
         Destroy(gameObject);
