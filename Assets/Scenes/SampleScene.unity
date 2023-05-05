@@ -184,7 +184,7 @@ Camera:
   far clip plane: 1000
   field of view: 60
   orthographic: 1
-  orthographic size: 1
+  orthographic size: 1.1
   m_Depth: -1
   m_CullingMask:
     serializedVersion: 2
@@ -399,6 +399,31 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: c6651f9a6c94d314e8385c03c8cb76be, type: 3}
+--- !u!1 &310445606 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 353534342817622301, guid: ac8a5a8d72e441f44953033b88e8b60e,
+    type: 3}
+  m_PrefabInstance: {fileID: 683593870163820584}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &310445613
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 310445606}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: aa6b8f658fbb0724380367b5942c8125, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  isRewinding: 0
+  KeyTrigger: r
+  UseInputTrigger: 1
+  animator: {fileID: 0}
+  RewindSeconds: 20
+  RewindSpeed: 2
+  PauseEnd: 0
 --- !u!1001 &686233279
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -6037,6 +6062,31 @@ Tilemap:
     e31: 0
     e32: 0
     e33: 1
+--- !u!1 &1846145127 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 7103884299703389329, guid: d14b75de5ccb59944ace846c2fba62a4,
+    type: 3}
+  m_PrefabInstance: {fileID: 4582205724375509577}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &1846145128
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1846145127}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: aa6b8f658fbb0724380367b5942c8125, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  isRewinding: 0
+  KeyTrigger: r
+  UseInputTrigger: 1
+  animator: {fileID: 0}
+  RewindSeconds: 20
+  RewindSpeed: 2
+  PauseEnd: 1
 --- !u!1001 &683593870163820584
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -6108,7 +6158,11 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 353534342817622301, guid: ac8a5a8d72e441f44953033b88e8b60e,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 310445613}
   m_SourcePrefab: {fileID: 100100000, guid: ac8a5a8d72e441f44953033b88e8b60e, type: 3}
 --- !u!1001 &4582205724375509577
 PrefabInstance:
@@ -6122,6 +6176,26 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Player
+      objectReference: {fileID: 0}
+    - target: {fileID: 8006137486223461078, guid: d14b75de5ccb59944ace846c2fba62a4,
+        type: 3}
+      propertyPath: m_Avatar
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 8006137486223461078, guid: d14b75de5ccb59944ace846c2fba62a4,
+        type: 3}
+      propertyPath: m_UpdateMode
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8006137486223461078, guid: d14b75de5ccb59944ace846c2fba62a4,
+        type: 3}
+      propertyPath: m_CullingMode
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8006137486223461078, guid: d14b75de5ccb59944ace846c2fba62a4,
+        type: 3}
+      propertyPath: m_ApplyRootMotion
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8303431347630341780, guid: d14b75de5ccb59944ace846c2fba62a4,
         type: 3}
@@ -6181,5 +6255,9 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 7103884299703389329, guid: d14b75de5ccb59944ace846c2fba62a4,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1846145128}
   m_SourcePrefab: {fileID: 100100000, guid: d14b75de5ccb59944ace846c2fba62a4, type: 3}
