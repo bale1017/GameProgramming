@@ -1,30 +1,28 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class SwordAttack : MonoBehaviour
 {
     public float damage = 3;
-    public BoxCollider2D swordCollider;
+    BoxCollider2D swordCollider;
     Vector2 rightAttackOffset;
 
     // Start is called before the first frame update
     void Start()
     {
-        //swordCollider = GetComponent<BoxCollider2D>();
-        rightAttackOffset = transform.position;
+        swordCollider = GetComponent<BoxCollider2D>();
+        rightAttackOffset = transform.localPosition;
     }
 
     public void AttackRight()
     {
-        print("Attack right");
+        Debug.Log("Sword attack right");
         swordCollider.enabled = true;
         transform.localPosition = rightAttackOffset;
     }
 
     public void AttackLeft()
     {
-        print("Attack left");
+        Debug.Log("Sword attack left");
         swordCollider.enabled = true;
         transform.localPosition = new Vector3(rightAttackOffset.x * -1, rightAttackOffset.y);
     }
@@ -39,10 +37,10 @@ public class SwordAttack : MonoBehaviour
         if (collision.tag == "Enemy")
         {
             //Deal damage to enemy
-            Enemy enemy = collision.GetComponent<Enemy>();
+            EnemyController enemy = collision.GetComponent<EnemyController>();
             if (enemy != null)
             {
-                enemy.Health -= damage;
+                enemy.health.ReduceHealth(damage);
             }
         }
     }
