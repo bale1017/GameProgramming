@@ -73,6 +73,7 @@
     <Compile Include="Assets\Skripts\LevelLoader.cs" />
     <Compile Include="Assets\Movement.cs" />
     <Compile Include="Assets\Art\Pixel Art Top Down - Basic\Script\TopDownCharacterController.cs" />
+    <Compile Include="Assets\SpikeTrap.cs" />
     <Compile Include="Assets\Skripts\LevelCounter.cs" />
     <Compile Include="Assets\Skripts\MapGenerator.cs" />
     <Compile Include="Assets\Skripts\Room.cs" />
