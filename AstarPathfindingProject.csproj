@@ -110,8 +110,8 @@
     <Compile Include="Assets\AstarPathfindingProject\Utilities\DotNetReplacements.cs" />
     <Compile Include="Assets\AstarPathfindingProject\ExampleScenes\ExampleScripts\MineBotAnimation.cs" />
     <Compile Include="Assets\AstarPathfindingProject\Utilities\AstarProfiler.cs" />
-    <Compile Include="Assets\AstarPathfindingProject\Utilities\PathUtilities.cs" />
     <Compile Include="Assets\AstarPathfindingProject\Core\AI\TurnBasedAI.cs" />
+    <Compile Include="Assets\AstarPathfindingProject\Utilities\PathUtilities.cs" />
     <Compile Include="Assets\AstarPathfindingProject\Generators\PointGenerator.cs" />
     <Compile Include="Assets\AstarPathfindingProject\ExampleScenes\Example12_Procedural\ProceduralWorld.cs" />
     <Compile Include="Assets\AstarPathfindingProject\Legacy\LegacyAIPath.cs" />
