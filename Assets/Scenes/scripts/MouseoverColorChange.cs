@@ -22,4 +22,9 @@ public class Mouseover : MonoBehaviour
         TextMeshPro textmeshPro = GetComponent<TextMeshPro>();
         textmeshPro.color = new Color32(0, 0, 0, 255);
     }
+    public void Reset()
+    {
+        TextMeshPro textmeshPro = GetComponent<TextMeshPro>();
+        textmeshPro.color = new Color32(0, 0, 0, 255);
+    }
 }

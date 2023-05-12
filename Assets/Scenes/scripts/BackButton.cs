@@ -5,14 +5,16 @@ using UnityEngine.SceneManagement;
 
 public class BackButton : MonoBehaviour
 {
-    // Start is called before the first frame update
+    public GameObject MainMenu;
+    public GameObject OptionsMenu;
     void Start()
     {
-        
     }
     void OnMouseUp()
     {
-        SceneManager.LoadScene("Menu");
+        MainMenu.SetActive(true);
+        OptionsMenu.SetActive(false);
+        this.GetComponent<Mouseover>().Reset();
     }
     // Update is called once per frame
     void Update()
