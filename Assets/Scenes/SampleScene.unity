@@ -6413,12 +6413,37 @@ MonoBehaviour:
     pivotPointRoot: {fileID: 0}
     spreadOutCount: 1
   showGraphs: 1
+--- !u!1 &1336996963 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 7103884299703389329, guid: d14b75de5ccb59944ace846c2fba62a4,
+    type: 3}
+  m_PrefabInstance: {fileID: 4582205724375509577}
+  m_PrefabAsset: {fileID: 0}
 --- !u!4 &2140641646 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 8303431347630341780, guid: d14b75de5ccb59944ace846c2fba62a4,
     type: 3}
   m_PrefabInstance: {fileID: 4582205724375509577}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &2140641653
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1336996963}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: aa6b8f658fbb0724380367b5942c8125, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  isRewinding: 0
+  KeyTrigger: q
+  UseInputTrigger: 1
+  animator: {fileID: 0}
+  RewindSeconds: 60
+  RewindSpeed: 5
+  PauseEnd: 0
 --- !u!1001 &683593870163820584
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -6606,5 +6631,5 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 7103884299703389329, guid: d14b75de5ccb59944ace846c2fba62a4,
         type: 3}
       insertIndex: -1
-      addedObject: {fileID: 1846145128}
+      addedObject: {fileID: 2140641653}
   m_SourcePrefab: {fileID: 100100000, guid: d14b75de5ccb59944ace846c2fba62a4, type: 3}
