@@ -75,12 +75,12 @@ public class ReTime : MonoBehaviour {
 	}
 
 	void FixedUpdate(){
-		ChangeTimeScale (RewindSpeed);
 		//if true then run the rewind method, else record the events
-		if (isRewinding) {
-			Rewind ();
+		if (isRewinding)
+        {
+            ChangeTimeScale(RewindSpeed);
+            Rewind ();
 		}else{
-			Time.timeScale = 1f;
 			if(isFeeding)
 				Record ();
 		}
@@ -114,15 +114,24 @@ public class ReTime : MonoBehaviour {
 	}
 
 	void StartRewind(){
+		if (PauseMenu.Paused)
+		{
+			return;
+		}
+
 		isRewinding = true;
 		if(hasAnimator)
-			animator.enabled = false;
+			// animator.enabled = false;
 
 		if (hasRb)
 			GetComponent<Rigidbody> ().isKinematic = true;
 	}
 
 	void StopRewind(){
+		if (!isRewinding)
+		{
+			return;
+		}
 		Time.timeScale = 1;
 		isRewinding = false;
 		if(hasAnimator)
