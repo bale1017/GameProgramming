@@ -37,7 +37,7 @@ public class SwordAttack : MonoBehaviour
         if (collision.tag == "Enemy")
         {
             //Deal damage to enemy
-            EnemyController enemy = collision.GetComponent<EnemyController>();
+            BatController enemy = collision.GetComponent<BatController>();
             if (enemy != null)
             {
                 enemy.health.ReduceHealth(damage);

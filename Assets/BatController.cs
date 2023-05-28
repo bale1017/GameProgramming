@@ -5,7 +5,7 @@ using UnityEngine;
 using Pathfinding;
 using System;
 
-public class EnemyController : MonoBehaviour
+public class BatController : MonoBehaviour
 {
     private Seeker seeker;
     private Animator animator;
@@ -18,10 +18,10 @@ public class EnemyController : MonoBehaviour
     }
     private State state;
     public float chaseRange = 1;
-    public float attackRange = 0.15F;
+    public float attackRange = 0.1F;
     public float damage = 1;
     private float nextAttackTime;
-    public float attackRate = 0.05F; 
+    public float attackRate = 0.1F; 
 
     // values for a* algorithm
     public Transform targetPosition;
@@ -29,11 +29,14 @@ public class EnemyController : MonoBehaviour
     public float nextWaypointDistance = 0.2F;
     public float updatePathTime = 2;
 
+    public float timeUntilSleeping = 2;
+    private float sleepTime;
     public float distanceOffset = 2;
 
-    public BatAttack attack;
     private Movement mv;
     public Health health;
+
+    private CircleCollider2D attackCollider;
 
     public void Start()
     {
@@ -42,7 +45,9 @@ public class EnemyController : MonoBehaviour
         spriteRenderer = GetComponent<SpriteRenderer>();
 
         mv = new Movement(seeker, speed, nextWaypointDistance, updatePathTime);
-        health = new Health(3, Defeated);
+        health = new Health(3, ReceivedDamage, Defeated);
+
+        attackCollider = GetComponent<CircleCollider2D>();
 
         state = State.Idle;
     }
@@ -53,11 +58,16 @@ public class EnemyController : MonoBehaviour
         {
             default:
             case State.Idle:
-                //animator.SetBool("isMoving", false);
                 if (Vector3.Distance(transform.position, PlayerController.Instance.GetPosition()) < chaseRange)
                 {
                     //Player within target range
                     state = State.ChaseTarget;
+                } else
+                {
+                    if (Time.time > sleepTime)
+                    {
+                        animator.SetBool("isMoving", false);
+                    }
                 }
                 break;
 
@@ -66,7 +76,6 @@ public class EnemyController : MonoBehaviour
                 if (Time.time > nextAttackTime)
                 {
                     animator.SetTrigger("isAttacking");
-                    //animator.SetBool("test", true);
                     nextAttackTime = Time.time + attackRate;
                     state = State.ChaseTarget;
                 }
@@ -97,6 +106,7 @@ public class EnemyController : MonoBehaviour
                 } else if (Vector3.Distance(transform.position, PlayerController.Instance.GetPosition()) + distanceOffset > chaseRange)
                 {
                     //Player outside of target range
+                    sleepTime = Time.time + timeUntilSleeping;
                     state = State.Idle;
                 }
                 break;
@@ -104,33 +114,47 @@ public class EnemyController : MonoBehaviour
         
     }
 
+    // Called by 'bat_attack' animation
     public void Attack()
     {
-        Debug.Log("Bat attacks");
         mv.LockMovement();
-        if (spriteRenderer.flipX == true)
-        {
-            attack.AttackLeft();
-        }
-        else
-        {
-            attack.AttackRight();
-        }
+        attackCollider.enabled = true;
     }
 
+    // Called by 'bat_attack' animation
     public void EndAttack()
     {
         mv.UnlockMovement();
-        attack.StopAttack();
+        attackCollider.enabled = false;
     }
 
-    public void Defeated()
+    public void Defeated(float val)
     {
+        Debug.Log("Bat has been slayed");
         animator.SetTrigger("defeated");
+    }
+
+    public void ReceivedDamage(float val)
+    {
+        Debug.Log("Bat received " + val + " damage");
+        animator.SetTrigger("receivesDamage");
     }
 
     public void RemoveEnemy()
     { // called from inside "death"-animation
-        Destroy(gameObject);
+        //Destroy(gameObject);
+        gameObject.SetActive(false);
     }
+
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        Debug.Log("OnTriggerEnter2D was called");
+        if (collision.tag == "Player")
+        {
+            //Deal damage to player
+            PlayerController player = collision.GetComponent<PlayerController>();
+            player.health.ReduceHealth(damage);
+        }
+    }
+
 }

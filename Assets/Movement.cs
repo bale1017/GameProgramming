@@ -22,7 +22,7 @@ public class Movement
 
     public void OnPathComplete(Path p)
     {
-        Debug.Log("A path was calculated. Did it fail with an error? " + p.error);
+        //Debug.Log("A path was calculated. Did it fail with an error? " + p.error);
 
         if (!p.error)
         {
@@ -94,13 +94,11 @@ public class Movement
 
     public void LockMovement()
     {
-        Debug.Log("Lock movement");
         canMove = false;
     }
 
     public void UnlockMovement()
     {
-        Debug.Log("Unlock movement");
         canMove = true;
     }
 
