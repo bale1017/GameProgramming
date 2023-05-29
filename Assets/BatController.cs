@@ -33,7 +33,7 @@ public class BatController : MonoBehaviour
     private float sleepTime;
     public float distanceOffset = 2;
 
-    private Movement mv;
+    private Movement movement;
     public Health health;
 
     private CircleCollider2D attackCollider;
@@ -43,12 +43,12 @@ public class BatController : MonoBehaviour
         seeker = GetComponent<Seeker>();
         animator = GetComponent<Animator>();
         spriteRenderer = GetComponent<SpriteRenderer>();
-
-        mv = new Movement(seeker, speed, nextWaypointDistance, updatePathTime);
-        health = new Health(3, ReceivedDamage, Defeated);
-
         attackCollider = GetComponent<CircleCollider2D>();
 
+        movement = new Movement(seeker, speed, nextWaypointDistance, updatePathTime);
+        health = new Health(3, ReceivedDamage, Defeated);
+
+        movement.PreCalcPath(transform.position, targetPosition.position);
         state = State.Idle;
     }
 
@@ -82,7 +82,7 @@ public class BatController : MonoBehaviour
                 break;
 
             case State.ChaseTarget:
-                Vector3 dir = mv.Move(transform.position, targetPosition.position);
+                Vector3 dir = movement.Move(transform.position, targetPosition.position);
                 if (dir != Vector3.zero)
                 {
                     animator.SetBool("isMoving", true);
@@ -114,17 +114,17 @@ public class BatController : MonoBehaviour
         
     }
 
-    // Called by 'bat_attack' animation
+    // Called at begin of 'bat_attack' animation
     public void Attack()
     {
-        mv.LockMovement();
+        movement.LockMovement();
         attackCollider.enabled = true;
     }
 
-    // Called by 'bat_attack' animation
+    // Called at end of 'bat_attack' animation
     public void EndAttack()
     {
-        mv.UnlockMovement();
+        movement.UnlockMovement();
         attackCollider.enabled = false;
     }
 

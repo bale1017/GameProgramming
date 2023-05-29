@@ -132,7 +132,7 @@ MonoBehaviour:
   attackRange: 0.1
   damage: 1
   attackRate: 1
-  targetPosition: {fileID: 0}
+  target: {fileID: 8303431347630341780, guid: d14b75de5ccb59944ace846c2fba62a4, type: 3}
   speed: 0.4
   nextWaypointDistance: 0.2
   updatePathTime: 2
