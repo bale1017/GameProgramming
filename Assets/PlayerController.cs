@@ -1,10 +1,11 @@
+using BasePatterns;
 using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-public class PlayerController : MonoBehaviour
+public class PlayerController : MonoBehaviour, IController
 {
     Animator animator;
     SpriteRenderer spriteRenderer;
@@ -22,6 +23,7 @@ public class PlayerController : MonoBehaviour
     public float healthAmount = 25;
 
     public static PlayerController Instance { get; private set; }
+    Health IController.health { get => health; }
 
     // Start is called before the first frame update
     void Start()

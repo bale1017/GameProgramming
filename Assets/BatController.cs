@@ -4,8 +4,9 @@ using UnityEngine;
 // This line should always be present at the top of scripts which use pathfinding
 using Pathfinding;
 using System;
+using BasePatterns;
 
-public class BatController : MonoBehaviour
+public class BatController : MonoBehaviour, IController
 {
     private Seeker seeker;
     private Animator animator;
@@ -17,6 +18,7 @@ public class BatController : MonoBehaviour
         AttackTarget
     }
     private State state;
+    public float initialHealth = 3;
     public float chaseRange = 1;
     public float attackRange = 0.1F;
     public float damage = 1;
@@ -38,6 +40,8 @@ public class BatController : MonoBehaviour
 
     private CircleCollider2D attackCollider;
 
+    Health IController.health { get => health; }
+
     public void Start()
     {
         seeker = GetComponent<Seeker>();
@@ -46,7 +50,7 @@ public class BatController : MonoBehaviour
         attackCollider = GetComponent<CircleCollider2D>();
 
         movement = new Movement(seeker, speed, nextWaypointDistance, updatePathTime);
-        health = new Health(3, ReceivedDamage, Defeated);
+        health = new Health(initialHealth, ReceivedDamage, Defeated);
 
         movement.PreCalcPath(transform.position, targetPosition.position);
         state = State.Idle;

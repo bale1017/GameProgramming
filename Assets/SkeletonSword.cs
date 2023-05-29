@@ -1,9 +1,8 @@
-using BasePatterns;
 using UnityEngine;
 
-public class SwordAttack : MonoBehaviour
+public class SkeletonSword : MonoBehaviour
 {
-    public float damage = 3;
+    public float damage = 2;
     BoxCollider2D swordCollider;
     Vector2 rightAttackOffset;
 
@@ -16,16 +15,14 @@ public class SwordAttack : MonoBehaviour
 
     public void AttackRight()
     {
-        Debug.Log("Sword attack right");
-        swordCollider.enabled = true;
         transform.localPosition = rightAttackOffset;
+        swordCollider.enabled = true;
     }
 
     public void AttackLeft()
     {
-        Debug.Log("Sword attack left");
-        swordCollider.enabled = true;
         transform.localPosition = new Vector3(rightAttackOffset.x * -1, rightAttackOffset.y);
+        swordCollider.enabled = true;
     }
 
     public void StopAttack()
@@ -35,15 +32,12 @@ public class SwordAttack : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if (collision.tag == "Enemy")
+        Debug.Log("OnTriggerEnter2D of Skeleton called");
+        if (collision.tag == "Player")
         {
-            //Deal damage to enemy
-            IController enemy = collision.GetComponent<IController>();
-            if (enemy != null)
-            {
-                enemy.health.ReduceHealth(damage);
-            }
+            //Deal damage to player
+            PlayerController player = collision.GetComponent<PlayerController>();
+            player.health.ReduceHealth(damage);
         }
     }
 }
-

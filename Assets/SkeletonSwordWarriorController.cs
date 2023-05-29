@@ -2,21 +2,22 @@ using Pathfinding;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using BehaviourPatterns;
+using BasePatterns;
 
-public class SkeletonSwordWarriorController : MonoBehaviour
+public class SkeletonSwordWarriorController : MonoBehaviour, IController
 {
     private Seeker seeker;
     private Animator animator;
     private SpriteRenderer spriteRenderer;
-    private BoxCollider2D attackCollider;
 
     private EnemyState state;
+    public float initialHealth = 10;
     public float chaseRange = 1;
     public float attackRange = 0.1F;
     public float damage = 5;
     private float nextAttackTime;
     public float attackRate = 0.1F;
+    private bool chooseAttackA = true;
 
     // values for a* algorithm
     public Transform targetPosition;
@@ -36,16 +37,18 @@ public class SkeletonSwordWarriorController : MonoBehaviour
 
     private Movement movement;
     public Health health;
+    public SkeletonSword skeletonSword;
+
+    Health IController.health { get => health; }
 
     public void Start()
     {
         seeker = GetComponent<Seeker>();
         animator = GetComponent<Animator>();
         spriteRenderer = GetComponent<SpriteRenderer>();
-        attackCollider = GetComponent<BoxCollider2D>();
 
         movement = new Movement(seeker, speed, nextWaypointDistance, updatePathTime);
-        health = new Health(3, ReceivedDamage, Defeated);
+        health = new Health(initialHealth, ReceivedDamage, Defeated);
 
         startPosition = transform.position;
         randNextDestination = Movement.GetRandNextDestination(startPosition, roamingOffset);
@@ -107,10 +110,10 @@ public class SkeletonSwordWarriorController : MonoBehaviour
             state = EnemyState.ChaseTarget;
         } else
         {
-            Debug.Log(transform.position.ToString("F8"));
-            Debug.Log(randNextDestination.ToString("F8"));
-            Debug.Log(transform.position == randNextDestination);
-            Debug.Log(Movement.Equal(transform.position, randNextDestination));
+            //Debug.Log(transform.position.ToString("F8"));
+            //Debug.Log(randNextDestination.ToString("F8"));
+            //Debug.Log(transform.position == randNextDestination);
+            //Debug.Log(Movement.Equal(transform.position, randNextDestination));
 
             movement.speed = 0.2F;
             animator.SetFloat("movementSpeed", 0.4F);
@@ -149,28 +152,36 @@ public class SkeletonSwordWarriorController : MonoBehaviour
         //Player within attack range
         if (Time.time > nextAttackTime)
         {
-            if (Random.value >= 0.5)
+            if (chooseAttackA)
             {
                 //use attack A
                 animator.SetTrigger("isAttackingA");
+                chooseAttackA = false;
             }
             else
             {
                 //use attack B
                 animator.SetTrigger("isAttackingB");
+                chooseAttackA = true;
             }
 
             nextAttackTime = Time.time + attackRate;
-            state = EnemyState.ChaseTarget;
+
+            if (Vector3.Distance(transform.position, PlayerController.Instance.GetPosition()) + distanceOffset > chaseRange)
+            {
+                //Player outside of target range
+                returnTime = Time.time + timeUntilReturning;
+                state = EnemyState.Idle;
+            }
         }
     }
 
     private void Move(Vector3 dir)
     {
-        Debug.Log(dir.ToString("F8"));
+        //Debug.Log(dir.ToString("F8"));
         if (!Movement.Equal(dir, Vector3.zero))
         {
-            Debug.Log("Try to move");
+            //Debug.Log("Try to move");
             animator.SetBool("isMoving", true);
             if (dir.x <= 0)
             {
@@ -189,20 +200,26 @@ public class SkeletonSwordWarriorController : MonoBehaviour
     public void Attack()
     {
         movement.LockMovement();
-        attackCollider.enabled = true;
+        if (spriteRenderer.flipX == true)
+        {
+            skeletonSword.AttackLeft();
+        } else
+        {
+            skeletonSword.AttackRight();
+        }
     }
 
     // Called at end of attack animation
     public void EndAttack()
     {
         movement.UnlockMovement();
-        attackCollider.enabled = false;
+        skeletonSword.StopAttack();
     }
 
     public void Defeated(float val)
     {
         Debug.Log("Skeleton Sword Warrior has been slayed");
-        animator.SetTrigger("defeated");
+        animator.SetBool("defeated", true);
     }
 
     public void ReceivedDamage(float val)
@@ -215,16 +232,5 @@ public class SkeletonSwordWarriorController : MonoBehaviour
     { // called from inside "death"-animation
         //Destroy(gameObject);
         gameObject.SetActive(false);
-    }
-
-    private void OnTriggerEnter2D(Collider2D collision)
-    {
-        Debug.Log("OnTriggerEnter2D was called");
-        if (collision.tag == "Player")
-        {
-            //Deal damage to player
-            PlayerController player = collision.GetComponent<PlayerController>();
-            player.health.ReduceHealth(damage);
-        }
     }
 }

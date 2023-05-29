@@ -1,4 +1,4 @@
-﻿namespace BehaviourPatterns
+﻿namespace BasePatterns
 {
     public enum EnemyState
     {
@@ -6,5 +6,10 @@
         Roaming,
         ChaseTarget,
         AttackTarget
+    }
+
+    interface IController
+    {
+        public Health health { get; }
     }
 }

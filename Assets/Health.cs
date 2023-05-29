@@ -1,4 +1,4 @@
-using System;
+using UnityEngine;
 
 public delegate void OnReceivingDamage(float val);
 public delegate void OnHealthBelowZero(float val);
@@ -23,6 +23,7 @@ public class Health
 
     public void ReduceHealth(float val)
     {
+        Debug.Log("Reduce Health by " + val);
         if (health - val > 0)
         {
             health -= val;
