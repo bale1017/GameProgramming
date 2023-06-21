@@ -9,53 +9,50 @@ public class GenerateLevel : MonoBehaviour
     public int level;
     public GameObject[] rooms;
     public GameObject[] interiors;
-    private int roomAmount;
 
-    public void GenerateLayout()
+    public void GenerateLayout(GameObject[] rooms, GameObject[] interiors)
     {
+        int roomAmount;
+        int roomLayer;
         switch(level)
         {
             case 1:
             case 2:
-                // first room design
-                /*
-                 * Choose Room amount
-                 * Choose Layout Cross, Straight, Corner etc.
-                 * Generate each Room
-                 * Instantiate according to layout
-                 * create Connections
-                 */
+                roomLayer = 0;
                 roomAmount = Random.Range(3, 6);
-                List<(int, int)> roomList = new List<(int, int)>();
-                for (int i = 0; i < roomAmount; i++)
-                {
-                    roomList.Add((0, Random.Range(0, interiors.Length-1)));
-                }
-                List<(int, int)> roomLayouts = ChooseLayout();
-
-                for (int i = 0; i < roomList.Count; i++)
-                {
-                    int roomType = roomList[i].Item1;
-                    int roomInterior = roomList[i].Item2;
-                    int x = roomLayouts[i].Item1;
-                    int y = roomLayouts[i].Item2;
-                    Instantiate(rooms[roomType], new Vector2(x, y), Quaternion.identity);
-                    Instantiate(interiors[roomInterior], new Vector2(x, y), Quaternion.identity);
-                }
+                
                 break;
             case 3:
             case 4:
-                // second room design
+                roomAmount = Random.Range(4, 8);
+                roomLayer = 1;
                 break;
             default:
-                // third room desing from level 5 and onwards
+                roomAmount = Random.Range(6, 9);
+                roomLayer = 2;
                 break;
 
+        }
+        List<(int, int)> roomList = new List<(int, int)>();
+        for (int i = 0; i <= roomAmount; i++)
+        {
+            roomList.Add((roomLayer, Random.Range(0, interiors.Length - 1)));
+        }
+        List<(int, int)> roomLayouts = ChooseLayout(roomAmount);
+
+        for (int i = 0; i < roomList.Count; i++)
+        {
+            int roomType = roomList[i].Item1;
+            int roomInterior = roomList[i].Item2;
+            int x = roomLayouts[i].Item1;
+            int y = roomLayouts[i].Item2;
+            Instantiate(rooms[roomType], new Vector2(x, y), Quaternion.identity);
+            Instantiate(interiors[roomInterior], new Vector2(x, y), Quaternion.identity);
         }
     }
 
 
-    private List<(int,int)> ChooseLayout()
+    private List<(int,int)> ChooseLayout(int roomAmount)
     {
         List<(int, int)> placedRooms = new()
         {
@@ -69,7 +66,7 @@ public class GenerateLevel : MonoBehaviour
             (int, int) current = placedRooms[i];
             (int, int) newRoom = (0, 0);
             // nord, ost, süd, west
-            int adjacentRooms = Random.Range(1, 9);
+            int adjacentRooms = Random.Range(1, 16);
             for (int j = 0; j < 4; j++)
             {
                 if ((adjacentRooms >> j & 1) == 1 && availableRooms > 0)
