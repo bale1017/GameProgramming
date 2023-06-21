@@ -41,6 +41,11 @@ public class SkeletonSwordWarriorController : MonoBehaviour, IController
     public Health health;
     public SkeletonSword skeletonSword;
 
+    public AudioSource TakeDamage;
+    public AudioSource AttackFast;
+    public AudioSource AttackSlow;
+    public AudioSource Death;
+
     Health IController.health { get => health; }
 
     public void Start()
@@ -61,8 +66,8 @@ public class SkeletonSwordWarriorController : MonoBehaviour, IController
 
     public void FixedUpdate()
     {
-        //if (!Game.current.IsRunning()) { 
-            if (!Game.IsRewinding && !PauseMenu.Paused)
+        if (Game.current.IsRunning()) { 
+            if (!Game.IsRewinding)
             {
                 switch (state)
                 {
@@ -84,7 +89,7 @@ public class SkeletonSwordWarriorController : MonoBehaviour, IController
                         break;
                 }
             }
-        //}
+        }
     }
 
     private void Idle() 
@@ -161,12 +166,14 @@ public class SkeletonSwordWarriorController : MonoBehaviour, IController
             if (chooseAttackA)
             {
                 //use attack A
+                AttackFast.Play();
                 animator.SetTrigger("isAttackingA");
                 chooseAttackA = false;
             }
             else
             {
                 //use attack B
+                AttackSlow.Play();
                 animator.SetTrigger("isAttackingB");
                 chooseAttackA = true;
             }
@@ -228,12 +235,14 @@ public class SkeletonSwordWarriorController : MonoBehaviour, IController
     public void Defeated(float val)
     {
         Debug.Log("Skeleton Sword Warrior has been slayed!");
+        Death.Play();
         animator.SetBool("defeated", true);
     }
 
     public void ReceivedDamage(float val)
     {
         Debug.Log("Skeleton Sword Warrior received " + val + " damage!");
+        TakeDamage.Play();
         animator.SetTrigger("receivesDamage");
     }
 

@@ -15,7 +15,7 @@ public class BossController : MonoBehaviour, IController
     private EnemyState state;
     public float initialHealth = 10;
     public float chaseRange = 1;
-    public float attackRange = 0.1F;
+    public float attackRange = 0.5F;
     public float damage = 7;
     public float attackRate = 0.1F;
 
@@ -50,8 +50,8 @@ public class BossController : MonoBehaviour, IController
     // Update is called once per frame
     void FixedUpdate()
     {
-        //if (!Game.current.IsRunning()) { 
-            if (!Game.IsRewinding && !PauseMenu.Paused)
+        if (Game.current.IsRunning()) { 
+            if (!Game.IsRewinding)
             {
                 switch (state)
                 {
@@ -69,7 +69,7 @@ public class BossController : MonoBehaviour, IController
                         break;
                 }
             }
-        //}
+        }
     }
 
     private void Idle()
@@ -148,7 +148,8 @@ public class BossController : MonoBehaviour, IController
 
         animator.SetBool("rewind", true);
 
-
+        //TODO add rewinding logic
+        isFirstPhase = false;
 
         animator.SetBool("rewind", false);
 

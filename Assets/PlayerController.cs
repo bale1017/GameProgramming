@@ -41,8 +41,8 @@ public class PlayerController : MonoBehaviour, IController
 
     private void FixedUpdate()
     {
-        //if (!Game.current.IsRunning()) { 
-            if (canMove && !Game.IsRewinding && !PauseMenu.Paused)
+        if (Game.current.IsRunning()) { 
+            if (canMove && !Game.IsRewinding)
             {
                 //If movement input is not 0, try to move
                 if (movementInput != Vector2.zero)
@@ -75,8 +75,8 @@ public class PlayerController : MonoBehaviour, IController
                     spriteRenderer.flipX = false;
                 }
             }
-        //}
     }
+}
 
     private bool TryMove(Vector2 direction)
     {

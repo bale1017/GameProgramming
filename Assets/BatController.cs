@@ -56,8 +56,9 @@ public class BatController : MonoBehaviour, IController
 
     public void FixedUpdate()
     {
-        //if (!Game.current.IsRunning()) { 
-            if (!Game.IsRewinding && !PauseMenu.Paused)
+        if (Game.current.IsRunning())
+        {
+            if (!Game.IsRewinding)
             {
                 switch (state)
                 {
@@ -75,7 +76,7 @@ public class BatController : MonoBehaviour, IController
                         break;
                 }
             }
-        //}
+        }
     }
 
     private void Idle()
