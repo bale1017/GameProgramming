@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 2771699262767419328}
   - component: {fileID: 1066617242273878461}
   m_Layer: 0
-  m_Name: Treasure Room
+  m_Name: Treasure Room 1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
