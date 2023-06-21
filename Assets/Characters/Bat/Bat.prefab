@@ -128,11 +128,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d84d894e43e43b447be9443a31683476, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  initialHealth: 3
   chaseRange: 1
   attackRange: 0.1
   damage: 1
   attackRate: 1
-  target: {fileID: 8303431347630341780, guid: d14b75de5ccb59944ace846c2fba62a4, type: 3}
+  targetPosition: {fileID: 0}
   speed: 0.4
   nextWaypointDistance: 0.2
   updatePathTime: 2
@@ -150,7 +151,7 @@ Animator:
   m_Avatar: {fileID: 0}
   m_Controller: {fileID: 9100000, guid: 8ef0e01c997bbf548889fb295af29a49, type: 2}
   m_CullingMode: 0
-  m_UpdateMode: 0
+  m_UpdateMode: 2
   m_ApplyRootMotion: 0
   m_LinearVelocityBlending: 0
   m_StabilizeFeet: 0
