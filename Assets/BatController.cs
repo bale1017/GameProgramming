@@ -58,64 +58,85 @@ public class BatController : MonoBehaviour, IController
 
     public void FixedUpdate()
     {
-        switch (state)
+        //if (!Game.current.IsRunning()) { 
+            if (!Game.IsRewinding && !PauseMenu.Paused)
+            {
+                switch (state)
+                {
+                    default:
+                    case State.Idle:
+                        Idle();
+                        break;
+
+                    case State.AttackTarget:
+                        AttackTarget();
+                        break;
+
+                    case State.ChaseTarget:
+                        ChaseTarget();
+                        break;
+                }
+            }
+        //}
+    }
+
+    private void Idle()
+    {
+        if (Vector3.Distance(transform.position, PlayerController.Instance.GetPosition()) < chaseRange)
         {
-            default:
-            case State.Idle:
-                if (Vector3.Distance(transform.position, PlayerController.Instance.GetPosition()) < chaseRange)
-                {
-                    //Player within target range
-                    state = State.ChaseTarget;
-                } else
-                {
-                    if (Time.time > sleepTime)
-                    {
-                        animator.SetBool("isMoving", false);
-                    }
-                }
-                break;
-
-            case State.AttackTarget:
-                //Player within attack range
-                if (Time.time > nextAttackTime)
-                {
-                    animator.SetTrigger("isAttacking");
-                    nextAttackTime = Time.time + attackRate;
-                    state = State.ChaseTarget;
-                }
-                break;
-
-            case State.ChaseTarget:
-                Vector3 dir = movement.Move(transform.position, targetPosition.position);
-                if (dir != Vector3.zero)
-                {
-                    animator.SetBool("isMoving", true);
-                    if (dir.x < 0)
-                    {
-                        spriteRenderer.flipX = true;
-                    }
-                    else if (dir.x > 0)
-                    {
-                        spriteRenderer.flipX = false;
-                    }
-                }
-
-                // Move the bat
-                transform.position += dir * Time.deltaTime;
-
-                if (Vector3.Distance(transform.position, PlayerController.Instance.GetPosition()) < attackRange)
-                {
-                    //Player inside attack range
-                    state = State.AttackTarget;
-                } else if (Vector3.Distance(transform.position, PlayerController.Instance.GetPosition()) + distanceOffset > chaseRange)
-                {
-                    //Player outside of target range
-                    sleepTime = Time.time + timeUntilSleeping;
-                    state = State.Idle;
-                }
-                break;
+            //Player within target range
+            state = State.ChaseTarget;
         }
-        
+        else
+        {
+            if (Time.time > sleepTime)
+            {
+                animator.SetBool("isMoving", false);
+            }
+        }
+    }
+
+    private void ChaseTarget()
+    {
+        Vector3 dir = movement.Move(transform.position, targetPosition.position);
+        if (dir != Vector3.zero)
+        {
+            animator.SetBool("isMoving", true);
+            if (dir.x < 0)
+            {
+                spriteRenderer.flipX = true;
+            }
+            else if (dir.x > 0)
+            {
+                spriteRenderer.flipX = false;
+            }
+        }
+
+        // Move the bat
+        transform.position += dir * Time.deltaTime;
+
+        if (Vector3.Distance(transform.position, PlayerController.Instance.GetPosition()) < attackRange)
+        {
+            //Player inside attack range
+            state = State.AttackTarget;
+        }
+        else if (Vector3.Distance(transform.position, PlayerController.Instance.GetPosition()) + distanceOffset > chaseRange)
+        {
+            //Player outside of target range
+            sleepTime = Time.time + timeUntilSleeping;
+            state = State.Idle;
+        }
+    }
+
+    private void AttackTarget()
+    {
+        //Player within attack range
+        if (Time.time > nextAttackTime)
+        {
+            animator.SetTrigger("isAttacking");
+            nextAttackTime = Time.time + attackRate;
+            state = State.ChaseTarget;
+        }
     }
 
     // Called at begin of 'bat_attack' animation

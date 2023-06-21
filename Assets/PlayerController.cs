@@ -38,39 +38,41 @@ public class PlayerController : MonoBehaviour, IController
 
     private void FixedUpdate()
     {
-        if (canMove)
-        {
-            //If movement input is not 0, try to move
-            if (movementInput != Vector2.zero)
+        //if (!Game.current.IsRunning()) { 
+            if (canMove && !Game.IsRewinding && !PauseMenu.Paused)
             {
-                bool success = TryMove(movementInput);
-                if (!success)
+                //If movement input is not 0, try to move
+                if (movementInput != Vector2.zero)
                 {
-                    success = TryMove(new Vector2(movementInput.x, 0));
+                    bool success = TryMove(movementInput);
                     if (!success)
                     {
-                        success = TryMove(new Vector2(0, movementInput.y));
+                        success = TryMove(new Vector2(movementInput.x, 0));
+                        if (!success)
+                        {
+                            success = TryMove(new Vector2(0, movementInput.y));
+                        }
                     }
+                    //set "moving" animation
+                    animator.SetBool("isMoving", success);
                 }
-                //set "moving" animation
-                animator.SetBool("isMoving", success);
-            }
-            else
-            {
-                //set "idle" animation
-                animator.SetBool("isMoving", false);
-            }
+                else
+                {
+                    //set "idle" animation
+                    animator.SetBool("isMoving", false);
+                }
 
-            //Set direction of sprite to movemnet direction
-            if (movementInput.x < 0)
-            {
-                spriteRenderer.flipX = true;
+                //Set direction of sprite to movemnet direction
+                if (movementInput.x < 0)
+                {
+                    spriteRenderer.flipX = true;
+                }
+                else if (movementInput.x > 0)
+                {
+                    spriteRenderer.flipX = false;
+                }
             }
-            else if (movementInput.x > 0)
-            {
-                spriteRenderer.flipX = false;
-            }
-        }
+        //}
     }
 
     private bool TryMove(Vector2 direction)

@@ -15,8 +15,9 @@ public class SkeletonSwordWarriorController : MonoBehaviour, IController
     public float chaseRange = 1;
     public float attackRange = 0.1F;
     public float damage = 5;
-    private float nextAttackTime;
     public float attackRate = 0.1F;
+
+    private float nextAttackTime;
     private bool chooseAttackA = true;
 
     // values for a* algorithm
@@ -25,6 +26,7 @@ public class SkeletonSwordWarriorController : MonoBehaviour, IController
     public float nextWaypointDistance = 0.2F;
     public float updatePathTime = 2;
 
+    // values for Roaming
     private Vector3 startPosition;
     private Vector3 randNextDestination;
     private float roamingTime;
@@ -59,26 +61,30 @@ public class SkeletonSwordWarriorController : MonoBehaviour, IController
 
     public void FixedUpdate()
     {
-        switch (state)
-        {
-            default:
-            case EnemyState.Idle:
-                Idle();
-                break;
+        //if (!Game.current.IsRunning()) { 
+            if (!Game.IsRewinding && !PauseMenu.Paused)
+            {
+                switch (state)
+                {
+                    default:
+                    case EnemyState.Idle:
+                        Idle();
+                        break;
 
-            case EnemyState.AttackTarget:
-                AttackTarget();
-                break;
+                    case EnemyState.AttackTarget:
+                        AttackTarget();
+                        break;
 
-            case EnemyState.ChaseTarget:
-                ChaseTarget();
-                break;
+                    case EnemyState.ChaseTarget:
+                        ChaseTarget();
+                        break;
 
-            case EnemyState.Roaming:
-                Roaming();
-                break;
-        }
-
+                    case EnemyState.Roaming:
+                        Roaming();
+                        break;
+                }
+            }
+        //}
     }
 
     private void Idle() 
