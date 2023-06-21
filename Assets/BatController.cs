@@ -3,7 +3,7 @@ using UnityEngine;
 // Note this line, if it is left out, the script won't know that the class 'Path' exists and it will throw compiler errors
 // This line should always be present at the top of scripts which use pathfinding
 using Pathfinding;
-using System;
+using System.Collections;
 using BasePatterns;
 
 public class BatController : MonoBehaviour, IController
@@ -143,13 +143,15 @@ public class BatController : MonoBehaviour, IController
     {
         movement.LockMovement();
         attackCollider.enabled = true;
+        StartCoroutine(EndAttack());
     }
 
     // Called at end of 'bat_attack' animation
-    public void EndAttack()
+    public IEnumerator EndAttack()
     {
-        movement.UnlockMovement();
+        yield return new WaitForSeconds(1);
         attackCollider.enabled = false;
+        movement.UnlockMovement();
     }
 
     public void Defeated(float val)

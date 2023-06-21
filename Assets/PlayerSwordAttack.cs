@@ -21,7 +21,6 @@ public class PlayerSwordAttack : MonoBehaviour
         Debug.Log("Sword attack right");
         transform.localPosition = rightAttackOffset;
         swordCollider.enabled = true;
-
     }
 
     public void AttackLeft()

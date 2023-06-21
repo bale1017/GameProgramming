@@ -2,6 +2,7 @@ using BasePatterns;
 using Pathfinding;
 using UnityEngine;
 using System;
+using System.Collections;
 
 public class BossController : MonoBehaviour, IController
 {
@@ -14,8 +15,8 @@ public class BossController : MonoBehaviour, IController
     public float initialHealth = 30;
     public float chaseRange = 1000;
     public float attackRangeX = 0.45F;
-    public float attackRangeY = 0.2F;
-    public float damage = 7;
+    public float attackRangeY = 0.1F;
+    public float damage = 6;
     public float timeToNextAttack = 2;
     public float attackAnimationSpeed = 0.9F;
 
@@ -96,7 +97,7 @@ public class BossController : MonoBehaviour, IController
     {
         //Debug.Log("Revan in Chase State");
         Vector3 dir = movement.Move(transform.position, PlayerController.Instance.GetPosition());
-        Debug.Log(dir);
+        //Debug.Log(dir);
         Move(dir);
         if (Math.Abs(transform.position.x - PlayerController.Instance.GetPosition().x) < attackRangeX &&
             Math.Abs(transform.position.y - PlayerController.Instance.GetPosition().y) < attackRangeY)
@@ -191,10 +192,12 @@ public class BossController : MonoBehaviour, IController
                 attackC.AttackRight();
             }
         }
+        StartCoroutine(EndAttack());
     }
 
-    public void EndAttack()
+    public IEnumerator EndAttack()
     {
+        yield return new WaitForSeconds(1);
         Debug.Log("Revan ends his attack");
         movement.UnlockMovement();
         attackA.StopAttack();

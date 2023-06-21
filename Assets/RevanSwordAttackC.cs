@@ -40,7 +40,7 @@ public class RevanSwordAttackC : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        Debug.Log("OnTriggerEnter2D of Revan called");
+        //Debug.Log("OnTriggerEnter2D of Revan called");
         if (collision.tag == "Player")
         {
             //Deal damage to player

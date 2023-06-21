@@ -223,11 +223,13 @@ public class SkeletonSwordWarriorController : MonoBehaviour, IController
         {
             skeletonSword.AttackRight();
         }
+        StartCoroutine(EndAttack());
     }
 
     // Called at end of attack animation
-    public void EndAttack()
+    public IEnumerator EndAttack()
     {
+        yield return new WaitForSeconds(1);
         skeletonSword.StopAttack();
         movement.UnlockMovement();
     }

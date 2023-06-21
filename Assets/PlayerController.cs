@@ -41,7 +41,8 @@ public class PlayerController : MonoBehaviour, IController
 
     private void FixedUpdate()
     {
-        if (Game.current.IsRunning()) { 
+        if (Game.current.IsRunning()) 
+        { 
             if (canMove && !Game.IsRewinding)
             {
                 //If movement input is not 0, try to move
@@ -114,8 +115,14 @@ public class PlayerController : MonoBehaviour, IController
 
     void OnFire()
     {
-        //start "Sword Attack" animation for player
-        animator.SetTrigger("swordAttack");
+        if (Game.current.IsRunning())
+        {
+            if (canMove && !Game.IsRewinding)
+            {
+                //start "Sword Attack" animation for player
+                animator.SetTrigger("swordAttack");
+            }
+        }
     }
     public void SwordAttack()
     {
@@ -128,9 +135,11 @@ public class PlayerController : MonoBehaviour, IController
         {
             swordAttack.AttackRight();
         }
+        StartCoroutine(EndSwordAttack());
     }
-    public void EndSwordAttack()
+    public IEnumerator EndSwordAttack()
     {
+        yield return new WaitForSeconds(1);
         swordAttack.StopAttack();
         UnlockMovement();
     }
