@@ -65,13 +65,6 @@ public class ReTime : MonoBehaviour {
 		}
 	}
 
-	void Update () {
-		// keep rewind until released
-		if (isRewinding)
-		{
-            StartRewind();
-        }
-	}
 
 	void FixedUpdate(){
 		//if true then run the rewind method, else record the events
@@ -112,7 +105,7 @@ public class ReTime : MonoBehaviour {
 		}
 	}
 
-	public void StartRewind(){
+	void StartRewind(){
 
 		isRewinding = true;
 		if(hasAnimator)
@@ -122,7 +115,7 @@ public class ReTime : MonoBehaviour {
 			GetComponent<Rigidbody> ().isKinematic = true;
 	}
 
-	public void StopRewind(){
+	void StopRewind(){
 		if (!isRewinding)
 		{
 			return;
