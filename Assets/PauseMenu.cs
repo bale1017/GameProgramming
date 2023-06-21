@@ -6,51 +6,25 @@ using UnityEngine;
 
 public class PauseMenu : MonoBehaviour
 {
-    public static bool Paused = false;
-
     public float AnimationDuration = .3f;
     public CanvasGroup Backdrop;
     public GameObject[] Buttons;
-    private float timeScale;
 
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
-
-    // Update is called once per frame
     void Update()
     {
         if (Input.GetKeyDown(KeyCode.Escape))
         {
-            if (Paused)
+            if (Game.current.IsPaused())
             {
-                ResumeGame();
+                Game.current.ResumeGame();
             } else
             {
-                PauseGame();
-
+                Game.current.PauseGame();
             }
         }
     }
 
-    public void PauseGame()
-    {
-        timeScale = Time.timeScale;
-        Time.timeScale = 0;
-        FadeIn();
-        Paused = true;
-    }
-
-    public void ResumeGame()
-    {
-        FadeOut();
-        Time.timeScale = timeScale;
-        Paused = false;
-    }
-
-    void FadeIn()
+    public void FadeIn()
     {
         Backdrop.GetComponent<CanvasGroup>().alphaTransition(1, AnimationDuration);
         float width = Screen.width + 100;
@@ -66,7 +40,7 @@ public class PauseMenu : MonoBehaviour
         }
     }
 
-    void FadeOut()
+    public void FadeOut()
     {
         Backdrop.GetComponent<CanvasGroup>().alphaTransition(-1, AnimationDuration);
         float width = Screen.width + 100;

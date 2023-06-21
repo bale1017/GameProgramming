@@ -39,6 +39,11 @@ public class SkeletonSwordWarriorController : MonoBehaviour, IController
     public Health health;
     public SkeletonSword skeletonSword;
 
+    public AudioSource TakeDamage;
+    public AudioSource AttackFast;
+    public AudioSource AttackSlow;
+    public AudioSource Death;
+
     Health IController.health { get => health; }
 
     public void Start()
@@ -154,12 +159,14 @@ public class SkeletonSwordWarriorController : MonoBehaviour, IController
         {
             if (chooseAttackA)
             {
+                AttackFast.Play();
                 //use attack A
                 animator.SetTrigger("isAttackingA");
                 chooseAttackA = false;
             }
             else
             {
+                AttackSlow.Play();
                 //use attack B
                 animator.SetTrigger("isAttackingB");
                 chooseAttackA = true;
@@ -218,12 +225,14 @@ public class SkeletonSwordWarriorController : MonoBehaviour, IController
 
     public void Defeated(float val)
     {
+        Death.Play();
         Debug.Log("Skeleton Sword Warrior has been slayed");
         animator.SetBool("defeated", true);
     }
 
     public void ReceivedDamage(float val)
     {
+        TakeDamage.Play();
         Debug.Log("Skeleton Sword Warrior received " + val + " damage");
         animator.SetTrigger("receivesDamage");
     }

@@ -62,6 +62,8 @@
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\VertexShakeA.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\TMP_ExampleScript_01.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\TMPro_InstructionOverlay.cs" />
+    <Compile Include="Assets\Scenes\scripts\BackButtonOptions.cs" />
+    <Compile Include="Assets\Scenes\scripts\BackButtonLoadLevel.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\VertexShakeB.cs" />
     <Compile Include="Assets\PlayerController.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\DropdownSample.cs" />
@@ -95,7 +97,6 @@
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\TMP_TextEventCheck.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\TMP_UiFrameRateCounter.cs" />
     <Compile Include="Assets\Scenes\scripts\StartButton.cs" />
-    <Compile Include="Assets\Scenes\scripts\BackButton.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\Benchmark01.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\TextMeshSpawner.cs" />
     <Compile Include="Assets\Skripts\LevelLoader.cs" />
@@ -119,6 +120,7 @@
     <Compile Include="Assets\SkeletonSwordWarriorController.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\Benchmark03.cs" />
     <Compile Include="Assets\ReTime\Core Scripts\ReTimeParticles.cs" />
+    <Compile Include="Assets\CompleteMenu.cs" />
     <Compile Include="Assets\Scenes\scripts\QuitButton.cs" />
     <Compile Include="Assets\ReTime\Core Scripts\ReTime.cs" />
     <Compile Include="Assets\Timer.cs" />

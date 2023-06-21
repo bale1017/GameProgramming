@@ -65,14 +65,6 @@ public class ReTime : MonoBehaviour {
 		}
 	}
 
-	void Update () {
-		//when specific input is triggered then start rewind else, stop
-		if (UseInputTrigger) 
-			if (Input.GetKey (KeyTrigger))
-				StartRewind ();
-			else
-				StopRewind ();
-	}
 
 	void FixedUpdate(){
 		//if true then run the rewind method, else record the events
@@ -114,10 +106,6 @@ public class ReTime : MonoBehaviour {
 	}
 
 	void StartRewind(){
-		if (PauseMenu.Paused)
-		{
-			return;
-		}
 
 		isRewinding = true;
 		if(hasAnimator)

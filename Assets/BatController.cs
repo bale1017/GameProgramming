@@ -38,6 +38,9 @@ public class BatController : MonoBehaviour, IController
     private Movement movement;
     public Health health;
 
+
+    public AudioSource TakeDamage;
+
     private CircleCollider2D attackCollider;
 
     Health IController.health { get => health; }
@@ -134,12 +137,14 @@ public class BatController : MonoBehaviour, IController
 
     public void Defeated(float val)
     {
+        TakeDamage.Play();
         Debug.Log("Bat has been slayed");
         animator.SetTrigger("defeated");
     }
 
     public void ReceivedDamage(float val)
     {
+        TakeDamage.Play();
         Debug.Log("Bat received " + val + " damage");
         animator.SetTrigger("receivesDamage");
     }
