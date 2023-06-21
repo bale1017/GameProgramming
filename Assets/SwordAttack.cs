@@ -3,6 +3,7 @@ using UnityEngine;
 
 public class SwordAttack : MonoBehaviour
 {
+    public AudioSource Slash;
     public float damage = 3;
     BoxCollider2D swordCollider;
     Vector2 rightAttackOffset;
@@ -16,6 +17,7 @@ public class SwordAttack : MonoBehaviour
 
     public void AttackRight()
     {
+        Slash.Play();
         Debug.Log("Sword attack right");
         swordCollider.enabled = true;
         transform.localPosition = rightAttackOffset;
@@ -23,6 +25,7 @@ public class SwordAttack : MonoBehaviour
 
     public void AttackLeft()
     {
+        Slash.Play();
         Debug.Log("Sword attack left");
         swordCollider.enabled = true;
         transform.localPosition = new Vector3(rightAttackOffset.x * -1, rightAttackOffset.y);
