@@ -24,16 +24,20 @@ public class Game : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (Input.GetKeyDown(RewindKey))
+        // start and stop if Rewind Key is pressed and game is not paused
+        if (!PauseMenu.Paused)
         {
-            IsRewinding = true;
-            OnRewindStart.Invoke();
-        } else if (Input.GetKeyUp(RewindKey))
-        {
-            IsRewinding = false;
-            OnRewindEnd.Invoke();
+            if (Input.GetKeyDown(RewindKey))
+            {
+                StartRewind();
+            }
+            else if (Input.GetKeyUp(RewindKey))
+            {
+                StopRewind();
+            }
         }
 
+        // make as listener
         if (IsRewinding)
         {
             timer += Time.deltaTime;
@@ -41,6 +45,20 @@ public class Game : MonoBehaviour
         {
             timer -= Time.deltaTime;
         }
+    }
+
+    public void StartRewind()
+    {
+        IsRewinding = true;
+        // Invoke start event so that all listeners know that time is now rewinding.
+        OnRewindStart.Invoke();
+    }
+
+    public void StopRewind()
+    {
+        IsRewinding = false;
+        // Invoke stop event so that all listeners know that time is no longer rewinding.
+        OnRewindEnd.Invoke();
     }
 
     public double GetTime()
