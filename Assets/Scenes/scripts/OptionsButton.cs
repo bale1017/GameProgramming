@@ -5,15 +5,18 @@ using UnityEngine.SceneManagement;
 
 public class OptionsButton : MonoBehaviour
 {
-    // Start is called before the first frame update
+    public GameObject MainMenu;
+    public GameObject OptionsMenu;
     void Start()
     {
-        
+        OptionsMenu.SetActive(false);
     }
 
     void OnMouseUp()
     {
-        SceneManager.LoadScene("Options");
+        MainMenu.SetActive(false);
+        OptionsMenu.SetActive(true);
+        this.GetComponent<Mouseover>().Reset();
     }
     // Update is called once per frame
     void Update()

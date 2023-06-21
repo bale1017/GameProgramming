@@ -22,6 +22,9 @@ public class PlayerController : MonoBehaviour, IController
     bool canMove = true;
     public float healthAmount = 25;
 
+    public AudioSource TakeDamage;
+    public AudioSource Death;
+
     public static PlayerController Instance { get; private set; }
     Health IController.health { get => health; }
 
@@ -142,6 +145,7 @@ public class PlayerController : MonoBehaviour, IController
 
     public void Defeated(float val)
     {
+        Death.Play();
         Debug.Log("Player has been defeated");
         // trigger death animation of player
         animator.SetBool("defeated", true);
@@ -149,6 +153,7 @@ public class PlayerController : MonoBehaviour, IController
 
     public void ReceivedDamage(float val)
     {
+        TakeDamage.Play();
         Debug.Log("Player received " + val + " damage");
         // trigger damage receiving animation of player
         animator.SetTrigger("receivesDamage");
