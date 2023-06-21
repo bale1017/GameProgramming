@@ -163,6 +163,8 @@ public class PlayerController : MonoBehaviour, IController
         gameObject.SetActive(false);
         bxc.enabled = false;
         animator.SetBool("defeated", false);
+
+        Game.current.FailGame();
     }
 
     public Vector3 GetPosition() 
