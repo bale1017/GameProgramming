@@ -1,7 +1,9 @@
 using Lean.Transition;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.UI;
 using UnityEngine.UIElements;
 
@@ -11,22 +13,20 @@ public class Timer : MonoBehaviour
     private double testTime = 60;
     private double previousTime = 0;
 
-    double getTime()
-    {
-        return testTime;
-    }
+    public Game game;
+
 
     // Start is called before the first frame update
     void Start()
     {
         text = GetComponent<Text>();
-        previousTime = getTime();
+        previousTime = game.GetTime();
     }
 
     // Update is called once per frame
     void Update()
     {
-        double time = getTime();
+        double time = game.GetTime();
         text.text = time.ToString("00.00s").Replace(",", ":");
         if (time < 5 && (int) previousTime > (int) time
             || (int) (previousTime / 10) > (int)(time / 10))
@@ -38,7 +38,6 @@ public class Timer : MonoBehaviour
             SetColor();
         }
         previousTime = time;
-        testTime -= Time.deltaTime;
     }
 
     private void SetColor()
