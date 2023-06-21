@@ -3,17 +3,17 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-public class BackButton : MonoBehaviour
+public class BackButtonLoadLevel : MonoBehaviour
 {
     public GameObject MainMenu;
-    public GameObject OptionsMenu;
+    public GameObject LoadLevelMenu;
     void Start()
     {
     }
     void OnMouseUp()
     {
         MainMenu.SetActive(true);
-        OptionsMenu.SetActive(false);
+        LoadLevelMenu.SetActive(false);
         this.GetComponent<Mouseover>().Reset();
     }
     // Update is called once per frame
