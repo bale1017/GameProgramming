@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using UnityEngine.UI;
 using TMPro;
 using UnityEngine;
 
@@ -7,19 +8,21 @@ public class Mouseover : MonoBehaviour
 {
     void Start()
     {
-        TextMeshPro textmeshPro = GetComponent<TextMeshPro>();
-        textmeshPro.color = new Color32(0, 0, 0, 255);
+
+        //GetComponent<Text>().color = new Color32(204, 204, 204, 255);
     }
 
     void OnMouseEnter()
     {
-        TextMeshPro textmeshPro = GetComponent<TextMeshPro>();
-        textmeshPro.color = new Color32(100, 0, 0, 255);
+        //GetComponent<Text>().color = new Color32(100, 0, 0, 255);
     }
 
     void OnMouseExit()
     {
-        TextMeshPro textmeshPro = GetComponent<TextMeshPro>();
-        textmeshPro.color = new Color32(0, 0, 0, 255);
+        //GetComponent<Text>().color = new Color32(204, 204, 204, 255);
+    }
+    public void Reset()
+    {
+       // GetComponent<Text>().color = new Color32(204, 204, 204, 255);
     }
 }
