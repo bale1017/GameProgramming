@@ -9,7 +9,7 @@
     <ProductVersion>10.0.20506</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
     <RootNamespace></RootNamespace>
-    <ProjectGuid>{57AF5954-C716-583A-F0A4-168C112F3A19}</ProjectGuid>
+    <ProjectGuid>{19C9804C-4E9F-83F9-3F0B-76D3C97538B5}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <AssemblyName>Assembly-CSharp</AssemblyName>
@@ -69,13 +69,12 @@
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\DropdownSample.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\VertexColorCycler.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\EnvMapAnimator.cs" />
-    <Compile Include="Assets\BatAttack.cs" />
+    <Compile Include="Assets\BatController.cs" />
+    <Compile Include="Assets\PauseMenu.cs" />
     <Compile Include="Assets\SwordAttack.cs" />
     <Compile Include="Assets\ReTime\Demos\Checkpoint\GroundHit.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\TMP_TextSelector_A.cs" />
-    <Compile Include="Assets\TestScript.cs" />
     <Compile Include="Assets\Art\Pixel Art Top Down - Basic\Script\SpriteColorAnimation.cs" />
-    <Compile Include="Assets\EnemyController.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\Benchmark01_UGUI.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\SimpleScript.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\Benchmark04.cs" />
@@ -84,6 +83,7 @@
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\ObjectSpin.cs" />
     <Compile Include="Assets\Art\Pixel Art Top Down - Basic\Script\CameraFollow.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\TMP_PhoneNumberValidator.cs" />
+    <Compile Include="Assets\Behaviour.cs" />
     <Compile Include="Assets\Scenes\scripts\OptionsButton.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\VertexJitter.cs" />
     <Compile Include="Assets\Art\Pixel Art Top Down - Basic\Script\LayerTrigger.cs" />
@@ -97,12 +97,12 @@
     <Compile Include="Assets\Scenes\scripts\StartButton.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\Benchmark01.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\TextMeshSpawner.cs" />
-    <Compile Include="Assets\PlayerMovement.cs" />
     <Compile Include="Assets\Skripts\LevelLoader.cs" />
     <Compile Include="Assets\Movement.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\VertexZoom.cs" />
     <Compile Include="Assets\Art\Pixel Art Top Down - Basic\Script\TopDownCharacterController.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\Benchmark02.cs" />
+    <Compile Include="Assets\SkeletonSword.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\TMP_TextSelector_B.cs" />
     <Compile Include="Assets\SpikeTrap.cs" />
     <Compile Include="Assets\Scenes\scripts\MouseoverColorChange.cs" />
@@ -115,10 +115,12 @@
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\CameraController.cs" />
     <Compile Include="Assets\Skripts\Room.cs" />
     <Compile Include="Assets\Art\Pixel Art Top Down - Basic\Script\PropsAltar.cs" />
+    <Compile Include="Assets\SkeletonSwordWarriorController.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\Benchmark03.cs" />
     <Compile Include="Assets\ReTime\Core Scripts\ReTimeParticles.cs" />
     <Compile Include="Assets\Scenes\scripts\QuitButton.cs" />
     <Compile Include="Assets\ReTime\Core Scripts\ReTime.cs" />
+    <Compile Include="Assets\Timer.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\TMP_TextInfoDebugTool.cs" />
     <Compile Include="Assets\Scenes\scripts\LoadLevelButton.cs" />
     <Compile Include="Assets\ReTime\Core Scripts\PointInTime.cs" />
@@ -127,13 +129,16 @@
     <None Include="Assets\TextMesh Pro\Shaders\TMPro.cginc" />
     <None Include="Assets\TextMesh Pro\Shaders\TMP_SDF-Mobile Overlay.shader" />
     <None Include="Assets\TextMesh Pro\Shaders\TMP_Bitmap.shader" />
+    <None Include="Assets\SimplePixelUI\fonts\Font2\license.txt" />
     <None Include="Assets\Art\Pixel Art Top Down - Basic\Changelog.txt" />
     <None Include="Assets\TextMesh Pro\Shaders\TMPro_Mobile.cginc" />
     <None Include="Assets\TextMesh Pro\Shaders\TMP_SDF SSD.shader" />
     <None Include="Assets\Art\Pixel Art Top Down - Basic\Shader\SH Sprite Shadow.shader" />
     <None Include="Assets\TextMesh Pro\Shaders\TMP_SDF-Surface-Mobile.shader" />
+    <None Include="Assets\Pixel Font - Tripfive\_README.txt" />
     <None Include="Assets\TextMesh Pro\Shaders\TMP_SDF-Surface.shader" />
     <None Include="Assets\TextMesh Pro\Sprites\EmojiOne Attribution.txt" />
+    <None Include="Assets\SimplePixelUI\fonts\Font1\license.txt" />
     <None Include="Assets\TextMesh Pro\Shaders\TMP_Bitmap-Custom-Atlas.shader" />
     <None Include="Assets\TextMesh Pro\Shaders\TMP_SDF.shader" />
     <None Include="Assets\TextMesh Pro\Shaders\TMP_SDF-Mobile SSD.shader" />
@@ -141,8 +146,11 @@
     <None Include="Assets\TextMesh Pro\Shaders\TMPro_Properties.cginc" />
     <None Include="Assets\TextMesh Pro\Shaders\TMPro_Surface.cginc" />
     <None Include="Assets\TextMesh Pro\Resources\LineBreaking Following Characters.txt" />
+    <None Include="Assets\SimplePixelUI\fonts\Font1\readme.txt" />
     <None Include="Assets\TextMesh Pro\Shaders\TMP_SDF-Mobile Masking.shader" />
+    <None Include="Assets\SimplePixelUI\fonts\Font2\readme.txt" />
     <None Include="Assets\TextMesh Pro\Shaders\TMP_SDF Overlay.shader" />
+    <None Include="Assets\Art\HeroandOpponents_v1\license.txt" />
     <None Include="Assets\Art\Pixel Art Top Down - Basic\Shader\SH Sprite Shadow Mask.shader" />
     <None Include="Assets\TextMesh Pro\Shaders\TMP_Bitmap-Mobile.shader" />
     <None Include="Assets\TextMesh Pro\Fonts\LiberationSans - OFL.txt" />
@@ -838,14 +846,14 @@
     <Reference Include="Unity.Mathematics.Editor">
       <HintPath>Library\ScriptAssemblies\Unity.Mathematics.Editor.dll</HintPath>
     </Reference>
-    <Reference Include="Unity.VisualScripting.Flow.Editor">
-      <HintPath>Library\ScriptAssemblies\Unity.VisualScripting.Flow.Editor.dll</HintPath>
-    </Reference>
     <Reference Include="Unity.2D.Common.Runtime">
       <HintPath>Library\ScriptAssemblies\Unity.2D.Common.Runtime.dll</HintPath>
     </Reference>
     <Reference Include="Unity.2D.Tilemap.Extras.Editor">
       <HintPath>Library\ScriptAssemblies\Unity.2D.Tilemap.Extras.Editor.dll</HintPath>
+    </Reference>
+    <Reference Include="Unity.VisualScripting.Flow.Editor">
+      <HintPath>Library\ScriptAssemblies\Unity.VisualScripting.Flow.Editor.dll</HintPath>
     </Reference>
     <Reference Include="Unity.Timeline">
       <HintPath>Library\ScriptAssemblies\Unity.Timeline.dll</HintPath>
@@ -904,16 +912,32 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="PackageToolsEditor.csproj">
-      <Project>{79C7CC4C-51E3-CFE9-5D67-734A2760A2C6}</Project>
+      <Project>{6420D252-0EE4-4CAA-3E48-44680A34D8FE}</Project>
       <Name>PackageToolsEditor</Name>
     </ProjectReference>
+    <ProjectReference Include="LeanTransition.Editor.csproj">
+      <Project>{64DEC180-BAD6-4177-D732-6511CE38F245}</Project>
+      <Name>LeanTransition.Editor</Name>
+    </ProjectReference>
     <ProjectReference Include="AstarPathfindingProjectEditor.csproj">
-      <Project>{492B3A5C-880F-3440-9087-2A603AE1FCD4}</Project>
+      <Project>{C6376F7C-EBBD-420E-7E13-B222538E9D48}</Project>
       <Name>AstarPathfindingProjectEditor</Name>
     </ProjectReference>
+    <ProjectReference Include="LeanTransition.csproj">
+      <Project>{F7255958-2555-2B2F-119E-755327CB5DE5}</Project>
+      <Name>LeanTransition</Name>
+    </ProjectReference>
     <ProjectReference Include="AstarPathfindingProject.csproj">
-      <Project>{A669236F-58B8-3559-0374-CC2C36040BB9}</Project>
+      <Project>{B2B9C2B6-244B-8C3E-4F4D-79091351EF62}</Project>
       <Name>AstarPathfindingProject</Name>
+    </ProjectReference>
+    <ProjectReference Include="CW.Common.csproj">
+      <Project>{C4F36F76-4002-B951-CCC7-D647558B6EC5}</Project>
+      <Name>CW.Common</Name>
+    </ProjectReference>
+    <ProjectReference Include="LeanCommon.csproj">
+      <Project>{D11DBE45-A56C-6F5D-303F-F16DA0E2E8AA}</Project>
+      <Name>LeanCommon</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

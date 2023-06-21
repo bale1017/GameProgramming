@@ -1,27 +1,36 @@
-using System;
+using UnityEngine;
+
+public delegate void OnReceivingDamage(float val);
+public delegate void OnHealthBelowZero(float val);
 
 public class Health
 {
     private float health = 1;
-    private Action ifLessOrEqualZero;
+    private OnReceivingDamage onReceivingDamage;
+    private OnHealthBelowZero onHealthBelowZero;
 
-    public Health(float _health, Action _ifLessOrEqualZero)
+    public Health(float _health, OnReceivingDamage _onReceivingDamage, OnHealthBelowZero _onHealthBelowZero)
     {
         health = _health;
-        ifLessOrEqualZero = _ifLessOrEqualZero;
+        onReceivingDamage = _onReceivingDamage;
+        onHealthBelowZero = _onHealthBelowZero;
     }
 
-    public float getHealth()
+    public float GetHealth()
     {
         return health;
     }
 
     public void ReduceHealth(float val)
     {
-        health -= val;
-        if (health <= 0)
+        Debug.Log("Reduce Health by " + val);
+        if (health - val > 0)
         {
-            ifLessOrEqualZero();
+            health -= val;
+            onReceivingDamage(val);
+        } else
+        {
+            onHealthBelowZero(val);
         }
     }
 

@@ -1,5 +1,6 @@
 using Pathfinding;
 using UnityEngine;
+using UnityEngine.Animations;
 
 public class Movement
 {
@@ -9,7 +10,7 @@ public class Movement
     private float nextWaypointDistance;
     private float nextPathUpdate;
     private float updatePathTime;
-    private float speed;
+    public float speed;
     private bool canMove = true;
 
     public Movement(Seeker _seeker, float _speed, float _nextWaypointDistance, float _updatePathTIme)
@@ -22,7 +23,7 @@ public class Movement
 
     public void OnPathComplete(Path p)
     {
-        Debug.Log("A path was calculated. Did it fail with an error? " + p.error);
+        //Debug.Log("A path was calculated. Did it fail with an error? " + p.error);
 
         if (!p.error)
         {
@@ -33,14 +34,17 @@ public class Movement
         }
     }
 
+    public void PreCalcPath(Vector3 currentPosition, Vector3 targetPosition)
+    {
+        seeker.StartPath(currentPosition, targetPosition, OnPathComplete);
+    }
+
     public Vector3 Move(Vector3 currentPosition, Vector3 targetPosition)
     {
-        if (canMove) 
+        if (canMove)
         {
-            if (path == null || Time.time > nextPathUpdate)
+            if (Time.time > nextPathUpdate)
             {
-                // We have no path to follow yet, so don't do anything
-                //return;
                 seeker.StartPath(currentPosition, targetPosition, OnPathComplete);
             }
 
@@ -94,23 +98,33 @@ public class Movement
 
     public void LockMovement()
     {
-        Debug.Log("Lock movement");
         canMove = false;
     }
 
     public void UnlockMovement()
     {
-        Debug.Log("Unlock movement");
         canMove = true;
     }
 
-    //private Vector3 GetRoamingPosititon()
-    //{
-    //    return startingPosition + GetRandomDir() * Random.Range(10f, 70f);
-    //}
+    public static Vector3 GetRandNextDestination(Vector3 originalPosition, float offset)
+    {
+        float randX = Random.Range(originalPosition.x - offset, originalPosition.x + offset);
+        float randY = Random.Range(originalPosition.y - offset, originalPosition.y + offset);
+        return new Vector3(randX, randY);
+    }
 
-    //private static Vector3 GetRandomDir()
-    //{
-    //    return new Vector3(Random.Range(-1f, 1f), Random.Range(-1f, 1f)).normalized;
-    //}
+    public static bool Equal(Vector3 a, Vector3 b, int precision = 3)
+    {
+        float aX = (float) System.Math.Round(a.x, precision);
+        float aY = (float) System.Math.Round(a.y, precision);
+        float bX = (float) System.Math.Round(b.x, precision);
+        float bY = (float) System.Math.Round(b.y, precision);
+
+        if (aX == bX && aY == bY) {
+            return true;
+        } else
+        {
+            return false;
+        }
+    }
 }
