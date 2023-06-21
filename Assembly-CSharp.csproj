@@ -9,7 +9,7 @@
     <ProductVersion>10.0.20506</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
     <RootNamespace></RootNamespace>
-    <ProjectGuid>{19C9804C-4E9F-83F9-3F0B-76D3C97538B5}</ProjectGuid>
+    <ProjectGuid>{57AF5954-C716-583A-F0A4-168C112F3A19}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <AssemblyName>Assembly-CSharp</AssemblyName>
@@ -846,14 +846,14 @@
     <Reference Include="Unity.Mathematics.Editor">
       <HintPath>Library\ScriptAssemblies\Unity.Mathematics.Editor.dll</HintPath>
     </Reference>
+    <Reference Include="Unity.VisualScripting.Flow.Editor">
+      <HintPath>Library\ScriptAssemblies\Unity.VisualScripting.Flow.Editor.dll</HintPath>
+    </Reference>
     <Reference Include="Unity.2D.Common.Runtime">
       <HintPath>Library\ScriptAssemblies\Unity.2D.Common.Runtime.dll</HintPath>
     </Reference>
     <Reference Include="Unity.2D.Tilemap.Extras.Editor">
       <HintPath>Library\ScriptAssemblies\Unity.2D.Tilemap.Extras.Editor.dll</HintPath>
-    </Reference>
-    <Reference Include="Unity.VisualScripting.Flow.Editor">
-      <HintPath>Library\ScriptAssemblies\Unity.VisualScripting.Flow.Editor.dll</HintPath>
     </Reference>
     <Reference Include="Unity.Timeline">
       <HintPath>Library\ScriptAssemblies\Unity.Timeline.dll</HintPath>
@@ -912,31 +912,31 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="PackageToolsEditor.csproj">
-      <Project>{6420D252-0EE4-4CAA-3E48-44680A34D8FE}</Project>
+      <Project>{79C7CC4C-51E3-CFE9-5D67-734A2760A2C6}</Project>
       <Name>PackageToolsEditor</Name>
     </ProjectReference>
     <ProjectReference Include="LeanTransition.Editor.csproj">
-      <Project>{64DEC180-BAD6-4177-D732-6511CE38F245}</Project>
+      <Project>{3B6E6393-89C1-FE38-1DD3-3895D92CD908}</Project>
       <Name>LeanTransition.Editor</Name>
     </ProjectReference>
     <ProjectReference Include="AstarPathfindingProjectEditor.csproj">
-      <Project>{C6376F7C-EBBD-420E-7E13-B222538E9D48}</Project>
+      <Project>{492B3A5C-880F-3440-9087-2A603AE1FCD4}</Project>
       <Name>AstarPathfindingProjectEditor</Name>
     </ProjectReference>
-    <ProjectReference Include="LeanTransition.csproj">
-      <Project>{F7255958-2555-2B2F-119E-755327CB5DE5}</Project>
-      <Name>LeanTransition</Name>
-    </ProjectReference>
     <ProjectReference Include="AstarPathfindingProject.csproj">
-      <Project>{B2B9C2B6-244B-8C3E-4F4D-79091351EF62}</Project>
+      <Project>{A669236F-58B8-3559-0374-CC2C36040BB9}</Project>
       <Name>AstarPathfindingProject</Name>
     </ProjectReference>
+    <ProjectReference Include="LeanTransition.csproj">
+      <Project>{46350276-83EE-E2D1-844D-FF7BE405B038}</Project>
+      <Name>LeanTransition</Name>
+    </ProjectReference>
     <ProjectReference Include="CW.Common.csproj">
-      <Project>{C4F36F76-4002-B951-CCC7-D647558B6EC5}</Project>
+      <Project>{A1448A62-79DF-FEFC-B5EE-076F4A6304D8}</Project>
       <Name>CW.Common</Name>
     </ProjectReference>
     <ProjectReference Include="LeanCommon.csproj">
-      <Project>{D11DBE45-A56C-6F5D-303F-F16DA0E2E8AA}</Project>
+      <Project>{E06BED95-31A1-AE21-DB0A-16B80138EE0B}</Project>
       <Name>LeanCommon</Name>
     </ProjectReference>
   </ItemGroup>
