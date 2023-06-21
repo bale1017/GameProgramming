@@ -796,14 +796,14 @@
     <Reference Include="Unity.Mathematics.Editor">
       <HintPath>Library\ScriptAssemblies\Unity.Mathematics.Editor.dll</HintPath>
     </Reference>
+    <Reference Include="Unity.VisualScripting.Flow.Editor">
+      <HintPath>Library\ScriptAssemblies\Unity.VisualScripting.Flow.Editor.dll</HintPath>
+    </Reference>
     <Reference Include="Unity.2D.Common.Runtime">
       <HintPath>Library\ScriptAssemblies\Unity.2D.Common.Runtime.dll</HintPath>
     </Reference>
     <Reference Include="Unity.2D.Tilemap.Extras.Editor">
       <HintPath>Library\ScriptAssemblies\Unity.2D.Tilemap.Extras.Editor.dll</HintPath>
-    </Reference>
-    <Reference Include="Unity.VisualScripting.Flow.Editor">
-      <HintPath>Library\ScriptAssemblies\Unity.VisualScripting.Flow.Editor.dll</HintPath>
     </Reference>
     <Reference Include="Unity.Timeline">
       <HintPath>Library\ScriptAssemblies\Unity.Timeline.dll</HintPath>
@@ -877,13 +877,13 @@
       <Project>{492B3A5C-880F-3440-9087-2A603AE1FCD4}</Project>
       <Name>AstarPathfindingProjectEditor</Name>
     </ProjectReference>
-    <ProjectReference Include="LeanTransition.csproj">
-      <Project>{46350276-83EE-E2D1-844D-FF7BE405B038}</Project>
-      <Name>LeanTransition</Name>
-    </ProjectReference>
     <ProjectReference Include="AstarPathfindingProject.csproj">
       <Project>{A669236F-58B8-3559-0374-CC2C36040BB9}</Project>
       <Name>AstarPathfindingProject</Name>
+    </ProjectReference>
+    <ProjectReference Include="LeanTransition.csproj">
+      <Project>{46350276-83EE-E2D1-844D-FF7BE405B038}</Project>
+      <Name>LeanTransition</Name>
     </ProjectReference>
     <ProjectReference Include="CW.Common.csproj">
       <Project>{A1448A62-79DF-FEFC-B5EE-076F4A6304D8}</Project>
