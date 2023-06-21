@@ -9,13 +9,14 @@ public class GenerateLevel : MonoBehaviour
     public int level;
     public GameObject[] rooms;
     public GameObject[] interiors;
-    public int RoomWidth = 26;
-    public int RoomHeight = 13;
+    public int RoomWidth; // should be around 3
+    public int RoomHeight; // should be around 5
 
-    public void GenerateLayout(GameObject[] rooms, GameObject[] interiors)
+    public void GenerateLayout()
     {
         int roomAmount;
         int roomLayer;
+
         switch(level)
         {
             case 1:
@@ -36,12 +37,11 @@ public class GenerateLevel : MonoBehaviour
 
         }
         List<(int, int)> roomList = new List<(int, int)>();
-        for (int i = 0; i <= roomAmount; i++)
+        for (int i = 0; i < roomAmount; i++)
         {
             roomList.Add((roomLayer, Random.Range(0, interiors.Length - 1)));
         }
         List<(int, int)> roomLayouts = ChooseLayout(roomAmount);
-
         for (int i = 0; i < roomList.Count; i++)
         {
             int roomType = roomList[i].Item1;
@@ -85,7 +85,7 @@ public class GenerateLevel : MonoBehaviour
                             newRoom = (current.Item1, current.Item2 - 1);
                             break;
                         case 3:
-                            newRoom = (current.Item1 + 1, current.Item2);
+                            newRoom = (current.Item1 - 1, current.Item2);
                             break;
                         default: break;
                     }
