@@ -6506,6 +6506,11 @@ PrefabInstance:
       propertyPath: m_AnchorMax.y
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 7835569214800605566, guid: f671e10c8adc4a748a153cf2b13dae48,
+        type: 3}
+      propertyPath: game
+      value: 
+      objectReference: {fileID: 670209696}
     - target: {fileID: 8513672743621948082, guid: f671e10c8adc4a748a153cf2b13dae48,
         type: 3}
       propertyPath: m_Value
