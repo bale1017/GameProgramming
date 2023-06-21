@@ -9,7 +9,7 @@
     <ProductVersion>10.0.20506</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
     <RootNamespace></RootNamespace>
-    <ProjectGuid>{19C9804C-4E9F-83F9-3F0B-76D3C97538B5}</ProjectGuid>
+    <ProjectGuid>{43C9A87A-81F0-8F8F-45F2-EAED40C2AB7E}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <AssemblyName>Assembly-CSharp</AssemblyName>
@@ -913,31 +913,31 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="PackageToolsEditor.csproj">
-      <Project>{6420D252-0EE4-4CAA-3E48-44680A34D8FE}</Project>
+      <Project>{1D6D834C-3BAD-BB59-8D13-382F828D2B8D}</Project>
       <Name>PackageToolsEditor</Name>
     </ProjectReference>
     <ProjectReference Include="LeanTransition.Editor.csproj">
-      <Project>{64DEC180-BAD6-4177-D732-6511CE38F245}</Project>
+      <Project>{5A93460A-A153-19EA-7140-6AA6325BB33E}</Project>
       <Name>LeanTransition.Editor</Name>
     </ProjectReference>
     <ProjectReference Include="AstarPathfindingProjectEditor.csproj">
-      <Project>{C6376F7C-EBBD-420E-7E13-B222538E9D48}</Project>
+      <Project>{A796BDB7-EFA7-D2C5-21AE-8C0B546E0377}</Project>
       <Name>AstarPathfindingProjectEditor</Name>
     </ProjectReference>
     <ProjectReference Include="LeanTransition.csproj">
-      <Project>{F7255958-2555-2B2F-119E-755327CB5DE5}</Project>
+      <Project>{54AE5487-84A2-454B-1FEB-A83CD1E29969}</Project>
       <Name>LeanTransition</Name>
     </ProjectReference>
     <ProjectReference Include="AstarPathfindingProject.csproj">
-      <Project>{B2B9C2B6-244B-8C3E-4F4D-79091351EF62}</Project>
+      <Project>{2809C93F-C366-45D6-FC69-96B73F69E755}</Project>
       <Name>AstarPathfindingProject</Name>
     </ProjectReference>
     <ProjectReference Include="CW.Common.csproj">
-      <Project>{C4F36F76-4002-B951-CCC7-D647558B6EC5}</Project>
+      <Project>{F1EFE84F-74EC-BEB8-FB7A-56CE279D6DF5}</Project>
       <Name>CW.Common</Name>
     </ProjectReference>
     <ProjectReference Include="LeanCommon.csproj">
-      <Project>{D11DBE45-A56C-6F5D-303F-F16DA0E2E8AA}</Project>
+      <Project>{5907912C-13D4-B4C0-0FF3-B76631BAFAB0}</Project>
       <Name>LeanCommon</Name>
     </ProjectReference>
   </ItemGroup>

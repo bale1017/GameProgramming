@@ -9,7 +9,7 @@
     <ProductVersion>10.0.20506</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
     <RootNamespace></RootNamespace>
-    <ProjectGuid>{C4F36F76-4002-B951-CCC7-D647558B6EC5}</ProjectGuid>
+    <ProjectGuid>{F1EFE84F-74EC-BEB8-FB7A-56CE279D6DF5}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <AssemblyName>CW.Common</AssemblyName>

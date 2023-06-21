@@ -10,6 +10,7 @@ public class SkeletonSwordWarriorController : MonoBehaviour, IController
     private Animator animator;
     private SpriteRenderer spriteRenderer;
 
+    // generic values and values for state machine
     private EnemyState state;
     public float initialHealth = 10;
     public float chaseRange = 1;
@@ -26,13 +27,12 @@ public class SkeletonSwordWarriorController : MonoBehaviour, IController
     public float nextWaypointDistance = 0.2F;
     public float updatePathTime = 2;
 
-    // values for Roaming
+    // values for roaming
     private Vector3 startPosition;
     private Vector3 randNextDestination;
     private float roamingTime;
     public float roamingOffset = 1F;
     public float timeUntilNextDestination = 3;
-
     private float returnTime;
     public float timeUntilReturning = 2;
     public float distanceOffset = 2;
@@ -189,6 +189,8 @@ public class SkeletonSwordWarriorController : MonoBehaviour, IController
         {
             //Debug.Log("Try to move");
             animator.SetBool("isMoving", true);
+
+            //switch direction depending of the position of the next waypoint
             if (dir.x <= 0)
             {
                 spriteRenderer.flipX = true;
@@ -197,7 +199,8 @@ public class SkeletonSwordWarriorController : MonoBehaviour, IController
             {
                 spriteRenderer.flipX = false;
             }
-            // Move the Skeleton Sword Warrior
+
+            //Move the Skeleton Sword Warrior
             transform.position += dir * Time.deltaTime;
         }
     }
@@ -224,13 +227,13 @@ public class SkeletonSwordWarriorController : MonoBehaviour, IController
 
     public void Defeated(float val)
     {
-        Debug.Log("Skeleton Sword Warrior has been slayed");
+        Debug.Log("Skeleton Sword Warrior has been slayed!");
         animator.SetBool("defeated", true);
     }
 
     public void ReceivedDamage(float val)
     {
-        Debug.Log("Skeleton Sword Warrior received " + val + " damage");
+        Debug.Log("Skeleton Sword Warrior received " + val + " damage!");
         animator.SetTrigger("receivesDamage");
     }
 

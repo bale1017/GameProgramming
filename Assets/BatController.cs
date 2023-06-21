@@ -11,13 +11,8 @@ public class BatController : MonoBehaviour, IController
     private Seeker seeker;
     private Animator animator;
     private SpriteRenderer spriteRenderer;
-    private enum State
-    {
-        Idle,
-        ChaseTarget,
-        AttackTarget
-    }
-    private State state;
+
+    private EnemyState state;
     public float initialHealth = 3;
     public float chaseRange = 1;
     public float attackRange = 0.1F;
@@ -53,7 +48,7 @@ public class BatController : MonoBehaviour, IController
         health = new Health(initialHealth, ReceivedDamage, Defeated);
 
         movement.PreCalcPath(transform.position, targetPosition.position);
-        state = State.Idle;
+        state = EnemyState.Idle;
     }
 
     public void FixedUpdate()
@@ -64,15 +59,15 @@ public class BatController : MonoBehaviour, IController
                 switch (state)
                 {
                     default:
-                    case State.Idle:
+                    case EnemyState.Idle:
                         Idle();
                         break;
 
-                    case State.AttackTarget:
+                    case EnemyState.AttackTarget:
                         AttackTarget();
                         break;
 
-                    case State.ChaseTarget:
+                    case EnemyState.ChaseTarget:
                         ChaseTarget();
                         break;
                 }
@@ -85,7 +80,7 @@ public class BatController : MonoBehaviour, IController
         if (Vector3.Distance(transform.position, PlayerController.Instance.GetPosition()) < chaseRange)
         {
             //Player within target range
-            state = State.ChaseTarget;
+            state = EnemyState.ChaseTarget;
         }
         else
         {
@@ -118,13 +113,13 @@ public class BatController : MonoBehaviour, IController
         if (Vector3.Distance(transform.position, PlayerController.Instance.GetPosition()) < attackRange)
         {
             //Player inside attack range
-            state = State.AttackTarget;
+            state = EnemyState.AttackTarget;
         }
         else if (Vector3.Distance(transform.position, PlayerController.Instance.GetPosition()) + distanceOffset > chaseRange)
         {
             //Player outside of target range
             sleepTime = Time.time + timeUntilSleeping;
-            state = State.Idle;
+            state = EnemyState.Idle;
         }
     }
 
@@ -135,7 +130,7 @@ public class BatController : MonoBehaviour, IController
         {
             animator.SetTrigger("isAttacking");
             nextAttackTime = Time.time + attackRate;
-            state = State.ChaseTarget;
+            state = EnemyState.ChaseTarget;
         }
     }
 
