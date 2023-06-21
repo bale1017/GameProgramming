@@ -9,7 +9,7 @@
     <ProductVersion>10.0.20506</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
     <RootNamespace></RootNamespace>
-    <ProjectGuid>{46350276-83EE-E2D1-844D-FF7BE405B038}</ProjectGuid>
+    <ProjectGuid>{54AE5487-84A2-454B-1FEB-A83CD1E29969}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <AssemblyName>LeanTransition</AssemblyName>
@@ -115,8 +115,8 @@
     <Compile Include="Assets\Plugins\CW\LeanTransition\Required\Methods\CanvasGroup\LeanCanvasGroupInteractable.cs" />
     <Compile Include="Assets\Plugins\CW\LeanTransition\Required\Methods\LeanGet.cs" />
     <Compile Include="Assets\Plugins\CW\LeanTransition\Extras\Scripts\LeanManualAnimation.cs" />
-    <Compile Include="Assets\Plugins\CW\LeanTransition\Required\Methods\LeanPlaySound.cs" />
     <Compile Include="Assets\Plugins\CW\LeanTransition\Required\Methods\RectTransform\LeanRectTransformAnchoredPosition.cs" />
+    <Compile Include="Assets\Plugins\CW\LeanTransition\Required\Methods\LeanPlaySound.cs" />
     <Compile Include="Assets\Plugins\CW\LeanTransition\Required\Methods\LeanDelay.cs" />
     <Compile Include="Assets\Plugins\CW\LeanTransition\Required\Methods\Transform\LeanTransformPosition.cs" />
     <Compile Include="Assets\Plugins\CW\LeanTransition\Required\Methods\Transform\LeanTransformLocalScale.cs" />
@@ -804,11 +804,11 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="LeanCommon.csproj">
-      <Project>{E06BED95-31A1-AE21-DB0A-16B80138EE0B}</Project>
+      <Project>{5907912C-13D4-B4C0-0FF3-B76631BAFAB0}</Project>
       <Name>LeanCommon</Name>
     </ProjectReference>
     <ProjectReference Include="CW.Common.csproj">
-      <Project>{A1448A62-79DF-FEFC-B5EE-076F4A6304D8}</Project>
+      <Project>{F1EFE84F-74EC-BEB8-FB7A-56CE279D6DF5}</Project>
       <Name>CW.Common</Name>
     </ProjectReference>
   </ItemGroup>

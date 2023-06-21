@@ -11,7 +11,7 @@ public class PlayerController : MonoBehaviour, IController
     SpriteRenderer spriteRenderer;
     Rigidbody2D rb;
     BoxCollider2D bxc;
-    public SwordAttack swordAttack; //import script
+    public PlayerSwordAttack swordAttack; //import script
     public Health health;
 
     Vector2 movementInput;
@@ -131,8 +131,8 @@ public class PlayerController : MonoBehaviour, IController
     }
     public void EndSwordAttack()
     {
-        UnlockMovement();
         swordAttack.StopAttack();
+        UnlockMovement();
     }
     public void LockMovement()
     {

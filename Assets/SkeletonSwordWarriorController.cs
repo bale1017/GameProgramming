@@ -228,8 +228,8 @@ public class SkeletonSwordWarriorController : MonoBehaviour, IController
     // Called at end of attack animation
     public void EndAttack()
     {
-        movement.UnlockMovement();
         skeletonSword.StopAttack();
+        movement.UnlockMovement();
     }
 
     public void Defeated(float val)

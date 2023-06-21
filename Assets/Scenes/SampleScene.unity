@@ -610,7 +610,7 @@ PrefabInstance:
     - target: {fileID: 256516355802191914, guid: dfe0c577415da6649a7df8d86a9f9373,
         type: 3}
       propertyPath: m_IsActive
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1710176694258134337, guid: dfe0c577415da6649a7df8d86a9f9373,
         type: 3}
@@ -891,13 +891,48 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 1946105947149942689, guid: 276987d33a0b16644aa5980b54cd09b7,
         type: 3}
+      propertyPath: speed
+      value: 0.7
+      objectReference: {fileID: 0}
+    - target: {fileID: 1946105947149942689, guid: 276987d33a0b16644aa5980b54cd09b7,
+        type: 3}
+      propertyPath: attackRate
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 1946105947149942689, guid: 276987d33a0b16644aa5980b54cd09b7,
+        type: 3}
+      propertyPath: chaseRange
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 1946105947149942689, guid: 276987d33a0b16644aa5980b54cd09b7,
+        type: 3}
+      propertyPath: attackRange
+      value: 0.45
+      objectReference: {fileID: 0}
+    - target: {fileID: 1946105947149942689, guid: 276987d33a0b16644aa5980b54cd09b7,
+        type: 3}
       propertyPath: targetPosition
       value: 
       objectReference: {fileID: 2140641646}
+    - target: {fileID: 1946105947149942689, guid: 276987d33a0b16644aa5980b54cd09b7,
+        type: 3}
+      propertyPath: attackAnimationSpeed
+      value: 0.8
+      objectReference: {fileID: 0}
     - target: {fileID: 6622463401287199620, guid: 276987d33a0b16644aa5980b54cd09b7,
         type: 3}
       propertyPath: m_Name
       value: Revan_the_Endboss
+      objectReference: {fileID: 0}
+    - target: {fileID: 6622463401287199620, guid: 276987d33a0b16644aa5980b54cd09b7,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6622463401287199620, guid: 276987d33a0b16644aa5980b54cd09b7,
+        type: 3}
+      propertyPath: m_TagString
+      value: Enemy
       objectReference: {fileID: 0}
     - target: {fileID: 6959471295415283788, guid: 276987d33a0b16644aa5980b54cd09b7,
         type: 3}
@@ -907,12 +942,12 @@ PrefabInstance:
     - target: {fileID: 6959471295415283788, guid: 276987d33a0b16644aa5980b54cd09b7,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: 1.742
+      value: 0.128
       objectReference: {fileID: 0}
     - target: {fileID: 6959471295415283788, guid: 276987d33a0b16644aa5980b54cd09b7,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: -0.35
+      value: 0.206
       objectReference: {fileID: 0}
     - target: {fileID: 6959471295415283788, guid: 276987d33a0b16644aa5980b54cd09b7,
         type: 3}
@@ -8138,7 +8173,7 @@ PrefabInstance:
     - target: {fileID: 353534342817622301, guid: ac8a5a8d72e441f44953033b88e8b60e,
         type: 3}
       propertyPath: m_IsActive
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 758290442576947392, guid: ac8a5a8d72e441f44953033b88e8b60e,
         type: 3}
