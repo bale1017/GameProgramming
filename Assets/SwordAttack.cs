@@ -1,3 +1,4 @@
+using BasePatterns;
 using UnityEngine;
 
 public class SwordAttack : MonoBehaviour
@@ -37,7 +38,7 @@ public class SwordAttack : MonoBehaviour
         if (collision.tag == "Enemy")
         {
             //Deal damage to enemy
-            EnemyController enemy = collision.GetComponent<EnemyController>();
+            IController enemy = collision.GetComponent<IController>();
             if (enemy != null)
             {
                 enemy.health.ReduceHealth(damage);
