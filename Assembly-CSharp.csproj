@@ -71,6 +71,7 @@
     <Compile Include="Assets\PauseMenu.cs" />
     <Compile Include="Assets\SwordAttack.cs" />
     <Compile Include="Assets\ReTime\Demos\Checkpoint\GroundHit.cs" />
+    <Compile Include="Assets\Skripts\Game.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\TMP_TextSelector_A.cs" />
     <Compile Include="Assets\Art\Pixel Art Top Down - Basic\Script\SpriteColorAnimation.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\Benchmark01_UGUI.cs" />
@@ -111,6 +112,7 @@
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\TextMeshProFloatingText.cs" />
     <Compile Include="Assets\Skripts\MapGenerator.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\ShaderPropAnimator.cs" />
+    <Compile Include="Assets\BossController.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\CameraController.cs" />
     <Compile Include="Assets\Skripts\Room.cs" />
     <Compile Include="Assets\Art\Pixel Art Top Down - Basic\Script\PropsAltar.cs" />
