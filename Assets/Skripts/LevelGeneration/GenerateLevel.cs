@@ -9,6 +9,8 @@ public class GenerateLevel : MonoBehaviour
     public int level;
     public GameObject[] rooms;
     public GameObject[] interiors;
+    public int RoomWidth = 26;
+    public int RoomHeight = 13;
 
     public void GenerateLayout(GameObject[] rooms, GameObject[] interiors)
     {
@@ -44,8 +46,8 @@ public class GenerateLevel : MonoBehaviour
         {
             int roomType = roomList[i].Item1;
             int roomInterior = roomList[i].Item2;
-            int x = roomLayouts[i].Item1;
-            int y = roomLayouts[i].Item2;
+            int x = roomLayouts[i].Item1 * RoomHeight;
+            int y = roomLayouts[i].Item2 * RoomWidth;
             Instantiate(rooms[roomType], new Vector2(x, y), Quaternion.identity);
             Instantiate(interiors[roomInterior], new Vector2(x, y), Quaternion.identity);
         }
