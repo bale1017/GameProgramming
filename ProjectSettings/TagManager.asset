@@ -26,8 +26,8 @@ TagManager:
   - 
   - 
   - 
-  - Layer 1
-  - Layer 2
+  - Ground
+  - CollisionObjects
   - Layer 3
   - 
   - 

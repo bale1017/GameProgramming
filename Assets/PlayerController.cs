@@ -1,16 +1,18 @@
+using BasePatterns;
 using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-public class PlayerController : MonoBehaviour
+public class PlayerController : MonoBehaviour, IController
 {
-
     Animator animator;
     SpriteRenderer spriteRenderer;
     Rigidbody2D rb;
+    BoxCollider2D bxc;
     public SwordAttack swordAttack; //import script
+    public Health health;
 
     Vector2 movementInput;
     public float moveSpeed = 1f;
@@ -18,6 +20,10 @@ public class PlayerController : MonoBehaviour
     public ContactFilter2D movementFilter;
     List<RaycastHit2D> castCollisions = new List<RaycastHit2D>();
     bool canMove = true;
+    public float healthAmount = 25;
+
+    public static PlayerController Instance { get; private set; }
+    Health IController.health { get => health; }
 
     // Start is called before the first frame update
     void Start()
@@ -25,6 +31,9 @@ public class PlayerController : MonoBehaviour
         rb = GetComponent<Rigidbody2D>();
         animator = GetComponent<Animator>();
         spriteRenderer = GetComponent<SpriteRenderer>();
+        bxc = GetComponent<BoxCollider2D>();
+        Instance = this;
+        health = new Health(healthAmount, ReceivedDamage, Defeated);
     }
 
     private void FixedUpdate()
@@ -95,7 +104,6 @@ public class PlayerController : MonoBehaviour
     //Function called by the "Player Input" component and processes the movement of the char
     void OnMove(InputValue movementValue)
     {
-        print("OnMove is called");
         movementInput = movementValue.Get<Vector2>();
     }
 
@@ -123,12 +131,37 @@ public class PlayerController : MonoBehaviour
     }
     public void LockMovement()
     {
-        print("Lock movement");
         canMove = false;
     }
     public void UnlockMovement()
     {
-        print("Unlock movement");
         canMove = true;
+    }
+
+    public void Defeated(float val)
+    {
+        Debug.Log("Player has been defeated");
+        // trigger death animation of player
+        animator.SetBool("defeated", true);
+    }
+
+    public void ReceivedDamage(float val)
+    {
+        Debug.Log("Player received " + val + " damage");
+        // trigger damage receiving animation of player
+        animator.SetTrigger("receivesDamage");
+    }
+
+    public void PlayerDefeated()
+    { // called from inside "death"-animation
+      //TODO implement logic for player death
+        gameObject.SetActive(false);
+        bxc.enabled = false;
+        animator.SetBool("defeated", false);
+    }
+
+    public Vector3 GetPosition() 
+    {
+        return transform.position;
     }
 }
