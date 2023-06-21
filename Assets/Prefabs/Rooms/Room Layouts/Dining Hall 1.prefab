@@ -946,7 +946,7 @@ GameObject:
   - component: {fileID: 5369365639284694622}
   - component: {fileID: 3033410901801900625}
   m_Layer: 0
-  m_Name: Dining Hall
+  m_Name: Dining Hall 1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
