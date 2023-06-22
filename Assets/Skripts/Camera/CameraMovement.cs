@@ -1,3 +1,4 @@
+using Lean.Transition;
 using Pathfinding;
 using System.Collections;
 using System.Collections.Generic;
@@ -45,7 +46,9 @@ public class CameraMovement : MonoBehaviour
             + PlayerDifference.x + " y" + PlayerDifference.y 
             + "overlapsXRounded: " + overlapsXRounded);
         //add the cameraoffset times the amount of screens we are away from the start
-        transform.position = StartLocationCamera + new Vector3(FlipCameraOffset.x * overlapsXRounded, FlipCameraOffset.y * overlapsYRounded, 0.0f);
+        Vector3 target = StartLocationCamera + new Vector3(FlipCameraOffset.x * overlapsXRounded, FlipCameraOffset.y * overlapsYRounded, 0.0f);
+
+        transform.positionTransition(target, 0.04f);
 
     }
 }

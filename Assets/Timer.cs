@@ -43,6 +43,12 @@ public class Timer : MonoBehaviour
             _timer = timer;
             Game.current.StopRewind();
         }
+        if (timeScale != 0 && _timer <= 0)
+        {
+            _timer = 0;
+            Game.current.FailGame();
+            return;
+        }
 
         text.text = _timer.ToString("00.00s").Replace(",", ":");
         if (_timer < 5 && (int) previousTime > (int)_timer
