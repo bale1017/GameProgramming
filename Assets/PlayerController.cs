@@ -163,6 +163,8 @@ public class PlayerController : MonoBehaviour, IController
 
     public void Defeated(float val)
     {
+        var healthbar = GameObject.Find("HealthBar_LR").GetComponent<Slider>();
+        healthbar.value = 0;
         isDead = true;
         Debug.Log("Player has been defeated");
         // trigger death animation of player
