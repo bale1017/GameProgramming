@@ -42,9 +42,9 @@ public class CameraMovement : MonoBehaviour
         float overlapsY = PlayerDifference.y / FlipPlayerOffset.y;
         int overlapsXRounded = (int)Mathf.Round(overlapsX);
         int overlapsYRounded = (int)Mathf.Round(overlapsY);
-        Debug.Log("camerastart: " + StartLocationCamera + " player start" + StartLocationPlayer + "PlayerDifferencex: " 
-            + PlayerDifference.x + " y" + PlayerDifference.y 
-            + "overlapsXRounded: " + overlapsXRounded);
+        // Debug.Log("camerastart: " + StartLocationCamera + " player start" + StartLocationPlayer + "PlayerDifferencex: " 
+        //    + PlayerDifference.x + " y" + PlayerDifference.y 
+        //    + "overlapsXRounded: " + overlapsXRounded);
         //add the cameraoffset times the amount of screens we are away from the start
         Vector3 target = StartLocationCamera + new Vector3(FlipCameraOffset.x * overlapsXRounded, FlipCameraOffset.y * overlapsYRounded, 0.0f);
 

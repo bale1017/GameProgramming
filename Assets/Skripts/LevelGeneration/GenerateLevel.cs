@@ -12,11 +12,15 @@ public class GenerateLevel : MonoBehaviour
     public GameObject[] rooms;
     public GameObject[] interiors;
     public GameObject[] Walls;
+    public GameObject exitRoom;
     public float RoomWidth;
     public float RoomHeight;
+    [HideInInspector]
+    public List<GameObject> createdObjects;
 
     public void GenerateLayout()
     {
+        createdObjects = new List<GameObject>();
         int roomAmount;
         int roomLayer;
         float roomOffset = 0;
@@ -60,6 +64,7 @@ public class GenerateLevel : MonoBehaviour
         int maxY = 0;
         int minY = 0;
 
+        GameObject newObject = null;
         for (int i = 0; i < roomList.Count; i++)
         {
             int roomType = roomList[i].Item1;
@@ -73,30 +78,41 @@ public class GenerateLevel : MonoBehaviour
             if (item.x < minX) minX = item.x;
             if (item.y < minY) minY = item.y;
 
-            Instantiate(rooms[roomType], new Vector2(x, y + roomOffset), Quaternion.identity);
-            if (i != 0)
+            newObject = (GameObject) Instantiate(rooms[roomType], new Vector2(x, y + roomOffset), Quaternion.identity);
+            createdObjects.Add(newObject);
+            if (i == roomList.Count - 1)
             {
-                Instantiate(interiors[roomInterior], new Vector2(x, y), Quaternion.identity);
+                newObject = (GameObject)Instantiate(exitRoom, new Vector2(x, y), Quaternion.identity);
+                createdObjects.Add(newObject);
+            }
+            else if (i != 0)
+            {
+                newObject = (GameObject)Instantiate(interiors[roomInterior], new Vector2(x, y), Quaternion.identity);
+                createdObjects.Add(newObject);
             }
             if (!item.hasNorth){
                 if (roomLayer == 0)
                 {
-                    Instantiate(Walls[0], new Vector2(x, y), Quaternion.identity);
+                    newObject = (GameObject) Instantiate(Walls[0], new Vector2(x, y), Quaternion.identity);
+                    createdObjects.Add(newObject);
                 }
                 else
                 {
-                    Instantiate(Walls[0 + 4], new Vector2(x, y), Quaternion.identity);
+                    newObject = (GameObject) Instantiate(Walls[0 + 4], new Vector2(x, y), Quaternion.identity);
+                    createdObjects.Add(newObject);
                 }
             }
             if (!item.hasEast)
             {
                 if (roomLayer == 0)
                 {
-                    Instantiate(Walls[1], new Vector2(x, y), Quaternion.identity);
+                    newObject = (GameObject) Instantiate(Walls[1], new Vector2(x, y), Quaternion.identity);
+                    createdObjects.Add(newObject);
                 }
                 else
                 {
-                    Instantiate(Walls[1 + 4], new Vector2(x, y), Quaternion.identity);
+                    newObject = (GameObject) Instantiate(Walls[1 + 4], new Vector2(x, y), Quaternion.identity);
+                    createdObjects.Add(newObject);
                 }
 
             }
@@ -104,11 +120,13 @@ public class GenerateLevel : MonoBehaviour
             {
                 if (roomLayer == 0)
                 {
-                    Instantiate(Walls[2], new Vector2(x, y), Quaternion.identity);
+                    newObject = (GameObject) Instantiate(Walls[2], new Vector2(x, y), Quaternion.identity);
+                    createdObjects.Add(newObject);
                 }
                 else
                 {
-                    Instantiate(Walls[2 + 4], new Vector2(x, y), Quaternion.identity);
+                    newObject = (GameObject) Instantiate(Walls[2 + 4], new Vector2(x, y), Quaternion.identity);
+                    createdObjects.Add(newObject);
                 }
 
             }
@@ -116,11 +134,13 @@ public class GenerateLevel : MonoBehaviour
             {
                 if (roomLayer == 0)
                 {
-                    Instantiate(Walls[3], new Vector2(x, y), Quaternion.identity);
+                    newObject = (GameObject) Instantiate(Walls[3], new Vector2(x, y), Quaternion.identity);
+                    createdObjects.Add(newObject);
                 }
                 else
                 {
-                    Instantiate(Walls[3 + 4], new Vector2(x, y), Quaternion.identity);
+                    newObject = (GameObject) Instantiate(Walls[3 + 4], new Vector2(x, y), Quaternion.identity);
+                    createdObjects.Add(newObject);
                 }
 
             }
