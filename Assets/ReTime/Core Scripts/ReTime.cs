@@ -215,13 +215,12 @@ public class ReTime : MonoBehaviour {
 		if(transform.childCount > 0){
 			foreach (Transform child in transform)
 			{
-                ReTime retime = child.GetComponent<ReTime>();
-                if (retime == null)
+                if (!child.TryGetComponent<ReTime>(out var retime))
                 {
                     retime = child.AddComponent<ReTime>();
 
                 }
-                retime.StopTimeRewind();
+                retime.StartTimeRewind();
             }
 		}
 	}
@@ -236,8 +235,7 @@ public class ReTime : MonoBehaviour {
 		if(transform.childCount > 0){
 			foreach (Transform child in transform) {
 
-				ReTime retime = child.GetComponent<ReTime>();
-				if (retime == null)
+				if (!child.TryGetComponent<ReTime>(out var retime))
 				{
 					retime = child.AddComponent<ReTime>();
 					
