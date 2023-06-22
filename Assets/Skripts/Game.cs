@@ -37,6 +37,9 @@ public class Game : MonoBehaviour
     // set to the previous game state when pausing and reset to this value after unpausing
     private float pausedTimeScale = 1;
 
+    private GameObject healthBarOfBoss = null;
+    private GameObject nametagOfBoss = null;
+
     public Game()
     {
         current = this;
@@ -78,6 +81,8 @@ public class Game : MonoBehaviour
     {
         gameState = GameState.PENDING;
         OnGameLoad.Invoke();
+
+        deactivateBossUI(); //deactivate UI (Healthbar + Nametag)
 
         StartGame();
     }
@@ -155,5 +160,21 @@ public class Game : MonoBehaviour
     public bool IsPaused()
     {
         return pausedGameState != GameState.PAUSED;
+    }
+
+    private void deactivateBossUI()
+    {
+        Debug.Log("Deactivate Boss UI");
+        nametagOfBoss = GameObject.Find("NameTag_Revan");
+        nametagOfBoss.SetActive(false);
+        healthBarOfBoss = GameObject.Find("HealthBar_Revan");
+        healthBarOfBoss.SetActive(false);
+    }
+
+    public void activateBossUI()
+    {
+        Debug.Log("Activate Boss UI");
+        nametagOfBoss.SetActive(true);
+        healthBarOfBoss.SetActive(true);
     }
 }

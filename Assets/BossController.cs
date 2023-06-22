@@ -3,6 +3,7 @@ using Pathfinding;
 using UnityEngine;
 using System;
 using System.Collections;
+using UnityEngine.UI;
 
 public class BossController : MonoBehaviour, IController
 {
@@ -18,15 +19,18 @@ public class BossController : MonoBehaviour, IController
     public float attackRangeY = 0.1F;
     public float damage = 6;
     public float timeToNextAttack = 2;
-    public float attackAnimationSpeed = 0.9F;
+    public float attackAnimationSpeed = 0.8F;
+    public float rewindTimeInSec = 3;
 
     private bool isFirstPhase = true;
     private float nextAttackTime;
     private int randAttack;
+    private bool activatedUI = false;
+    private bool revanIsRewinding = false;
 
     // values for a* algorithm
     public Transform targetPosition;
-    public float speed = 0.7F;
+    public float speed = 0.6F;
     public float nextWaypointDistance = 0.2F;
     public float updatePathTime = 2;
 
@@ -56,8 +60,13 @@ public class BossController : MonoBehaviour, IController
     // Update is called once per frame
     void FixedUpdate()
     {
+        if (!activatedUI)
+        {
+            activatedUI = true;
+            Game.current.activateBossUI();
+        }
         if (Game.current.IsRunning()) { 
-            if (!Game.IsRewinding)
+            if (!Game.IsRewinding && !revanIsRewinding)
             {
                 switch (state)
                 {
@@ -198,25 +207,28 @@ public class BossController : MonoBehaviour, IController
     public IEnumerator EndAttack()
     {
         yield return new WaitForSeconds(1);
-        Debug.Log("Revan ends his attack");
         movement.UnlockMovement();
         attackA.StopAttack();
         attackB.StopAttack();
         attackC.StopAttack();
     }
 
-    private void Rewind()
+    private IEnumerator Rewind()
     {
+        revanIsRewinding = true;
+        health.MakeInvulnerable();
         animator.SetTrigger("startRewind");
+        animator.SetBool("isRewinding", true);
+        yield return new WaitForSeconds(1);
 
-        animator.SetBool("rewind", true);
-
-        //TODO add rewinding logic
+        Game.current.StartRewind();
         isFirstPhase = false;
+        yield return new WaitForSeconds(rewindTimeInSec);
 
-        animator.SetBool("rewind", false);
-
-        animator.SetTrigger("endRewind");
+        Game.current.StopRewind();
+        animator.SetBool("isRewinding", false);
+        health.MakeVulnerable();
+        revanIsRewinding = false;
     }
 
     private void ReceivedDamage(float val)
@@ -224,19 +236,23 @@ public class BossController : MonoBehaviour, IController
         Debug.Log("Revan received " + val + " damage!");
         animator.SetTrigger("receivesDamage");
 
-        if (val <= 2 && isFirstPhase)
-        {
-            //It's rewind time!
-            Rewind();
-        }
+        var healthbar = GameObject.Find("HealthBar_Revan").GetComponent<Slider>();
+        healthbar.value = health.GetHealth()/initialHealth;
     }
 
     private void Defeated(float val)
     {
+        var healthbar = GameObject.Find("HealthBar_Revan").GetComponent<Slider>();
+        healthbar.value = 0;
+
         if (!isFirstPhase)
         {
             Debug.Log("Revan has been slayed!");
             animator.SetBool("defeated", true);
+        } else
+        {
+            //It's rewind time!
+            StartCoroutine(Rewind());
         }
     }
 }

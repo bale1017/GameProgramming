@@ -116,15 +116,10 @@ public class PlayerController : MonoBehaviour, IController
 
     void OnFire()
     {
-        Debug.Log("OnFire called");
-        Debug.Log(Game.current.IsRunning());
         if (Game.current.IsRunning())
         {
-            Debug.Log("OnFire entered");
-            Debug.Log(!Game.IsRewinding);
             if (canMove && !isDead && !Game.IsRewinding)
             {
-                Debug.Log("start attack");
                 //start "Sword Attack" animation for player
                 animator.SetTrigger("swordAttack");
             }
@@ -163,7 +158,7 @@ public class PlayerController : MonoBehaviour, IController
 
     public void Defeated(float val)
     {
-        var healthbar = GameObject.Find("HealthBar_LR").GetComponent<Slider>();
+        var healthbar = GameObject.Find("HealthBar_Player").GetComponent<Slider>();
         healthbar.value = 0;
         isDead = true;
         Debug.Log("Player has been defeated");
@@ -180,7 +175,7 @@ public class PlayerController : MonoBehaviour, IController
         Debug.Log("Player received " + val + " damage");
         // trigger damage receiving animation of player
         animator.SetTrigger("receivesDamage");
-        var healthbar = GameObject.Find("HealthBar_LR").GetComponent<Slider>();
+        var healthbar = GameObject.Find("HealthBar_Player").GetComponent<Slider>();
         healthbar.value = health.GetHealth()/healthAmount;
     }
 
