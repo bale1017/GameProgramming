@@ -18,6 +18,7 @@ public class SwordAttack : MonoBehaviour
     public void AttackRight()
     {
         Slash.Play();
+        GetComponent<ReTime>().AddKeyFrameAudio(Slash);
         Debug.Log("Sword attack right");
         swordCollider.enabled = true;
         transform.localPosition = rightAttackOffset;

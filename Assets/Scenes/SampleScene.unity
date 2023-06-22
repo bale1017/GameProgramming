@@ -546,12 +546,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   isRewinding: 0
-  KeyTrigger: 
-  UseInputTrigger: 0
   animator: {fileID: 0}
-  RewindSeconds: 5
   RewindSpeed: 1
-  PauseEnd: 0
 --- !u!1 &441799614 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 7128878733178503349, guid: ccb30c79aa3277c4bae558cfab8e9859,
