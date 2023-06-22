@@ -28,7 +28,6 @@ public class CompleteMenu : MonoBehaviour
         text = victory ? textVictory : textDefeat;
         Vector3 bPos = background.transform.position;
         Vector3 tPos = text.transform.position;
-        Debug.Log(bPos);
 
         background.SetActive(true);
         background.transform
