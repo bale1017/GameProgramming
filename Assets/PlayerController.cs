@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.InputSystem.Processors;
 
 public class PlayerController : MonoBehaviour, IController
 {
@@ -18,7 +19,8 @@ public class PlayerController : MonoBehaviour, IController
     public float collisionOffset = 0.01f;
     public ContactFilter2D movementFilter;
     List<RaycastHit2D> castCollisions = new List<RaycastHit2D>();
-    bool canMove = true;
+    private bool canMove = true;
+    private bool isDead = false;
     public float healthAmount = 25;
 
     public AudioSource TakeDamage;
@@ -41,7 +43,7 @@ public class PlayerController : MonoBehaviour, IController
     {
         if (Game.current.IsRunning()) 
         { 
-            if (canMove && !Game.IsRewinding)
+            if (canMove && !isDead && !Game.IsRewinding)
             {
                 //If movement input is not 0, try to move
                 if (movementInput != Vector2.zero)
@@ -118,8 +120,8 @@ public class PlayerController : MonoBehaviour, IController
         if (Game.current.IsRunning())
         {
             Debug.Log("OnFire entered");
-            Debug.Log(canMove && !Game.IsRewinding);
-            if (canMove && !Game.IsRewinding)
+            Debug.Log(!Game.IsRewinding);
+            if (canMove && !isDead && !Game.IsRewinding)
             {
                 Debug.Log("start attack");
                 //start "Sword Attack" animation for player
@@ -157,10 +159,13 @@ public class PlayerController : MonoBehaviour, IController
 
     public void Defeated(float val)
     {
-        Death.Play();
+        isDead = true;
         Debug.Log("Player has been defeated");
         // trigger death animation of player
+        animator.SetBool("isMoving", false);
         animator.SetBool("defeated", true);
+        Death.Play();
+        StartCoroutine(PlayerDefeated());
     }
 
     public void ReceivedDamage(float val)
@@ -171,14 +176,12 @@ public class PlayerController : MonoBehaviour, IController
         animator.SetTrigger("receivesDamage");
     }
 
-    public void PlayerDefeated()
-    { // called from inside "death"-animation
-      //TODO implement logic for player death
-      //gameObject.SetActive(false);
+    public IEnumerator PlayerDefeated()
+    { 
+        yield return new WaitForSeconds(1);
         GetComponent<SpriteRenderer>().enabled = false;
         GetComponent<BoxCollider2D>().enabled = false;
         animator.SetBool("defeated", false);
-
         Game.current.FailGame();
     }
 
