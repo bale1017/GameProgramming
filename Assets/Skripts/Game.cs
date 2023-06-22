@@ -144,7 +144,7 @@ public class Game : MonoBehaviour
         if (!IsRunning()) return;
         IsRewinding = false;
         // Invoke stop event so that all listeners know that time is no longer rewinding.
-        OnRewindEnd.Invoke();
+        OnRewindEnd.Invoke(); 
     }
 
     public bool IsRunning()

@@ -530,7 +530,7 @@ Transform:
   - {fileID: 541894017}
   - {fileID: 855069582}
   - {fileID: 1857037091}
-  - {fileID: 718295827}
+  - {fileID: 1648143612}
   m_Father: {fileID: 0}
   m_RootOrder: 7
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -561,6 +561,79 @@ RectTransform:
     type: 3}
   m_PrefabInstance: {fileID: 1189055570}
   m_PrefabAsset: {fileID: 0}
+--- !u!1001 &467996651
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 289664205}
+    m_Modifications:
+    - target: {fileID: 6622463401287199620, guid: 276987d33a0b16644aa5980b54cd09b7,
+        type: 3}
+      propertyPath: m_Name
+      value: Revan_the_Endboss
+      objectReference: {fileID: 0}
+    - target: {fileID: 6959471295415283788, guid: 276987d33a0b16644aa5980b54cd09b7,
+        type: 3}
+      propertyPath: m_RootOrder
+      value: -1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6959471295415283788, guid: 276987d33a0b16644aa5980b54cd09b7,
+        type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0.08
+      objectReference: {fileID: 0}
+    - target: {fileID: 6959471295415283788, guid: 276987d33a0b16644aa5980b54cd09b7,
+        type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0.213
+      objectReference: {fileID: 0}
+    - target: {fileID: 6959471295415283788, guid: 276987d33a0b16644aa5980b54cd09b7,
+        type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6959471295415283788, guid: 276987d33a0b16644aa5980b54cd09b7,
+        type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6959471295415283788, guid: 276987d33a0b16644aa5980b54cd09b7,
+        type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6959471295415283788, guid: 276987d33a0b16644aa5980b54cd09b7,
+        type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6959471295415283788, guid: 276987d33a0b16644aa5980b54cd09b7,
+        type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6959471295415283788, guid: 276987d33a0b16644aa5980b54cd09b7,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6959471295415283788, guid: 276987d33a0b16644aa5980b54cd09b7,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6959471295415283788, guid: 276987d33a0b16644aa5980b54cd09b7,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 276987d33a0b16644aa5980b54cd09b7, type: 3}
 --- !u!4 &541894017 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 7407949557343737041, guid: ac8a5a8d72e441f44953033b88e8b60e,
@@ -812,10 +885,34 @@ MonoBehaviour:
       m_Calls: []
   OnGamePause:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 1860027243}
+        m_TargetAssemblyTypeName: PauseMenu, Assembly-CSharp
+        m_MethodName: FadeIn
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
   OnGameUnpause:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 1860027243}
+        m_TargetAssemblyTypeName: PauseMenu, Assembly-CSharp
+        m_MethodName: FadeOut
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
   OnGameCompletion:
     m_PersistentCalls:
       m_Calls: []
@@ -852,7 +949,7 @@ MonoBehaviour:
   OnRewindStart:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 289664206}
+      - m_Target: {fileID: 0}
         m_TargetAssemblyTypeName: ReTime, Assembly-CSharp
         m_MethodName: StartTimeRewind
         m_Mode: 1
@@ -879,7 +976,7 @@ MonoBehaviour:
   OnRewindEnd:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 289664206}
+      - m_Target: {fileID: 0}
         m_TargetAssemblyTypeName: ReTime, Assembly-CSharp
         m_MethodName: StopTimeRewind
         m_Mode: 1
@@ -12854,6 +12951,12 @@ PrefabInstance:
       addedObject: {fileID: 1220640077}
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: ccb30c79aa3277c4bae558cfab8e9859, type: 3}
+--- !u!4 &1648143612 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 6959471295415283788, guid: 276987d33a0b16644aa5980b54cd09b7,
+    type: 3}
+  m_PrefabInstance: {fileID: 467996651}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1676390761
 GameObject:
   m_ObjectHideFlags: 0

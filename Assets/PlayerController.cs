@@ -113,10 +113,15 @@ public class PlayerController : MonoBehaviour, IController
 
     void OnFire()
     {
+        Debug.Log("OnFire called");
+        Debug.Log(Game.current.IsRunning());
         if (Game.current.IsRunning())
         {
+            Debug.Log("OnFire entered");
+            Debug.Log(canMove && !Game.IsRewinding);
             if (canMove && !Game.IsRewinding)
             {
+                Debug.Log("start attack");
                 //start "Sword Attack" animation for player
                 animator.SetTrigger("swordAttack");
             }
