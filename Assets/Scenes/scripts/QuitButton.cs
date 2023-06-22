@@ -13,7 +13,6 @@ public class QuitButton : MonoBehaviour
     void OnMouseUp()
     {
         Application.Quit();
-        Debug.Log("Hello: " + gameObject.name);
     }
     // Update is called once per frame
     void Update()
