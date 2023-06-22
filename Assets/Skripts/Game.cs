@@ -37,7 +37,7 @@ public class Game : MonoBehaviour
     // set to the previous game state when pausing and reset to this value after unpausing
     private float pausedTimeScale = 1;
 
-    double timer = 60;
+    public double timer = 60;
 
     // Start is called before the first frame update
     void Start()
@@ -70,24 +70,20 @@ public class Game : MonoBehaviour
                 StopRewind();
             }
         }
-
-        // make as listener
-        if (IsRewinding)
-        {
-            timer += Time.deltaTime;
-        }
-        else
-        {
-            timer -= Time.deltaTime;
-        }
     }
 
     public void LoadGame()
     {
         gameState = GameState.PENDING;
         OnGameLoad.Invoke();
-        // TODO 1s delay toleranz
-        StartGame();
+        then(1, StartGame);
+    }
+
+    IEnumerator then(int sec, Action f)
+    {
+        // Give some time so taht player can realize, then game over screen.
+        yield return new WaitForSeconds(sec);
+        f.Invoke();
     }
 
     public void StartGame()
@@ -107,10 +103,15 @@ public class Game : MonoBehaviour
     {
         gameState = GameState.FAILURE;
         OnGameFailure.Invoke();
+        Debug.Log("Failure");
     }
 
     public void PauseGame()
     {
+        if (gameState == GameState.VICTORY || gameState == GameState.FAILURE)
+        {
+            return;
+        }
         pausedGameState = gameState;
         pausedTimeScale = Time.timeScale;
         Time.timeScale = 0;

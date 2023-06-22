@@ -115,8 +115,8 @@
     <Compile Include="Assets\Plugins\CW\LeanTransition\Required\Methods\CanvasGroup\LeanCanvasGroupInteractable.cs" />
     <Compile Include="Assets\Plugins\CW\LeanTransition\Required\Methods\LeanGet.cs" />
     <Compile Include="Assets\Plugins\CW\LeanTransition\Extras\Scripts\LeanManualAnimation.cs" />
-    <Compile Include="Assets\Plugins\CW\LeanTransition\Required\Methods\LeanPlaySound.cs" />
     <Compile Include="Assets\Plugins\CW\LeanTransition\Required\Methods\RectTransform\LeanRectTransformAnchoredPosition.cs" />
+    <Compile Include="Assets\Plugins\CW\LeanTransition\Required\Methods\LeanPlaySound.cs" />
     <Compile Include="Assets\Plugins\CW\LeanTransition\Required\Methods\LeanDelay.cs" />
     <Compile Include="Assets\Plugins\CW\LeanTransition\Required\Methods\Transform\LeanTransformPosition.cs" />
     <Compile Include="Assets\Plugins\CW\LeanTransition\Required\Methods\Transform\LeanTransformLocalScale.cs" />
