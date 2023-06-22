@@ -37,12 +37,14 @@ public class Game : MonoBehaviour
     // set to the previous game state when pausing and reset to this value after unpausing
     private float pausedTimeScale = 1;
 
-    public double timer = 60;
+    public Game()
+    {
+        current = this;
+    }
 
     // Start is called before the first frame update
     void Start()
     {
-        current = this;
         LoadGame();
     }
 
@@ -76,7 +78,8 @@ public class Game : MonoBehaviour
     {
         gameState = GameState.PENDING;
         OnGameLoad.Invoke();
-        then(1, StartGame);
+
+        StartGame();
     }
 
     IEnumerator then(int sec, Action f)
@@ -97,13 +100,14 @@ public class Game : MonoBehaviour
     {
         gameState = GameState.VICTORY;
         OnGameVictory.Invoke();
+        OnGameCompletion.Invoke();
     }
 
     public void FailGame()
     {
         gameState = GameState.FAILURE;
         OnGameFailure.Invoke();
-        Debug.Log("Failure");
+        OnGameCompletion.Invoke();
     }
 
     public void PauseGame()
@@ -131,7 +135,6 @@ public class Game : MonoBehaviour
         if (!IsRunning()) return;
         if (IsRewinding) return;
         IsRewinding = true;
-        Debug.Log("start rewind");
         // Invoke start event so that all listeners know that time is now rewinding.
         OnRewindStart.Invoke();
     }
@@ -139,15 +142,9 @@ public class Game : MonoBehaviour
     public void StopRewind()
     {
         if (!IsRunning()) return;
-        if (!IsRewinding) return;
         IsRewinding = false;
         // Invoke stop event so that all listeners know that time is no longer rewinding.
-        OnRewindEnd.Invoke();
-    }
-
-    public double GetTime()
-    {
-        return timer;
+        OnRewindEnd.Invoke(); 
     }
 
     public bool IsRunning()

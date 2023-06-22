@@ -28,18 +28,17 @@ public class CompleteMenu : MonoBehaviour
         text = victory ? textVictory : textDefeat;
         Vector3 bPos = background.transform.position;
         Vector3 tPos = text.transform.position;
-        Debug.Log(bPos);
 
         background.SetActive(true);
         background.transform
             .positionTransition_x(+Screen.width * 2, 0)
             .JoinTransition()
-            .positionTransition_x(bPos.x, 0.3f);
+            .positionTransition_x(bPos.x, .3f);
         text.SetActive(true);
         text.transform
             .positionTransition_x(-Screen.width * 2, 0)
             .JoinTransition()
-            .positionTransition_x(tPos.x, 0.3f);
+            .positionTransition_x(tPos.x, 0.15f);
     }
 
     public void FadeOut()
