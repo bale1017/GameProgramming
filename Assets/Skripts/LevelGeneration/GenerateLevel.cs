@@ -64,7 +64,10 @@ public class GenerateLevel : MonoBehaviour
             float x = item.x * RoomWidth;
             float y = item.y * RoomHeight;  
             Instantiate(rooms[roomType], new Vector2(x, y + roomOffset), Quaternion.identity);
-            Instantiate(interiors[roomInterior], new Vector2(x, y), Quaternion.identity);
+            if (i != 0)
+            {
+                Instantiate(interiors[roomInterior], new Vector2(x, y), Quaternion.identity);
+            }
             if (!item.hasNorth){
                 if (roomLayer == 0)
                 {
