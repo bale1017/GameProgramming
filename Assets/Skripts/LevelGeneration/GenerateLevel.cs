@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.CompilerServices;
+using Pathfinding;
 using UnityEngine;
 
 
@@ -54,7 +55,10 @@ public class GenerateLevel : MonoBehaviour
         Debug.Log(test.hasSouth);
         Debug.Log(test.hasWest);
         */
-
+        int maxX = 0;
+        int minX = 0;
+        int maxY = 0;
+        int minY = 0;
 
         for (int i = 0; i < roomList.Count; i++)
         {
@@ -63,6 +67,12 @@ public class GenerateLevel : MonoBehaviour
             Room item = roomLayouts[i]; 
             float x = item.x * RoomWidth;
             float y = item.y * RoomHeight;  
+
+            if (item.x > maxX) maxX = item.x;
+            if (item.y > maxY) maxY = item.y;
+            if (item.x < minX) minX = item.x;
+            if (item.y < minY) minY = item.y;
+
             Instantiate(rooms[roomType], new Vector2(x, y + roomOffset), Quaternion.identity);
             if (i != 0)
             {
@@ -115,6 +125,7 @@ public class GenerateLevel : MonoBehaviour
 
             }
         }
+        AstarPath.active.Scan();
     }
 
     class Room

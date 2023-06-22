@@ -31,7 +31,7 @@ Transform:
   m_Children:
   - {fileID: 7679235622486417110}
   m_Father: {fileID: 0}
-  m_RootOrder: 9
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!156049354 &4574635568807195836
 Grid:
@@ -59,7 +59,7 @@ GameObject:
   - component: {fileID: 4048299993744231480}
   - component: {fileID: 5567040574735970798}
   - component: {fileID: 5594509875802199883}
-  m_Layer: 0
+  m_Layer: 21
   m_Name: Walls
   m_TagString: Untagged
   m_Icon: {fileID: 0}
