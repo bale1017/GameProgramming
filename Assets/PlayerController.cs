@@ -4,14 +4,15 @@ using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.InputSystem.Processors;
+using UnityEngine.UI;
 
 public class PlayerController : MonoBehaviour, IController
 {
     Animator animator;
     SpriteRenderer spriteRenderer;
     Rigidbody2D rb;
-    BoxCollider2D bxc;
-    public SwordAttack swordAttack; //import script
+    public PlayerSwordAttack swordAttack; //import script
     public Health health;
 
     Vector2 movementInput;
@@ -19,7 +20,8 @@ public class PlayerController : MonoBehaviour, IController
     public float collisionOffset = 0.01f;
     public ContactFilter2D movementFilter;
     List<RaycastHit2D> castCollisions = new List<RaycastHit2D>();
-    bool canMove = true;
+    private bool canMove = true;
+    private bool isDead = false;
     public float healthAmount = 25;
 
     public AudioSource TakeDamage;
@@ -34,47 +36,49 @@ public class PlayerController : MonoBehaviour, IController
         rb = GetComponent<Rigidbody2D>();
         animator = GetComponent<Animator>();
         spriteRenderer = GetComponent<SpriteRenderer>();
-        bxc = GetComponent<BoxCollider2D>();
         Instance = this;
         health = new Health(healthAmount, ReceivedDamage, Defeated);
     }
 
     private void FixedUpdate()
     {
-        if (canMove)
-        {
-            //If movement input is not 0, try to move
-            if (movementInput != Vector2.zero)
+        if (Game.current.IsRunning()) 
+        { 
+            if (canMove && !isDead && !Game.IsRewinding)
             {
-                bool success = TryMove(movementInput);
-                if (!success)
+                //If movement input is not 0, try to move
+                if (movementInput != Vector2.zero)
                 {
-                    success = TryMove(new Vector2(movementInput.x, 0));
+                    bool success = TryMove(movementInput);
                     if (!success)
                     {
-                        success = TryMove(new Vector2(0, movementInput.y));
+                        success = TryMove(new Vector2(movementInput.x, 0));
+                        if (!success)
+                        {
+                            success = TryMove(new Vector2(0, movementInput.y));
+                        }
                     }
+                    //set "moving" animation
+                    animator.SetBool("isMoving", success);
                 }
-                //set "moving" animation
-                animator.SetBool("isMoving", success);
-            }
-            else
-            {
-                //set "idle" animation
-                animator.SetBool("isMoving", false);
-            }
+                else
+                {
+                    //set "idle" animation
+                    animator.SetBool("isMoving", false);
+                }
 
-            //Set direction of sprite to movemnet direction
-            if (movementInput.x < 0)
-            {
-                spriteRenderer.flipX = true;
+                //Set direction of sprite to movemnet direction
+                if (movementInput.x < 0)
+                {
+                    spriteRenderer.flipX = true;
+                }
+                else if (movementInput.x > 0)
+                {
+                    spriteRenderer.flipX = false;
+                }
             }
-            else if (movementInput.x > 0)
-            {
-                spriteRenderer.flipX = false;
-            }
-        }
     }
+}
 
     private bool TryMove(Vector2 direction)
     {
@@ -112,8 +116,19 @@ public class PlayerController : MonoBehaviour, IController
 
     void OnFire()
     {
-        //start "Sword Attack" animation for player
-        animator.SetTrigger("swordAttack");
+        Debug.Log("OnFire called");
+        Debug.Log(Game.current.IsRunning());
+        if (Game.current.IsRunning())
+        {
+            Debug.Log("OnFire entered");
+            Debug.Log(!Game.IsRewinding);
+            if (canMove && !isDead && !Game.IsRewinding)
+            {
+                Debug.Log("start attack");
+                //start "Sword Attack" animation for player
+                animator.SetTrigger("swordAttack");
+            }
+        }
     }
     public void SwordAttack()
     {
@@ -126,16 +141,21 @@ public class PlayerController : MonoBehaviour, IController
         {
             swordAttack.AttackRight();
         }
+        StartCoroutine(EndSwordAttack());
     }
-    public void EndSwordAttack()
+
+    public IEnumerator EndSwordAttack()
     {
-        UnlockMovement();
+        yield return new WaitForSeconds(1);
         swordAttack.StopAttack();
+        UnlockMovement();
     }
+
     public void LockMovement()
     {
         canMove = false;
     }
+
     public void UnlockMovement()
     {
         canMove = true;
@@ -143,10 +163,15 @@ public class PlayerController : MonoBehaviour, IController
 
     public void Defeated(float val)
     {
-        Death.Play();
+        var healthbar = GameObject.Find("HealthBar_LR").GetComponent<Slider>();
+        healthbar.value = 0;
+        isDead = true;
         Debug.Log("Player has been defeated");
         // trigger death animation of player
+        animator.SetBool("isMoving", false);
         animator.SetBool("defeated", true);
+        Death.Play();
+        StartCoroutine(PlayerDefeated());
     }
 
     public void ReceivedDamage(float val)
@@ -155,15 +180,16 @@ public class PlayerController : MonoBehaviour, IController
         Debug.Log("Player received " + val + " damage");
         // trigger damage receiving animation of player
         animator.SetTrigger("receivesDamage");
+        var healthbar = GameObject.Find("HealthBar_LR").GetComponent<Slider>();
+        healthbar.value = health.GetHealth()/healthAmount;
     }
 
-    public void PlayerDefeated()
-    { // called from inside "death"-animation
-      //TODO implement logic for player death
-        gameObject.SetActive(false);
-        bxc.enabled = false;
+    public IEnumerator PlayerDefeated()
+    { 
+        yield return new WaitForSeconds(1);
+        GetComponent<SpriteRenderer>().enabled = false;
+        GetComponent<BoxCollider2D>().enabled = false;
         animator.SetBool("defeated", false);
-
         Game.current.FailGame();
     }
 

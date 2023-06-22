@@ -10,13 +10,15 @@ public class SkeletonSwordWarriorController : MonoBehaviour, IController
     private Animator animator;
     private SpriteRenderer spriteRenderer;
 
+    // generic values and values for state machine
     private EnemyState state;
     public float initialHealth = 10;
     public float chaseRange = 1;
     public float attackRange = 0.1F;
     public float damage = 5;
-    private float nextAttackTime;
     public float attackRate = 0.1F;
+
+    private float nextAttackTime;
     private bool chooseAttackA = true;
 
     // values for a* algorithm
@@ -25,12 +27,12 @@ public class SkeletonSwordWarriorController : MonoBehaviour, IController
     public float nextWaypointDistance = 0.2F;
     public float updatePathTime = 2;
 
+    // values for roaming
     private Vector3 startPosition;
     private Vector3 randNextDestination;
     private float roamingTime;
     public float roamingOffset = 1F;
     public float timeUntilNextDestination = 3;
-
     private float returnTime;
     public float timeUntilReturning = 2;
     public float distanceOffset = 2;
@@ -64,26 +66,30 @@ public class SkeletonSwordWarriorController : MonoBehaviour, IController
 
     public void FixedUpdate()
     {
-        switch (state)
-        {
-            default:
-            case EnemyState.Idle:
-                Idle();
-                break;
+        if (Game.current.IsRunning()) { 
+            if (!Game.IsRewinding)
+            {
+                switch (state)
+                {
+                    default:
+                    case EnemyState.Idle:
+                        Idle();
+                        break;
 
-            case EnemyState.AttackTarget:
-                AttackTarget();
-                break;
+                    case EnemyState.AttackTarget:
+                        AttackTarget();
+                        break;
 
-            case EnemyState.ChaseTarget:
-                ChaseTarget();
-                break;
+                    case EnemyState.ChaseTarget:
+                        ChaseTarget();
+                        break;
 
-            case EnemyState.Roaming:
-                Roaming();
-                break;
+                    case EnemyState.Roaming:
+                        Roaming();
+                        break;
+                }
+            }
         }
-
     }
 
     private void Idle() 
@@ -159,15 +165,15 @@ public class SkeletonSwordWarriorController : MonoBehaviour, IController
         {
             if (chooseAttackA)
             {
-                AttackFast.Play();
                 //use attack A
+                AttackFast.Play();
                 animator.SetTrigger("isAttackingA");
                 chooseAttackA = false;
             }
             else
             {
-                AttackSlow.Play();
                 //use attack B
+                AttackSlow.Play();
                 animator.SetTrigger("isAttackingB");
                 chooseAttackA = true;
             }
@@ -190,6 +196,8 @@ public class SkeletonSwordWarriorController : MonoBehaviour, IController
         {
             //Debug.Log("Try to move");
             animator.SetBool("isMoving", true);
+
+            //switch direction depending of the position of the next waypoint
             if (dir.x <= 0)
             {
                 spriteRenderer.flipX = true;
@@ -198,7 +206,8 @@ public class SkeletonSwordWarriorController : MonoBehaviour, IController
             {
                 spriteRenderer.flipX = false;
             }
-            // Move the Skeleton Sword Warrior
+
+            //Move the Skeleton Sword Warrior
             transform.position += dir * Time.deltaTime;
         }
     }
@@ -214,26 +223,28 @@ public class SkeletonSwordWarriorController : MonoBehaviour, IController
         {
             skeletonSword.AttackRight();
         }
+        StartCoroutine(EndAttack());
     }
 
     // Called at end of attack animation
-    public void EndAttack()
+    public IEnumerator EndAttack()
     {
-        movement.UnlockMovement();
+        yield return new WaitForSeconds(1);
         skeletonSword.StopAttack();
+        movement.UnlockMovement();
     }
 
     public void Defeated(float val)
     {
+        Debug.Log("Skeleton Sword Warrior has been slayed!");
         Death.Play();
-        Debug.Log("Skeleton Sword Warrior has been slayed");
         animator.SetBool("defeated", true);
     }
 
     public void ReceivedDamage(float val)
     {
+        Debug.Log("Skeleton Sword Warrior received " + val + " damage!");
         TakeDamage.Play();
-        Debug.Log("Skeleton Sword Warrior received " + val + " damage");
         animator.SetTrigger("receivesDamage");
     }
 

@@ -3,7 +3,7 @@ using UnityEngine;
 // Note this line, if it is left out, the script won't know that the class 'Path' exists and it will throw compiler errors
 // This line should always be present at the top of scripts which use pathfinding
 using Pathfinding;
-using System;
+using System.Collections;
 using BasePatterns;
 
 public class BatController : MonoBehaviour, IController
@@ -11,13 +11,8 @@ public class BatController : MonoBehaviour, IController
     private Seeker seeker;
     private Animator animator;
     private SpriteRenderer spriteRenderer;
-    private enum State
-    {
-        Idle,
-        ChaseTarget,
-        AttackTarget
-    }
-    private State state;
+
+    private EnemyState state;
     public float initialHealth = 3;
     public float chaseRange = 1;
     public float attackRange = 0.1F;
@@ -56,69 +51,91 @@ public class BatController : MonoBehaviour, IController
         health = new Health(initialHealth, ReceivedDamage, Defeated);
 
         movement.PreCalcPath(transform.position, targetPosition.position);
-        state = State.Idle;
+        state = EnemyState.Idle;
     }
 
     public void FixedUpdate()
     {
-        switch (state)
+        if (Game.current.IsRunning())
         {
-            default:
-            case State.Idle:
-                if (Vector3.Distance(transform.position, PlayerController.Instance.GetPosition()) < chaseRange)
+            if (!Game.IsRewinding)
+            {
+                switch (state)
                 {
-                    //Player within target range
-                    state = State.ChaseTarget;
-                } else
-                {
-                    if (Time.time > sleepTime)
-                    {
-                        animator.SetBool("isMoving", false);
-                    }
-                }
-                break;
+                    default:
+                    case EnemyState.Idle:
+                        Idle();
+                        break;
 
-            case State.AttackTarget:
-                //Player within attack range
-                if (Time.time > nextAttackTime)
-                {
-                    animator.SetTrigger("isAttacking");
-                    nextAttackTime = Time.time + attackRate;
-                    state = State.ChaseTarget;
-                }
-                break;
+                    case EnemyState.AttackTarget:
+                        AttackTarget();
+                        break;
 
-            case State.ChaseTarget:
-                Vector3 dir = movement.Move(transform.position, targetPosition.position);
-                if (dir != Vector3.zero)
-                {
-                    animator.SetBool("isMoving", true);
-                    if (dir.x < 0)
-                    {
-                        spriteRenderer.flipX = true;
-                    }
-                    else if (dir.x > 0)
-                    {
-                        spriteRenderer.flipX = false;
-                    }
+                    case EnemyState.ChaseTarget:
+                        ChaseTarget();
+                        break;
                 }
-
-                // Move the bat
-                transform.position += dir * Time.deltaTime;
-
-                if (Vector3.Distance(transform.position, PlayerController.Instance.GetPosition()) < attackRange)
-                {
-                    //Player inside attack range
-                    state = State.AttackTarget;
-                } else if (Vector3.Distance(transform.position, PlayerController.Instance.GetPosition()) + distanceOffset > chaseRange)
-                {
-                    //Player outside of target range
-                    sleepTime = Time.time + timeUntilSleeping;
-                    state = State.Idle;
-                }
-                break;
+            }
         }
-        
+    }
+
+    private void Idle()
+    {
+        if (Vector3.Distance(transform.position, PlayerController.Instance.GetPosition()) < chaseRange)
+        {
+            //Player within target range
+            state = EnemyState.ChaseTarget;
+        }
+        else
+        {
+            if (Time.time > sleepTime)
+            {
+                animator.SetBool("isMoving", false);
+            }
+        }
+    }
+
+    private void ChaseTarget()
+    {
+        Vector3 dir = movement.Move(transform.position, targetPosition.position);
+        if (dir != Vector3.zero)
+        {
+            animator.SetBool("isMoving", true);
+            if (dir.x < 0)
+            {
+                spriteRenderer.flipX = true;
+            }
+            else if (dir.x > 0)
+            {
+                spriteRenderer.flipX = false;
+            }
+        }
+
+        // Move the bat
+        transform.position += dir * Time.deltaTime;
+
+        if (Vector3.Distance(transform.position, PlayerController.Instance.GetPosition()) < attackRange)
+        {
+            //Player inside attack range
+            state = EnemyState.AttackTarget;
+        }
+        else if (Vector3.Distance(transform.position, PlayerController.Instance.GetPosition()) + distanceOffset > chaseRange)
+        {
+            //Player outside of target range
+            sleepTime = Time.time + timeUntilSleeping;
+            state = EnemyState.Idle;
+        }
+    }
+
+    private void AttackTarget()
+    {
+        //Player within attack range
+        if (Time.time > nextAttackTime)
+        {
+            animator.SetTrigger("isAttacking");
+            nextAttackTime = Time.time + attackRate;
+            state = EnemyState.ChaseTarget;
+        }
     }
 
     // Called at begin of 'bat_attack' animation
@@ -126,13 +143,15 @@ public class BatController : MonoBehaviour, IController
     {
         movement.LockMovement();
         attackCollider.enabled = true;
+        StartCoroutine(EndAttack());
     }
 
     // Called at end of 'bat_attack' animation
-    public void EndAttack()
+    public IEnumerator EndAttack()
     {
-        movement.UnlockMovement();
+        yield return new WaitForSeconds(1);
         attackCollider.enabled = false;
+        movement.UnlockMovement();
     }
 
     public void Defeated(float val)

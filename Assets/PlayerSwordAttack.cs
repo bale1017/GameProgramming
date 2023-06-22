@@ -1,14 +1,14 @@
 using BasePatterns;
 using UnityEngine;
 
-public class SwordAttack : MonoBehaviour
+public class PlayerSwordAttack : MonoBehaviour
 {
     public AudioSource Slash;
     public float damage = 3;
     BoxCollider2D swordCollider;
     Vector2 rightAttackOffset;
 
-    // Start is called before the first frame update
+    //Start is called before the first frame update
     void Start()
     {
         swordCollider = GetComponent<BoxCollider2D>();
@@ -18,17 +18,18 @@ public class SwordAttack : MonoBehaviour
     public void AttackRight()
     {
         Slash.Play();
+        GetComponent<ReTime>().AddKeyFrameAudio(Slash);
         Debug.Log("Sword attack right");
-        swordCollider.enabled = true;
         transform.localPosition = rightAttackOffset;
+        swordCollider.enabled = true;
     }
 
     public void AttackLeft()
     {
         Slash.Play();
         Debug.Log("Sword attack left");
-        swordCollider.enabled = true;
         transform.localPosition = new Vector3(rightAttackOffset.x * -1, rightAttackOffset.y);
+        swordCollider.enabled = true;
     }
 
     public void StopAttack()
