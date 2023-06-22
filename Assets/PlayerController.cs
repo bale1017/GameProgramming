@@ -5,6 +5,7 @@ using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.InputSystem.Processors;
+using UnityEngine.UI;
 
 public class PlayerController : MonoBehaviour, IController
 {
@@ -142,16 +143,19 @@ public class PlayerController : MonoBehaviour, IController
         }
         StartCoroutine(EndSwordAttack());
     }
+
     public IEnumerator EndSwordAttack()
     {
         yield return new WaitForSeconds(1);
         swordAttack.StopAttack();
         UnlockMovement();
     }
+
     public void LockMovement()
     {
         canMove = false;
     }
+
     public void UnlockMovement()
     {
         canMove = true;
@@ -174,6 +178,8 @@ public class PlayerController : MonoBehaviour, IController
         Debug.Log("Player received " + val + " damage");
         // trigger damage receiving animation of player
         animator.SetTrigger("receivesDamage");
+        var healthbar = GameObject.Find("HealthBar_LR").GetComponent<Slider>();
+        healthbar.value = health.GetHealth()/healthAmount;
     }
 
     public IEnumerator PlayerDefeated()

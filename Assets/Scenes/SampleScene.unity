@@ -574,6 +574,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: Revan_the_Endboss
       objectReference: {fileID: 0}
+    - target: {fileID: 6622463401287199620, guid: 276987d33a0b16644aa5980b54cd09b7,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 6959471295415283788, guid: 276987d33a0b16644aa5980b54cd09b7,
         type: 3}
       propertyPath: m_RootOrder
@@ -13512,7 +13517,7 @@ PrefabInstance:
     - target: {fileID: 353534342817622301, guid: ac8a5a8d72e441f44953033b88e8b60e,
         type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 758290442576947392, guid: ac8a5a8d72e441f44953033b88e8b60e,
         type: 3}
@@ -13637,7 +13642,7 @@ PrefabInstance:
     - target: {fileID: -6801898308520515085, guid: d14b75de5ccb59944ace846c2fba62a4,
         type: 3}
       propertyPath: healthAmount
-      value: 1
+      value: 25
       objectReference: {fileID: 0}
     - target: {fileID: 1269027620739745015, guid: d14b75de5ccb59944ace846c2fba62a4,
         type: 3}

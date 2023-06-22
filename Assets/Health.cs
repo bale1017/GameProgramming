@@ -23,7 +23,7 @@ public class Health
 
     public void ReduceHealth(float val)
     {
-        Debug.Log("Reduce Health by " + val);
+        Debug.Log("Reduce total health of " + health + " by " + val);
         if (health - val > 0)
         {
             health -= val;
