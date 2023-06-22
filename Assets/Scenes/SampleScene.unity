@@ -949,7 +949,7 @@ MonoBehaviour:
   OnRewindStart:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
+      - m_Target: {fileID: 289664206}
         m_TargetAssemblyTypeName: ReTime, Assembly-CSharp
         m_MethodName: StartTimeRewind
         m_Mode: 1
@@ -976,7 +976,7 @@ MonoBehaviour:
   OnRewindEnd:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
+      - m_Target: {fileID: 289664206}
         m_TargetAssemblyTypeName: ReTime, Assembly-CSharp
         m_MethodName: StopTimeRewind
         m_Mode: 1
@@ -13033,6 +13033,12 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1676390761}
   m_CullTransparentMesh: 1
+--- !u!1 &1814515063 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 7103884299703389329, guid: d14b75de5ccb59944ace846c2fba62a4,
+    type: 3}
+  m_PrefabInstance: {fileID: 4582205724375509577}
+  m_PrefabAsset: {fileID: 0}
 --- !u!224 &1857037091 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 8589102119393831401, guid: f671e10c8adc4a748a153cf2b13dae48,
@@ -13313,6 +13319,21 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 4582205724375509577}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &2140641653
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1814515063}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: aa6b8f658fbb0724380367b5942c8125, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  isRewinding: 0
+  animator: {fileID: 0}
+  RewindSpeed: 1
 --- !u!1001 &2142966627
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -13741,5 +13762,9 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 7103884299703389329, guid: d14b75de5ccb59944ace846c2fba62a4,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 2140641653}
   m_SourcePrefab: {fileID: 100100000, guid: d14b75de5ccb59944ace846c2fba62a4, type: 3}

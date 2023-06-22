@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Security.Cryptography;
 using System.Xml;
 using Unity.Collections;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class KeyFrameSorter : IComparer<KeyFrame>
@@ -213,7 +214,14 @@ public class ReTime : MonoBehaviour {
 
 		if(transform.childCount > 0){
 			foreach (Transform child in transform)
-				child.GetComponent<ReTime>().StartTimeRewind();
+			{
+                if (!child.TryGetComponent<ReTime>(out var retime))
+                {
+                    retime = child.AddComponent<ReTime>();
+
+                }
+                retime.StartTimeRewind();
+            }
 		}
 	}
 
@@ -226,7 +234,13 @@ public class ReTime : MonoBehaviour {
 
 		if(transform.childCount > 0){
 			foreach (Transform child in transform) {
-				child.GetComponent<ReTime> ().StopTimeRewind ();
+
+				if (!child.TryGetComponent<ReTime>(out var retime))
+				{
+					retime = child.AddComponent<ReTime>();
+					
+				}
+                retime.StopTimeRewind ();
 			}
 		}
 	}
@@ -235,9 +249,9 @@ public class ReTime : MonoBehaviour {
 	public void StopFeeding(){
 		isFeeding = false;
 
-		if(transform.childCount > 0){
+		if(transform.childCount > 0) {
 			foreach (Transform child in transform) {
-				child.GetComponent<ReTime> ().StopFeeding ();
+				child.GetComponent<ReTime>().StopFeeding ();
 			}
 		}
 	}
@@ -248,7 +262,7 @@ public class ReTime : MonoBehaviour {
 
 		if(transform.childCount > 0){
 			foreach (Transform child in transform) {
-				child.GetComponent<ReTime> ().StartFeeding ();
+				child.GetComponent<ReTime>().StartFeeding ();
 			}
 		}
 	}
