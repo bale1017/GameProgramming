@@ -6,22 +6,30 @@ using UnityEngine.Tilemaps;
 public class SpikeTrap : MonoBehaviour
 {
 
+    public float damage = 1;
     public Sprite activeSpike;
     public Sprite inactiveSpike;
     public float triggerDelay = 1;
     public float activeTime = 2;
 
     private bool triggered = false;
+    bool recentlyActivated = false;
 
 
     private void OnTriggerStay2D(Collider2D collision)
     {
-        if (collision.tag == "Player")
+        if (collision.tag == "Player" && !recentlyActivated)
             if (triggered)
-                print("damage player");
+            {
+                PlayerController player = collision.GetComponent<PlayerController>();
+                player.health.ReduceHealth(damage);
+                recentlyActivated = true;
+            }
             else
-                // wait
+            // wait
+            {
                 StartCoroutine(activateSpike());
+            }
     }
 
     private IEnumerator activateSpike()
@@ -33,5 +41,6 @@ public class SpikeTrap : MonoBehaviour
         yield return new WaitForSeconds(activeTime);
         triggered = false;
         this.GetComponent<SpriteRenderer>().sprite = inactiveSpike;
+        recentlyActivated = false;
     }
 }
