@@ -34,12 +34,12 @@ public class CompleteMenu : MonoBehaviour
         background.transform
             .positionTransition_x(+Screen.width * 2, 0)
             .JoinTransition()
-            .positionTransition_x(bPos.x, 0.3f);
+            .positionTransition_x(bPos.x, .3f);
         text.SetActive(true);
         text.transform
             .positionTransition_x(-Screen.width * 2, 0)
             .JoinTransition()
-            .positionTransition_x(tPos.x, 0.3f);
+            .positionTransition_x(tPos.x, 0.15f);
     }
 
     public void FadeOut()

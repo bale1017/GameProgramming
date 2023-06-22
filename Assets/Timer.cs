@@ -13,12 +13,15 @@ public class Timer : MonoBehaviour
     private double timeScale = 1;
     private double previousTime = 0;
 
+    public double timer = 60;
+    private double _timer;
 
     // Start is called before the first frame update
     void Start()
     {
+        _timer = timer;
         text = GetComponent<Text>();
-        previousTime = Game.current.GetTime();
+        previousTime = _timer;
 
         double before = 0;
         Game.current.OnGamePause.AddListener(() => {
@@ -34,24 +37,35 @@ public class Timer : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        Game.current.timer -= Time.deltaTime * timeScale;
-        double time = Game.current.GetTime();
-        text.text = time.ToString("00.00s").Replace(",", ":");
-        if (time < 5 && (int) previousTime > (int) time
-            || (int) (previousTime / 10) > (int)(time / 10))
+        _timer -= Time.deltaTime * timeScale;
+        if (_timer > timer)
+        {
+            _timer = timer;
+            Game.current.StopRewind();
+        }
+
+        text.text = _timer.ToString("00.00s").Replace(",", ":");
+        if (_timer < 5 && (int) previousTime > (int)_timer
+            || (int) (previousTime / 10) > (int)(_timer / 10))
         {
             Animate();
         }
-        if (time < 10)
-        {
-            SetColor();
-        }
-        previousTime = time;
+        SetColor();
+        previousTime = _timer;
     }
 
     private void SetColor()
     {
-        text.color = Color.red;
+        if (timeScale < 0)
+        {
+            text.color = Color.cyan;
+        } else if (_timer < 10)
+        {
+            text.color = Color.red;
+        } else
+        {
+            text.color = Color.white;
+        }
     }
 
     private void Animate()
