@@ -37,12 +37,14 @@ public class Game : MonoBehaviour
     // set to the previous game state when pausing and reset to this value after unpausing
     private float pausedTimeScale = 1;
 
-    double timer = 60;
+    public Game()
+    {
+        current = this;
+    }
 
     // Start is called before the first frame update
     void Start()
     {
-        current = this;
         LoadGame();
     }
 
@@ -70,24 +72,21 @@ public class Game : MonoBehaviour
                 StopRewind();
             }
         }
-
-        // make as listener
-        if (IsRewinding)
-        {
-            timer += Time.deltaTime;
-        }
-        else
-        {
-            timer -= Time.deltaTime;
-        }
     }
 
     public void LoadGame()
     {
         gameState = GameState.PENDING;
         OnGameLoad.Invoke();
-        // TODO 1s delay toleranz
+
         StartGame();
+    }
+
+    IEnumerator then(int sec, Action f)
+    {
+        // Give some time so taht player can realize, then game over screen.
+        yield return new WaitForSeconds(sec);
+        f.Invoke();
     }
 
     public void StartGame()
@@ -101,16 +100,22 @@ public class Game : MonoBehaviour
     {
         gameState = GameState.VICTORY;
         OnGameVictory.Invoke();
+        OnGameCompletion.Invoke();
     }
 
     public void FailGame()
     {
         gameState = GameState.FAILURE;
         OnGameFailure.Invoke();
+        OnGameCompletion.Invoke();
     }
 
     public void PauseGame()
     {
+        if (gameState == GameState.VICTORY || gameState == GameState.FAILURE)
+        {
+            return;
+        }
         pausedGameState = gameState;
         pausedTimeScale = Time.timeScale;
         Time.timeScale = 0;
@@ -130,7 +135,6 @@ public class Game : MonoBehaviour
         if (!IsRunning()) return;
         if (IsRewinding) return;
         IsRewinding = true;
-        Debug.Log("start rewind");
         // Invoke start event so that all listeners know that time is now rewinding.
         OnRewindStart.Invoke();
     }
@@ -138,15 +142,9 @@ public class Game : MonoBehaviour
     public void StopRewind()
     {
         if (!IsRunning()) return;
-        if (!IsRewinding) return;
         IsRewinding = false;
         // Invoke stop event so that all listeners know that time is no longer rewinding.
         OnRewindEnd.Invoke();
-    }
-
-    public double GetTime()
-    {
-        return timer;
     }
 
     public bool IsRunning()

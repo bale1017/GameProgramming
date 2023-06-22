@@ -1,6 +1,102 @@
-﻿using System.Collections;
+﻿using JetBrains.Annotations;
+using Lean.Transition.Method;
+using System;
+using System.Collections;
 using System.Collections.Generic;
+using System.Security.Cryptography;
+using System.Xml;
+using Unity.Collections;
 using UnityEngine;
+
+public class KeyFrameSorter : IComparer<KeyFrame>
+{
+    public int Compare(KeyFrame c1, KeyFrame c2)
+    {
+        return c2.endTimeStamp.CompareTo(c1.endTimeStamp);
+    }
+}
+
+public abstract class KeyFrame {
+	public long startTimeStamp;
+	public int durationMilliSeconds;
+	public long endTimeStamp;
+
+	public KeyFrame(long startTimeStamp) : this(startTimeStamp, 0)
+	{
+
+	}
+
+    public KeyFrame(long startTimeStamp, int duration)
+    {
+		this.startTimeStamp = startTimeStamp;
+		this.durationMilliSeconds = duration;
+		this.endTimeStamp = startTimeStamp + duration;
+    }
+
+    public abstract void Play(GameObject gameObject);
+}
+
+public class RunnableKeyFrame : KeyFrame
+{
+	private Action<GameObject> run;
+
+	public RunnableKeyFrame(long now, int duration, Action<GameObject> run) : base(now, duration)
+	{
+		this.run = run;
+	}
+
+    public override void Play(GameObject gameObject)
+    {
+		this.run(gameObject);
+    }
+}
+
+public class TransformKeyFrame : KeyFrame {
+
+	public Vector3 position;
+	public Quaternion rotation;
+	public Vector3 scale;
+
+	public TransformKeyFrame(long startTimeStamp, Transform transform) : base(startTimeStamp, 0)
+	{
+		this.position = transform.position;
+		this.rotation = transform.rotation;
+		this.scale = transform.localScale;
+	}
+
+	public override void Play(GameObject gameObject)
+	{
+		gameObject.transform.SetPositionAndRotation(position, rotation);
+		gameObject.transform.localScale = scale;
+	}
+}
+
+public class AudioKeyFrame : KeyFrame {
+
+	public AudioSource audioSource;
+	private float pitch = 1;
+
+	public AudioKeyFrame(long now, AudioSource audioSource) : base(now, (int) (audioSource.clip.length * 1000)) {
+		this.audioSource = audioSource;
+	}
+
+    public override void Play(GameObject gameObject)
+    {
+		pitch = audioSource.pitch;
+		audioSource.pitch = -1;
+		audioSource.loop = true;
+		audioSource.time = 0;
+		audioSource.Play();
+        gameObject.GetComponent<ReTime>().StartCoroutine(cleanup());
+	}
+
+    public IEnumerator cleanup()
+    {
+        yield return new WaitForSeconds(audioSource.clip.length);
+        audioSource.loop = false;
+		audioSource.pitch = pitch;
+    }
+}
 
 public class ReTime : MonoBehaviour {
 	//flagging to enable or disable rewind
@@ -8,111 +104,93 @@ public class ReTime : MonoBehaviour {
 	public bool isRewinding = false;
 
 	//use a linked list data structure for better performance of accessing previous positions and rotations;
-	private LinkedList<PointInTime> PointsInTime;
+	private List<KeyFrame> KeyFrames;
 
-	//the key that triggers the rewind
-	[Tooltip("Type the letter or name of the key you want to trigger the rewind with. Check the PDF guide for more information.")]
-	public string KeyTrigger;
-
-	[HideInInspector]
-	public bool UseInputTrigger;
 	private bool hasAnimator = false;
-	private bool hasRb = false;
-	public Animator animator;
+    [HideInInspector]
+    public Animator animator;
 
-	[HideInInspector]
-	public float RewindSeconds = 5;
-
-	[HideInInspector]
 	public float RewindSpeed = 1;
 	private bool isFeeding = true;
 	private ParticleSystem Particles;
 
-	[HideInInspector]
-	public bool PauseEnd;
-
+	long StartTime;
+	long Now;
 
 	// Use this for initialization
 	void Start () {
-		PointsInTime = new LinkedList<PointInTime> ();
+        KeyFrames = new List<KeyFrame>();
+		StartTime = 0;
+		Now = StartTime;
 
-		//if contains particle system, then cache and add comp.
-		if (GetComponent<ParticleSystem> ())
+        //if contains particle system, then cache and add comp.
+        if (GetComponent<ParticleSystem> ())
 			Particles = GetComponent<ParticleSystem> ();
 		
-		//if going to use keyboard input, cache the key result and transform to lower case to avoid errors
-		if(UseInputTrigger)
-			KeyTrigger = KeyTrigger.ToLower ();
-
 		//cache if has animator
 		if (GetComponent<Animator> ()) {
 			hasAnimator = true;
 			animator = GetComponent<Animator> ();
 		}
 
-		//has rigidbody or not
-		if (GetComponent<Rigidbody> ())
-			hasRb = true;
-
 		//Add the time rewind script to all children - Bubbling
 		foreach(Transform child in transform){
 			child.gameObject.AddComponent<ReTime> ();
-			child.GetComponent<ReTime> ().UseInputTrigger = UseInputTrigger;
-			child.GetComponent<ReTime> ().KeyTrigger = KeyTrigger;
-			child.GetComponent<ReTime> ().RewindSeconds = RewindSeconds;
 			child.GetComponent<ReTime> ().RewindSpeed = RewindSpeed;
-			child.GetComponent<ReTime> ().PauseEnd = PauseEnd;
 		}
 	}
 
+	public void AddKeyFrame (KeyFrame frame)
+	{
+		KeyFrames.Add(frame);
+    }
 
-	void FixedUpdate(){
-		//if true then run the rewind method, else record the events
-		if (isRewinding)
+    public void AddKeyFrame(Action<GameObject> run)
+    {
+        AddKeyFrame(new RunnableKeyFrame(Now, 0, run));
+    }
+
+    public void AddKeyFrame(int duration, Action<GameObject> run)
+    {
+        AddKeyFrame(new RunnableKeyFrame(Now, duration, run));
+    }
+
+	public void AddKeyFrameAudio(AudioSource audioSource)
+	{
+		AddKeyFrame(new AudioKeyFrame(Now, audioSource));
+    }
+
+    void FixedUpdate()
+    {
+        Now += (long)(Time.deltaTime * RewindSpeed * 1000 * (isRewinding ? -1 : 1));
+
+        if (isRewinding)
         {
-            ChangeTimeScale(RewindSpeed);
             Rewind ();
 		}else{
 			if(isFeeding)
-				Record ();
-		}
+                AddKeyFrame(new TransformKeyFrame(Now, transform));
+        }
 	}
 
 	//The Rewind method
 	void Rewind(){
-		if (PointsInTime.Count > 0 ) {
-			PointInTime PointInTime = PointsInTime.First.Value;
-			transform.position = PointInTime.position;
-			transform.rotation = PointInTime.rotation;
-			PointsInTime.RemoveFirst();
-		} else {
-			if(PauseEnd)
-				Time.timeScale = 0;
-			else
-				StopRewind ();
-		}
-	}
 
-	//use the constructor to add the new data
-	void Record(){
-		if(PointsInTime.Count > Mathf.Round(RewindSeconds / Time.fixedDeltaTime)){
-			PointsInTime.RemoveLast ();
-		}
-		PointsInTime.AddFirst (new PointInTime (transform.position, transform.rotation));
-		if (Particles)
-		if (Particles.isPaused) {
-			Particles.Play ();
-		}
+		KeyFrames.Sort(new KeyFrameSorter());
+        while (KeyFrames.Count > 0 && KeyFrames[0].endTimeStamp > Now)
+		{
+			KeyFrame val = KeyFrames[0];
+			val.Play(gameObject);
+			KeyFrames.Remove (val);
+
+        }
 	}
 
 	void StartRewind(){
 
 		isRewinding = true;
 		if(hasAnimator)
-			// animator.enabled = false;
-
-		if (hasRb)
-			GetComponent<Rigidbody> ().isKinematic = true;
+			animator.enabled = false;
 	}
 
 	void StopRewind(){
@@ -124,17 +202,6 @@ public class ReTime : MonoBehaviour {
 		isRewinding = false;
 		if(hasAnimator)
 			animator.enabled = true;
-
-		if (hasRb)
-			GetComponent<Rigidbody> ().isKinematic = false;
-	}
-		
-	void ChangeTimeScale(float speed){
-		Time.timeScale = speed;
-		if (speed > 1)
-			Time.fixedDeltaTime = 0.02f / speed;
-		else
-			Time.fixedDeltaTime = speed * 0.02f;
 	}
 
 	//exposed method to enable rewind
@@ -144,12 +211,9 @@ public class ReTime : MonoBehaviour {
 		if(hasAnimator)
 			animator.enabled = false;
 
-		if (hasRb)
-			GetComponent<Rigidbody> ().isKinematic = true;
-		
 		if(transform.childCount > 0){
 			foreach (Transform child in transform)
-				child.GetComponent<ReTime> ().StartRewind ();
+				child.GetComponent<ReTime>().StartTimeRewind();
 		}
 	}
 
@@ -159,9 +223,6 @@ public class ReTime : MonoBehaviour {
 		Time.timeScale = 1;
 		if(hasAnimator)
 			animator.enabled = true;
-
-		if (hasRb)
-			GetComponent<Rigidbody> ().isKinematic = false;
 
 		if(transform.childCount > 0){
 			foreach (Transform child in transform) {

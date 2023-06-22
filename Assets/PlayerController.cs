@@ -173,6 +173,8 @@ public class PlayerController : MonoBehaviour, IController
         GetComponent<SpriteRenderer>().enabled = false;
         GetComponent<BoxCollider2D>().enabled = false;
         animator.SetBool("defeated", false);
+
+        Game.current.FailGame();
     }
 
     public Vector3 GetPosition() 
