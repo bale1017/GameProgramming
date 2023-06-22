@@ -10,7 +10,6 @@ public class PlayerController : MonoBehaviour, IController
     Animator animator;
     SpriteRenderer spriteRenderer;
     Rigidbody2D rb;
-    BoxCollider2D bxc;
     public PlayerSwordAttack swordAttack; //import script
     public Health health;
 
@@ -34,7 +33,6 @@ public class PlayerController : MonoBehaviour, IController
         rb = GetComponent<Rigidbody2D>();
         animator = GetComponent<Animator>();
         spriteRenderer = GetComponent<SpriteRenderer>();
-        bxc = GetComponent<BoxCollider2D>();
         Instance = this;
         health = new Health(healthAmount, ReceivedDamage, Defeated);
     }
@@ -171,8 +169,9 @@ public class PlayerController : MonoBehaviour, IController
     public void PlayerDefeated()
     { // called from inside "death"-animation
       //TODO implement logic for player death
-        gameObject.SetActive(false);
-        bxc.enabled = false;
+      //gameObject.SetActive(false);
+        GetComponent<SpriteRenderer>().enabled = false;
+        GetComponent<BoxCollider2D>().enabled = false;
         animator.SetBool("defeated", false);
     }
 
