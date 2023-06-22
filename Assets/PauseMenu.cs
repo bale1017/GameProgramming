@@ -3,6 +3,7 @@ using Lean.Transition.Method;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class PauseMenu : MonoBehaviour
 {
@@ -53,5 +54,13 @@ public class PauseMenu : MonoBehaviour
                 .localPositionTransition_x(width, AnimationDuration);
             delay += AnimationDuration / 8;
         }
+    }
+    public void GoToMainMenu()
+    {
+        SceneManager.LoadScene("Menu");
+    }
+    public void Exit()
+    {
+        Application.Quit();
     }
 }
