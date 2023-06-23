@@ -5,14 +5,14 @@ using UnityEngine;
 public class NextLevel : MonoBehaviour
 {
     private bool isTriggered = false;
-    public GameObject openTrapDoor;
+    public Sprite openTrapDoor;
 
     public void OnTriggerEnter2D(Collider2D collision)
     {
         if (!isTriggered)
         {
+            this.GetComponent<SpriteRenderer>().sprite = openTrapDoor;
             isTriggered = true;
-            // change sprite to open door
         }
         else
         {
