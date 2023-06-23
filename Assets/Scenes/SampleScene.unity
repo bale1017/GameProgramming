@@ -460,12 +460,12 @@ PrefabInstance:
     - target: {fileID: 6959471295415283788, guid: 276987d33a0b16644aa5980b54cd09b7,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: -4.09
+      value: -3.82
       objectReference: {fileID: 0}
     - target: {fileID: 6959471295415283788, guid: 276987d33a0b16644aa5980b54cd09b7,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0.37
+      value: 0.213
       objectReference: {fileID: 0}
     - target: {fileID: 6959471295415283788, guid: 276987d33a0b16644aa5980b54cd09b7,
         type: 3}
@@ -961,12 +961,8 @@ MonoBehaviour:
   - {fileID: 893942113526230309, guid: aebd9a1063b53d7489f2b9508075152a, type: 3}
   - {fileID: 3539917540547519268, guid: f21fb98ad01d393409005f32145e3524, type: 3}
   - {fileID: 3141257047695413659, guid: 2d40513187b78fa4f812811fe60196df, type: 3}
-<<<<<<< HEAD
   exitRoom: {fileID: 2045100668050378381, guid: 3aac1fda40cded241b392e07d407507d,
     type: 3}
-=======
-  exitRoom: {fileID: 0}
->>>>>>> main
   RoomWidth: 4.4
   RoomHeight: 2.8
   createdObjects: []
