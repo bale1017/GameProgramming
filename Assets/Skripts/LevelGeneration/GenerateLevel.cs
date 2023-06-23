@@ -185,6 +185,11 @@ public class GenerateLevel : MonoBehaviour
         int i = 0;
         while (availableRooms > 0)
         {
+            if (i >= placedRooms.Count())
+            {
+                i--;
+            }
+
             // nord, ost, süd, west
             Room current = placedRooms[i];
             Room newRoom = new Room(0, 0);
