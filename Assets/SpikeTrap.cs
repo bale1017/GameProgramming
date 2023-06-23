@@ -11,36 +11,51 @@ public class SpikeTrap : MonoBehaviour
     public Sprite inactiveSpike;
     public float triggerDelay = 1;
     public float activeTime = 2;
-
+    
     private bool triggered = false;
-    bool recentlyActivated = false;
-
+    private bool damaged = true;
 
     private void OnTriggerStay2D(Collider2D collision)
     {
-        if (collision.tag == "Player" && !recentlyActivated)
-            if (triggered)
-            {
-                PlayerController player = collision.GetComponent<PlayerController>();
-                player.health.ReduceHealth(damage);
-                recentlyActivated = true;
-            }
-            else
-            // wait
-            {
-                StartCoroutine(activateSpike());
-            }
+        if (!Game.current.IsRunning()) return;
+        if (Game.IsRewinding) return;
+        if (collision.tag != "Player") return;
+
+        if (triggered && !damaged)
+        {
+            PlayerController player = collision.GetComponent<PlayerController>();
+            player.health.ReduceHealth(damage);
+            GetComponent<ReTime>().AddKeyFrame(g => damaged = true, g => damaged = false);
+        }
+        else
+        {
+            StartCoroutine(activateSpike());
+        }
     }
 
     private IEnumerator activateSpike()
     {
+        ReTime retime = GetComponent<ReTime>();
+        if (!retime)
+        {
+            retime = gameObject.AddComponent<ReTime>();
+        }
+
         yield return new WaitForSeconds(triggerDelay);
-        // extend spike
-        this.GetComponent<SpriteRenderer>().sprite = activeSpike;
-        triggered = true;
+
+        retime.AddKeyFrame(g => damaged = false, g => damaged = true);
+        retime.AddKeyFrame(g => triggered = true, g => triggered = false);
+        retime.AddKeyFrame(
+            g => g.GetComponent<SpriteRenderer>().sprite = activeSpike,
+            g => g.GetComponent<SpriteRenderer>().sprite = inactiveSpike
+        );
+        
         yield return new WaitForSeconds(activeTime);
-        triggered = false;
-        this.GetComponent<SpriteRenderer>().sprite = inactiveSpike;
-        recentlyActivated = false;
+        
+        retime.AddKeyFrame(g => triggered = true, g => triggered = false);
+        retime.AddKeyFrame(
+            g => g.GetComponent<SpriteRenderer>().sprite = inactiveSpike,
+            g => g.GetComponent<SpriteRenderer>().sprite = activeSpike
+        );
     }
 }

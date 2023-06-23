@@ -9,7 +9,15 @@ using Unity.Collections;
 using Unity.VisualScripting;
 using UnityEngine;
 
-public class KeyFrameSorter : IComparer<KeyFrame>
+public class KeyFrameForwardSorter : IComparer<KeyFrame>
+{
+    public int Compare(KeyFrame c1, KeyFrame c2)
+    {
+        return c2.endTimeStamp.CompareTo(c1.startTimeStamp);
+    }
+}
+
+public class KeyFrameRewindSorter : IComparer<KeyFrame>
 {
     public int Compare(KeyFrame c1, KeyFrame c2)
     {
@@ -17,8 +25,13 @@ public class KeyFrameSorter : IComparer<KeyFrame>
     }
 }
 
+
 public abstract class KeyFrame {
-	public long startTimeStamp;
+
+    public static KeyFrameForwardSorter forwardsSorter = new();
+    public static KeyFrameRewindSorter rewindSorter = new();
+
+    public long startTimeStamp;
 	public int durationMilliSeconds;
 	public long endTimeStamp;
 
@@ -34,21 +47,34 @@ public abstract class KeyFrame {
 		this.endTimeStamp = startTimeStamp + duration;
     }
 
-    public abstract void Play(GameObject gameObject);
+    public abstract void PlayForwards(GameObject gameObject);
+    public abstract void PlayRewind(GameObject gameObject);
 }
 
 public class RunnableKeyFrame : KeyFrame
 {
-	private Action<GameObject> run;
+	private Action<GameObject> forwards;
+	private Action<GameObject> backwards;
 
-	public RunnableKeyFrame(long now, int duration, Action<GameObject> run) : base(now, duration)
+	public RunnableKeyFrame(long now, int duration, Action<GameObject> forwards, Action<GameObject> backwards)
+		: base(now, duration)
 	{
-		this.run = run;
+		this.forwards = forwards;
+		this.backwards = backwards;
 	}
 
-    public override void Play(GameObject gameObject)
+	public RunnableKeyFrame(long now, int duration, Action<GameObject> run)
+		: this(now, duration, run, run)
+	{
+	}
+
+    public override void PlayForwards(GameObject gameObject)
     {
-		this.run(gameObject);
+		this.forwards(gameObject);
+    }
+    public override void PlayRewind(GameObject gameObject)
+    {
+        this.backwards(gameObject);
     }
 }
 
@@ -65,11 +91,16 @@ public class TransformKeyFrame : KeyFrame {
 		this.scale = transform.localScale;
 	}
 
-	public override void Play(GameObject gameObject)
+	public override void PlayForwards(GameObject gameObject)
 	{
 		gameObject.transform.SetPositionAndRotation(position, rotation);
 		gameObject.transform.localScale = scale;
 	}
+
+    public override void PlayRewind(GameObject gameObject)
+    {
+		PlayForwards(gameObject);
+    }
 }
 
 public class AudioKeyFrame : KeyFrame {
@@ -81,7 +112,12 @@ public class AudioKeyFrame : KeyFrame {
 		this.audioSource = audioSource;
 	}
 
-    public override void Play(GameObject gameObject)
+    public override void PlayForwards(GameObject gameObject)
+    {
+        throw new NotImplementedException();
+    }
+
+    public override void PlayRewind(GameObject gameObject)
     {
 		pitch = audioSource.pitch;
 		audioSource.pitch = -1;
@@ -149,14 +185,28 @@ public class ReTime : MonoBehaviour {
     public void AddKeyFrame(Action<GameObject> run)
     {
         AddKeyFrame(new RunnableKeyFrame(Now, 0, run));
+		run(gameObject);
     }
 
     public void AddKeyFrame(int duration, Action<GameObject> run)
     {
         AddKeyFrame(new RunnableKeyFrame(Now, duration, run));
+        run(gameObject);
     }
 
-	public void AddKeyFrameAudio(AudioSource audioSource)
+    public void AddKeyFrame(Action<GameObject> forwards, Action<GameObject> backwards)
+    {
+        AddKeyFrame(new RunnableKeyFrame(Now, 0, forwards, backwards));
+        forwards(gameObject);
+    }
+
+    public void AddKeyFrame(int duration, Action<GameObject> forwards, Action<GameObject> backwards)
+    {
+        AddKeyFrame(new RunnableKeyFrame(Now, duration, forwards, backwards));
+        forwards(gameObject);
+    }
+
+    public void AddKeyFrameAudio(AudioSource audioSource)
 	{
 		AddKeyFrame(new AudioKeyFrame(Now, audioSource));
     }
@@ -177,11 +227,11 @@ public class ReTime : MonoBehaviour {
 	//The Rewind method
 	void Rewind(){
 
-		KeyFrames.Sort(new KeyFrameSorter());
+		KeyFrames.Sort(KeyFrame.rewindSorter);
         while (KeyFrames.Count > 0 && KeyFrames[0].endTimeStamp > Now)
 		{
 			KeyFrame val = KeyFrames[0];
-			val.Play(gameObject);
+			val.PlayRewind(gameObject);
 			KeyFrames.Remove (val);
 
         }

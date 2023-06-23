@@ -146,6 +146,14 @@ public class GenerateLevel : MonoBehaviour
             }
         }
         AstarPath.active.Scan();
+        GameObject rewind = GameObject.Find("Rewind");
+        if (rewind.transform)
+        {
+            foreach (GameObject obj in createdObjects)
+            {
+                obj.transform.SetParent(rewind.transform);
+            }
+        }
     }
 
     class Room

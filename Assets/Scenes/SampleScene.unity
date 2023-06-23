@@ -961,7 +961,8 @@ MonoBehaviour:
   - {fileID: 893942113526230309, guid: aebd9a1063b53d7489f2b9508075152a, type: 3}
   - {fileID: 3539917540547519268, guid: f21fb98ad01d393409005f32145e3524, type: 3}
   - {fileID: 3141257047695413659, guid: 2d40513187b78fa4f812811fe60196df, type: 3}
-  exitRoom: {fileID: 0}
+  exitRoom: {fileID: 2045100668050378381, guid: 3aac1fda40cded241b392e07d407507d,
+    type: 3}
   RoomWidth: 4.4
   RoomHeight: 2.8
   createdObjects: []
@@ -10698,7 +10699,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: -1390.93, y: 243}
-  m_SizeDelta: {x: 265.1808, y: 45.920044}
+  m_SizeDelta: {x: 49.7, y: 12.6}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &1037204380
 GameObject:
@@ -11138,8 +11139,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 300, y: -150}
-  m_SizeDelta: {x: 560, y: 290}
+  m_AnchoredPosition: {x: 223, y: -36}
+  m_SizeDelta: {x: 240, y: 510}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1433866231
 MonoBehaviour:
@@ -11161,7 +11162,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: 53d6189e9551f0842abb510e19a90e31, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 8fe020ae98ae9904887f0a2d77e031d4, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
