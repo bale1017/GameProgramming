@@ -10,7 +10,7 @@ using UnityEngine.UIElements;
 public class Timer : MonoBehaviour
 {
     Text text;
-    private double timeScale = 1;
+    private double timeScale = 0;
     private double previousTime = 0;
 
     public double timer = 60;
@@ -23,6 +23,7 @@ public class Timer : MonoBehaviour
         text = GetComponent<Text>();
         previousTime = _timer;
 
+        Game.current.OnGameStart.AddListener(() => timeScale = 1);
         double before = 0;
         Game.current.OnGamePause.AddListener(() => {
             before = timeScale;

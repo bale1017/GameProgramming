@@ -4,9 +4,12 @@ using System.Collections.Generic;
 using System.Security.Cryptography;
 using UnityEngine;
 using UnityEngine.Events;
+using UnityEngine.SceneManagement;
 
 public class Game : MonoBehaviour
 {
+    public static int level = 1;
+
     enum GameState
     {
         PENDING,
@@ -28,6 +31,7 @@ public class Game : MonoBehaviour
     public UnityEvent OnGameFailure = new();
     public UnityEvent OnRewindStart = new();
     public UnityEvent OnRewindEnd = new();
+    public UnityEvent OnLevelEnd = new();
 
     public KeyCode RewindKey = KeyCode.R;
 
@@ -84,7 +88,7 @@ public class Game : MonoBehaviour
 
         deactivateBossUI(); //deactivate UI (Healthbar + Nametag)
 
-        StartGame();
+        StartCoroutine(then(1, StartGame));
     }
 
     IEnumerator then(int sec, Action f)
@@ -101,11 +105,25 @@ public class Game : MonoBehaviour
         OnGameStart.Invoke();
     }
 
+    public void NextLevel()
+    {
+        Game.level++;
+        Scene scene = SceneManager.GetActiveScene();
+        SceneManager.LoadScene(scene.name);
+    }
+
     public void WinGame()
     {
         gameState = GameState.VICTORY;
         OnGameVictory.Invoke();
         OnGameCompletion.Invoke();
+        StartCoroutine(EndGame());
+    }
+
+    IEnumerator EndGame()
+    {
+        yield return new WaitForSeconds(1);
+        OnLevelEnd.Invoke();
     }
 
     public void FailGame()
