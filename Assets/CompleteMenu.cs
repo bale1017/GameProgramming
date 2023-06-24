@@ -2,6 +2,8 @@ using Lean.Transition;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
+using static UnityEditor.PlayerSettings;
 
 public class CompleteMenu : MonoBehaviour
 {
@@ -43,7 +45,26 @@ public class CompleteMenu : MonoBehaviour
 
     public void FadeOut()
     {
-        background.SetActive(false); 
-        text.SetActive(false);
+        Vector3 bPos = background.transform.position;
+        Vector3 tPos = text.transform.position;
+
+        StartCoroutine(then(.2f, () =>
+        {
+            background.transform
+                .positionTransition_x(bPos.x - Screen.width, .3f);
+            text.transform
+                .positionTransition_x(tPos.x - Screen.width, 0.15f);
+
+            StartCoroutine(then(.3f, () => {
+                background.SetActive(false);
+                text.SetActive(false);
+            }));
+        }));
+    }
+
+    IEnumerator then(float sec, UnityAction then)
+    {
+        yield return new WaitForSeconds(sec);
+        then();
     }
 }
