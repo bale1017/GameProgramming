@@ -29,7 +29,7 @@ public class BossController : MonoBehaviour, IController
     private bool revanIsRewinding = false;
 
     // values for a* algorithm
-    public Transform targetPosition;
+    private Transform targetPosition;
     public float speed = 0.6F;
     public float nextWaypointDistance = 0.2F;
     public float updatePathTime = 2;
@@ -53,7 +53,7 @@ public class BossController : MonoBehaviour, IController
         health = new Health(initialHealth, ReceivedDamage, Defeated);
 
         animator.SetFloat("attackAnimationSpeed", attackAnimationSpeed);
-        movement.PreCalcPath(transform.position, targetPosition.position);
+        movement.PreCalcPath(transform.position, transform.position);
         state = EnemyState.Idle;
     }
 
