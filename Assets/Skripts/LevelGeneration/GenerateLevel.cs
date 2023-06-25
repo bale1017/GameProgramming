@@ -154,7 +154,6 @@ public class GenerateLevel : MonoBehaviour
                 obj.transform.SetParent(rewind.transform);
             }
         }
-        Debug.Log("rewind.GetComponent<ReTime>() " + rewind.GetComponent<ReTime>().RewindSpeed);
         rewind.GetComponent<ReTime>().PassDown();
     }
 

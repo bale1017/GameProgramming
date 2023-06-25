@@ -72,13 +72,19 @@ public class PlayerController : MonoBehaviour
                 }
 
                 //Set direction of sprite to movemnet direction
-                if (movementInput.x < 0)
+                if (movementInput.x < 0 && !spriteRenderer.flipX)
                 {
-                    spriteRenderer.flipX = true;
+                    GetComponent<ReTime>().AddKeyFrame(
+                        g => spriteRenderer.flipX = true,
+                        g => spriteRenderer.flipX = false
+                    );
                 }
-                else if (movementInput.x > 0)
+                else if (movementInput.x > 0 && spriteRenderer.flipX)
                 {
-                    spriteRenderer.flipX = false;
+                    GetComponent<ReTime>().AddKeyFrame(
+                        g => spriteRenderer.flipX = false,
+                        g => spriteRenderer.flipX = true
+                    );
                 }
             }
     }
