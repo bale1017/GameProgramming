@@ -56,6 +56,19 @@ public class BatController : MonoBehaviour
 
     public void FixedUpdate()
     {
+        GameObject[] possibleTargets = GameObject.FindGameObjectsWithTag("Player");
+        GameObject closestTarget = null;
+        float distance = float.MaxValue;
+        foreach (var possibleTarget in possibleTargets)
+        {
+            if (closestTarget == null || distance > Vector3.Distance(transform.position, possibleTarget.transform.position))
+            {
+                distance = Vector3.Distance(transform.position, possibleTarget.transform.position);
+                closestTarget = possibleTarget;
+            }
+        }
+        targetPosition = closestTarget.transform;
+
         if (Game.current.IsRunning())
         {
             if (!Game.IsRewinding)

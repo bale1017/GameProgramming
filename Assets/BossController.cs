@@ -63,11 +63,25 @@ public class BossController : MonoBehaviour
     // Update is called once per frame
     void FixedUpdate()
     {
+        GameObject[] possibleTargets = GameObject.FindGameObjectsWithTag("Player");
+        GameObject closestTarget = null;
+        float distance = float.MaxValue;
+        foreach (var possibleTarget in possibleTargets)
+        {
+            if (closestTarget == null || distance > Vector3.Distance(transform.position, possibleTarget.transform.position))
+            {
+                distance = Vector3.Distance(transform.position, possibleTarget.transform.position);
+                closestTarget = possibleTarget;
+            }
+        }
+        targetPosition = closestTarget.transform;
+
         if (!activatedUI)
         {
             activatedUI = true;
             Game.current.activateBossUI();
         }
+
         if (Game.current.IsRunning()) { 
             if (!Game.IsRewinding && !revanIsRewinding)
             {
