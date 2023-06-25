@@ -42,6 +42,8 @@ public class BatController : MonoBehaviour
         spriteRenderer = GetComponent<SpriteRenderer>();
         attackCollider = GetComponent<CircleCollider2D>();
 
+        TakeDamage = GetComponentInChildren<AudioSource>();
+
         movement = new Movement(seeker, speed, nextWaypointDistance, updatePathTime);
         Health health = GetComponent<Health>();
         if (health != null)
