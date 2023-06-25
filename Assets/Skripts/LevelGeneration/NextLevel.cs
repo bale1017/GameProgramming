@@ -16,8 +16,12 @@ public class NextLevel : MonoBehaviour
             Game.current.WinGame();
             return;
         }
-        ReTime time = GetComponent<ReTime>() ?? gameObject.AddComponent<ReTime>();
-        time.AddKeyFrame(
+        ReTime retime = GetComponent<ReTime>();
+        if (!retime)
+        {
+            gameObject.AddComponent<ReTime>();
+        }
+        retime.AddKeyFrame(
             g =>
             {
                 this.GetComponent<SpriteRenderer>().sprite = openTrapDoor;
