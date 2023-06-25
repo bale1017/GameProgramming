@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 5258695528696898733}
   - component: {fileID: 8589074385746017794}
-  - component: {fileID: 201530085915848929}
+  - component: {fileID: 4516035680614055117}
   m_Layer: 0
   m_Name: SwordHitboxB
   m_TagString: Untagged
@@ -78,7 +78,7 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 0.33062407, y: 0.14672984}
   m_EdgeRadius: 0
---- !u!114 &201530085915848929
+--- !u!114 &4516035680614055117
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -87,7 +87,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 1444340284183651186}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0ebce0c2153758b498e6148376ffb5e4, type: 3}
+  m_Script: {fileID: 11500000, guid: 501db29e05388da46a962e09b4c360de, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   damage: 3
@@ -192,7 +192,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1867848266371577680}
   - component: {fileID: 1278752072714273178}
-  - component: {fileID: 8868847301427775939}
+  - component: {fileID: 3605719642880037591}
   m_Layer: 0
   m_Name: SwordHitboxC
   m_TagString: Untagged
@@ -260,7 +260,7 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 0.46548006, y: 0.42134553}
   m_EdgeRadius: 0
---- !u!114 &8868847301427775939
+--- !u!114 &3605719642880037591
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -269,7 +269,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 4163141770327565218}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 345e863c79031334da17217a369de4d7, type: 3}
+  m_Script: {fileID: 11500000, guid: 501db29e05388da46a962e09b4c360de, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   damage: 3
@@ -283,6 +283,7 @@ GameObject:
   m_Component:
   - component: {fileID: 6959471295415283788}
   - component: {fileID: 6655121769589303237}
+  - component: {fileID: 4022281557343201453}
   - component: {fileID: 1946105947149942689}
   - component: {fileID: 541941586397077992}
   - component: {fileID: 8145153404293545114}
@@ -311,7 +312,7 @@ Transform:
   - {fileID: 5258695528696898733}
   - {fileID: 1867848266371577680}
   m_Father: {fileID: 0}
-  m_RootOrder: -1
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!212 &6655121769589303237
 SpriteRenderer:
@@ -365,6 +366,27 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!114 &4022281557343201453
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6622463401287199620}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6c361e8106ad6014abb58268ccf14ba0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  initHealth: 30
+  maxHealth: 30
+  vulnerable: 1
+  OnHealthChange:
+    m_PersistentCalls:
+      m_Calls: []
+  OnDeath:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!114 &1946105947149942689
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -377,21 +399,21 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d1cac15d8c7f9ed459357eb63b4f9b51, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  initialHealth: 30
   chaseRange: 1000
   attackRangeX: 0.45
   attackRangeY: 0.1
   damage: 7
   timeToNextAttack: 2
   attackAnimationSpeed: 0.8
+  rewindTimeInSec: 3
   targetPosition: {fileID: 8303431347630341780, guid: d14b75de5ccb59944ace846c2fba62a4,
     type: 3}
   speed: 0.7
   nextWaypointDistance: 0.2
   updatePathTime: 2
   attackA: {fileID: 3378079980207575204}
-  attackB: {fileID: 201530085915848929}
-  attackC: {fileID: 8868847301427775939}
+  attackB: {fileID: 4516035680614055117}
+  attackC: {fileID: 3605719642880037591}
 --- !u!50 &541941586397077992
 Rigidbody2D:
   serializedVersion: 4

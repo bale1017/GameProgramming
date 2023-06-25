@@ -7,13 +7,12 @@ using UnityEngine.InputSystem;
 using UnityEngine.InputSystem.Processors;
 using UnityEngine.UI;
 
-public class PlayerController : MonoBehaviour, IController
+public class PlayerController : MonoBehaviour
 {
     Animator animator;
     SpriteRenderer spriteRenderer;
     Rigidbody2D rb;
     public PlayerSwordAttack swordAttack; //import script
-    public Health health;
 
     Vector2 movementInput;
     public float moveSpeed = 1f;
@@ -22,13 +21,12 @@ public class PlayerController : MonoBehaviour, IController
     List<RaycastHit2D> castCollisions = new List<RaycastHit2D>();
     private bool canMove = true;
     private bool isDead = false;
-    public float healthAmount = 25;
 
+    Health health;
     public AudioSource TakeDamage;
     public AudioSource Death;
 
     public static PlayerController Instance { get; private set; }
-    Health IController.health { get => health; }
 
     // Start is called before the first frame update
     void Start()
@@ -37,7 +35,13 @@ public class PlayerController : MonoBehaviour, IController
         animator = GetComponent<Animator>();
         spriteRenderer = GetComponent<SpriteRenderer>();
         Instance = this;
-        health = new Health(healthAmount, ReceivedDamage, Defeated);
+        Health health = GetComponent<Health>();
+        if (health == null)
+        {
+            health = GetComponent<Health>();
+        }
+        health.OnDeath.AddListener(Defeated);
+        health.OnHealthDecreaseBy.AddListener(ReceivedDamage);
     }
 
     private void FixedUpdate()
@@ -156,10 +160,8 @@ public class PlayerController : MonoBehaviour, IController
         canMove = true;
     }
 
-    public void Defeated(float val)
+    public void Defeated()
     {
-        var healthbar = GameObject.Find("HealthBar_Player").GetComponent<Slider>();
-        healthbar.value = 0;
         isDead = true;
         Debug.Log("Player has been defeated");
         // trigger death animation of player
@@ -175,8 +177,6 @@ public class PlayerController : MonoBehaviour, IController
         Debug.Log("Player received " + val + " damage");
         // trigger damage receiving animation of player
         animator.SetTrigger("receivesDamage");
-        var healthbar = GameObject.Find("HealthBar_Player").GetComponent<Slider>();
-        healthbar.value = health.GetHealth()/healthAmount;
     }
 
     public IEnumerator PlayerDefeated()

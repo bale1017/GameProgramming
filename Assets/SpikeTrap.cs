@@ -23,8 +23,8 @@ public class SpikeTrap : MonoBehaviour
 
         if (triggered && !damaged)
         {
-            PlayerController player = collision.GetComponent<PlayerController>();
-            player.health.ReduceHealth(damage);
+            Health target = collision.GetComponent<Health>();
+            target.AffectHealth(-damage);
             GetComponent<ReTime>().AddKeyFrame(g => damaged = true, g => damaged = false);
         }
         else
@@ -41,10 +41,12 @@ public class SpikeTrap : MonoBehaviour
             retime = gameObject.AddComponent<ReTime>();
         }
 
+        retime.AddKeyFrame(g => triggered = true, g => triggered = false);
+        retime.AddKeyFrame(g => damaged = true, g => damaged = false);
+
         yield return new WaitForSeconds(triggerDelay);
 
         retime.AddKeyFrame(g => damaged = false, g => damaged = true);
-        retime.AddKeyFrame(g => triggered = true, g => triggered = false);
         retime.AddKeyFrame(
             g => g.GetComponent<SpriteRenderer>().sprite = activeSpike,
             g => g.GetComponent<SpriteRenderer>().sprite = inactiveSpike

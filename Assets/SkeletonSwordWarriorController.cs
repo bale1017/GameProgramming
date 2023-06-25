@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using BasePatterns;
 
-public class SkeletonSwordWarriorController : MonoBehaviour, IController
+public class SkeletonSwordWarriorController : MonoBehaviour
 {
     private Seeker seeker;
     private Animator animator;
@@ -12,7 +12,6 @@ public class SkeletonSwordWarriorController : MonoBehaviour, IController
 
     // generic values and values for state machine
     private EnemyState state;
-    public float initialHealth = 10;
     public float chaseRange = 1;
     public float attackRange = 0.1F;
     public float damage = 5;
@@ -38,15 +37,12 @@ public class SkeletonSwordWarriorController : MonoBehaviour, IController
     public float distanceOffset = 2;
 
     private Movement movement;
-    public Health health;
     public SkeletonSword skeletonSword;
 
     public AudioSource TakeDamage;
     public AudioSource AttackFast;
     public AudioSource AttackSlow;
     public AudioSource Death;
-
-    Health IController.health { get => health; }
 
     public void Start()
     {
@@ -55,7 +51,12 @@ public class SkeletonSwordWarriorController : MonoBehaviour, IController
         spriteRenderer = GetComponent<SpriteRenderer>();
 
         movement = new Movement(seeker, speed, nextWaypointDistance, updatePathTime);
-        health = new Health(initialHealth, ReceivedDamage, Defeated);
+        Health health = GetComponent<Health>();
+        if (health != null)
+        {
+            health.OnDeath.AddListener(Defeated);
+            health.OnHealthDecreaseBy.AddListener(ReceivedDamage);
+        }
 
         startPosition = transform.position;
         randNextDestination = Movement.GetRandNextDestination(startPosition, roamingOffset);
@@ -247,7 +248,7 @@ public class SkeletonSwordWarriorController : MonoBehaviour, IController
         movement.UnlockMovement();
     }
 
-    public void Defeated(float val)
+    public void Defeated()
     {
         Debug.Log("Skeleton Sword Warrior has been slayed!");
         Death.Play();

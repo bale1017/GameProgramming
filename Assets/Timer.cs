@@ -38,7 +38,7 @@ public class Timer : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        _timer -= Time.deltaTime * timeScale;
+        _timer -= Time.deltaTime * timeScale * (Game.IsRewinding ? GetComponent<ReTime>().RewindSpeed : 1);
         if (_timer > timer)
         {
             _timer = timer;
