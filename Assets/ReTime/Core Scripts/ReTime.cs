@@ -213,7 +213,7 @@ public class ReTime : MonoBehaviour {
 
     void FixedUpdate()
     {
-        Now += (long)(Time.deltaTime * RewindSpeed * 1000 * (isRewinding ? -1 : 1));
+        Now += (long)(Time.deltaTime * 1000 * (isRewinding ? -RewindSpeed : 1));
 
         if (isRewinding)
         {

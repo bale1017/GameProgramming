@@ -1,20 +1,21 @@
+using System.Runtime.ConstrainedExecution;
 using UnityEngine;
+using UnityEngine.Events;
 
-public delegate void OnReceivingDamage(float val);
-public delegate void OnHealthBelowZero(float val);
-
-public class Health
+public class Health : MonoBehaviour
 {
-    private float health = 1;
-    private bool vulnerable = true;
-    private OnReceivingDamage onReceivingDamage;
-    private OnHealthBelowZero onHealthBelowZero;
+    public float initHealth = 1;
+    public float maxHealth = 1;
+    public bool vulnerable = true;
+    private float health;
+    public UnityEvent<float> OnHealthChange;
+    public UnityEvent<float> OnHealthDecreaseBy;
+    public UnityEvent<float> OnHealthIncreaseBy;
+    public UnityEvent OnDeath;
 
-    public Health(float _health, OnReceivingDamage _onReceivingDamage, OnHealthBelowZero _onHealthBelowZero)
+    private void Start()
     {
-        health = _health;
-        onReceivingDamage = _onReceivingDamage;
-        onHealthBelowZero = _onHealthBelowZero;
+        health = initHealth;
     }
 
     public float GetHealth()
@@ -22,18 +23,63 @@ public class Health
         return health;
     }
 
-    public void ReduceHealth(float val)
+    public void AffectHealth(float val)
     {
-        if (vulnerable) { 
-            Debug.Log("Reduce total health of " + health + " by " + val);
-            if (health - val > 0)
-            {
-                health -= val;
-                onReceivingDamage(val);
-            } else
-            {
-                onHealthBelowZero(val);
-            }
+        if (!vulnerable) return;
+        Debug.Log("Reduce total health of " + health + " by " + val);
+        if (health + val < 0)
+        {
+            float cur = health;
+            GetComponent<ReTime>().AddKeyFrame(
+                g => {
+                    health = 0;
+                    OnDeath.Invoke();
+                    OnHealthDecreaseBy.Invoke(cur);
+                    OnHealthChange.Invoke(0);
+                },
+                g => {
+                    health = cur;
+                    OnHealthIncreaseBy.Invoke(cur);
+                    OnHealthChange.Invoke(health);
+                }
+                );
+            return;
+        }
+        if (health + val > maxHealth)
+        {
+            float cur = health;
+            GetComponent<ReTime>().AddKeyFrame(
+                g => {
+                    health = maxHealth;
+                    OnHealthChange.Invoke(maxHealth);
+                    OnHealthIncreaseBy.Invoke(maxHealth - cur);
+                },
+                g => {
+                    health = cur;
+                    OnHealthChange.Invoke(health);
+                    OnHealthDecreaseBy.Invoke(maxHealth - cur);
+                }
+            );
+            
+        } else
+        {
+            GetComponent<ReTime>().AddKeyFrame(
+                g => {
+                    health += val;
+                    OnHealthChange.Invoke(health);
+                    if (val < 0)
+                    {
+                        OnHealthDecreaseBy.Invoke(val);
+                    }else
+                    {
+                        OnHealthIncreaseBy.Invoke(val);
+                    }
+                },
+                g => {
+                    health -= val;
+                    OnHealthChange.Invoke(health);
+                }
+            );
         }
     }
 

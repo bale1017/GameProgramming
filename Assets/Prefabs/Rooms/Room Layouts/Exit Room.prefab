@@ -309,6 +309,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a413e04a31beb6d44ab4296fe02e3739, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  closeTrapDoor: {fileID: -713831673, guid: d82fc23b40e02bb408e4baec4b392600, type: 3}
   openTrapDoor: {fileID: -819505333, guid: d82fc23b40e02bb408e4baec4b392600, type: 3}
 --- !u!61 &8499707182302928668
 BoxCollider2D:

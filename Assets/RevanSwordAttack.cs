@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class RevanSwordAttackB : MonoBehaviour
+public class RevanSwordAttack : MonoBehaviour
 {
     //public AudioSource Slash;
     public float damage = 3;
@@ -18,17 +18,20 @@ public class RevanSwordAttackB : MonoBehaviour
 
     public void AttackRight()
     {
-        //Slash.Play();
-        Debug.Log("Revan uses Right Sword Attack B!");
         transform.localPosition = rightAttackOffset;
-        swordCollider.enabled = true;
+        Attack();
     }
 
     public void AttackLeft()
     {
-        //Slash.Play();
-        Debug.Log("Revan uses Left Sword Attack B!");
         transform.localPosition = new Vector3(rightAttackOffset.x * -1, rightAttackOffset.y);
+        Attack();
+    }
+
+    void Attack()
+    {
+        //Slash.Play();
+        Debug.Log("Revan uses Left Sword Attack!");
         swordCollider.enabled = true;
     }
 
@@ -39,12 +42,12 @@ public class RevanSwordAttackB : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        Debug.Log("OnTriggerEnter2D of Revan called");
+        //Debug.Log("OnTriggerEnter2D of Revan called");
         if (collision.tag == "Player")
         {
             //Deal damage to player
-            PlayerController player = collision.GetComponent<PlayerController>();
-            player.health.ReduceHealth(damage);
+            Health player = collision.GetComponent<Health>();
+            player.AffectHealth(-damage);
         }
     }
 }
