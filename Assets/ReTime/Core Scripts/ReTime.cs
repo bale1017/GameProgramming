@@ -7,7 +7,10 @@ using System.Security.Cryptography;
 using System.Xml;
 using Unity.Collections;
 using Unity.VisualScripting;
+using UnityEditor.Animations;
 using UnityEngine;
+using UnityEngine.Animations;
+using UnityEngine.Playables;
 
 public class KeyFrameForwardSorter : IComparer<KeyFrame>
 {
@@ -101,6 +104,28 @@ public class TransformKeyFrame : KeyFrame {
     {
 		PlayForwards(gameObject);
     }
+}
+
+public class AnimKeyFrame : KeyFrame
+{
+	public Animation anim;
+	public AnimationClip clip;
+
+    public AnimKeyFrame(long now, AnimationClip clip) : base(now, (int)(clip.length * 1000))
+    {
+        this.clip = clip;
+    }
+
+	public override void PlayForwards(GameObject gameObject)
+	{
+	}
+    public override void PlayRewind(GameObject gameObject)
+	{
+		Animator anim = gameObject.GetComponent<Animator>();
+		if (anim == null) return;
+        var overrideCtl = new AnimatorOverrideController(anim.runtimeAnimatorController);
+		anim.runtimeAnimatorController = overrideCtl;
+	}
 }
 
 public class AudioKeyFrame : KeyFrame {
@@ -221,6 +246,8 @@ public class ReTime : MonoBehaviour {
 		AddKeyFrame(new AudioKeyFrame(Now, audioSource));
     }
 
+	private string lastAnim = "";
+
     void FixedUpdate()
     {
         Now += (long)(Time.deltaTime * 1000 * (isRewinding ? -RewindSpeed : 1));
@@ -230,7 +257,17 @@ public class ReTime : MonoBehaviour {
             Rewind ();
 		}else{
 			if(isFeeding)
+			{
                 AddKeyFrame(new TransformKeyFrame(Now, transform));
+				if (hasAnimator)
+				{
+                    AnimationClip cur = animator.GetCurrentAnimatorClipInfo(0)[0].clip;
+                    if (cur != null && cur.name != lastAnim)
+                    {
+                        // AddKeyFrame(new AnimKeyFrame(Now, cur));
+                    }
+                }
+            }
         }
 	}
 
@@ -247,30 +284,12 @@ public class ReTime : MonoBehaviour {
         }
 	}
 
-	void StartRewind(){
-
-		isRewinding = true;
-		if(hasAnimator)
-			animator.enabled = false;
-	}
-
-	void StopRewind(){
-		if (!isRewinding)
-		{
-			return;
-		}
-		Time.timeScale = 1;
-		isRewinding = false;
-		if(hasAnimator)
-			animator.enabled = true;
-	}
-
 	//exposed method to enable rewind
 	public void StartTimeRewind(){
 		isRewinding = true;
 
-		if(hasAnimator)
-			animator.enabled = false;
+		if (hasAnimator)
+			animator.SetFloat("retime", -RewindSpeed);
 
 		if(transform.childCount > 0){
 			foreach (Transform child in transform)
@@ -278,7 +297,6 @@ public class ReTime : MonoBehaviour {
                 if (!child.TryGetComponent<ReTime>(out var retime))
                 {
                     retime = child.AddComponent<ReTime>();
-
                 }
                 retime.StartTimeRewind();
             }
@@ -288,11 +306,10 @@ public class ReTime : MonoBehaviour {
 	//exposed method to disable rewind
 	public void StopTimeRewind(){
 		isRewinding = false;
-		Time.timeScale = 1;
 		if(hasAnimator)
-			animator.enabled = true;
+            animator.SetFloat("retime", 1);
 
-		if(transform.childCount > 0){
+        if (transform.childCount > 0){
 			foreach (Transform child in transform) {
 
 				if (!child.TryGetComponent<ReTime>(out var retime))
