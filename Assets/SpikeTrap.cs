@@ -35,10 +35,9 @@ public class SpikeTrap : MonoBehaviour
 
     private IEnumerator activateSpike()
     {
-        ReTime retime = GetComponent<ReTime>();
-        if (!retime)
+        if (!TryGetComponent<ReTime>(out var retime))
         {
-            gameObject.AddComponent<ReTime>();
+            retime = gameObject.AddComponent<ReTime>();
         }
         retime.AddKeyFrame(g => triggered = true, g => triggered = false);
         retime.AddKeyFrame(g => damaged = true, g => damaged = false);

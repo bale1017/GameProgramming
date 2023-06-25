@@ -16,20 +16,19 @@ public class NextLevel : MonoBehaviour
             Game.current.WinGame();
             return;
         }
-        ReTime retime = GetComponent<ReTime>();
-        if (!retime)
+        if (!TryGetComponent<ReTime>(out var retime))
         {
-            gameObject.AddComponent<ReTime>();
+            retime = gameObject.AddComponent<ReTime>();
         }
         retime.AddKeyFrame(
             g =>
             {
-                this.GetComponent<SpriteRenderer>().sprite = openTrapDoor;
+                g.GetComponent<SpriteRenderer>().sprite = openTrapDoor;
                 isTriggered = true;
             },
             g =>
             {
-                this.GetComponent<SpriteRenderer>().sprite = closeTrapDoor;
+                g.GetComponent<SpriteRenderer>().sprite = closeTrapDoor;
                 isTriggered = false;
             }
         );
