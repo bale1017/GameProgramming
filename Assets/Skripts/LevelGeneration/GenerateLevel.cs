@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -18,6 +19,13 @@ public class GenerateLevel : MonoBehaviour
     [HideInInspector]
     public List<GameObject> createdObjects;
 
+    private int roomsToWest = 0;
+    private int roomsToEast = 0;
+    private int roomsToNorth = 0;
+    private int roomsToSouth = 0;
+    private int widthOfAStar = 85; 
+    private int depthOfAStar = 55;
+
     public void GenerateLayout()
     {
         createdObjects = new List<GameObject>();
@@ -30,17 +38,17 @@ public class GenerateLevel : MonoBehaviour
             case 1:
             case 2:
                 roomLayer = 0;
-                roomAmount = Random.Range(3, 6);
+                roomAmount = UnityEngine.Random.Range(3, 6);
                 
                 break;
             case 3:
             case 4:
-                roomAmount = Random.Range(4, 8);
+                roomAmount = UnityEngine.Random.Range(4, 8);
                 roomLayer = 1;
                 roomOffset = 3.2F;
                 break;
             default:
-                roomAmount = Random.Range(6, 9);
+                roomAmount = UnityEngine.Random.Range(6, 9);
                 roomLayer = 2;
                 roomOffset = 6.4F;
                 break;
@@ -49,7 +57,7 @@ public class GenerateLevel : MonoBehaviour
         List<(int, int)> roomList = new List<(int, int)>();
         for (int i = 0; i < roomAmount; i++)
         {
-            roomList.Add((roomLayer, Random.Range(0, interiors.Length)));
+            roomList.Add((roomLayer, UnityEngine.Random.Range(0, interiors.Length)));
         }
         List<Room> roomLayouts = ChooseLayout(roomAmount);
         /*
@@ -145,7 +153,9 @@ public class GenerateLevel : MonoBehaviour
 
             }
         }
-        AstarPath.active.Scan();
+
+        updateGraph(); //update Graph with more fitting size
+
         GameObject rewind = GameObject.Find("Rewind");
         if (rewind.transform)
         {
@@ -196,28 +206,32 @@ public class GenerateLevel : MonoBehaviour
             Room current = placedRooms[i];
             Room newRoom = new Room(0, 0);
 
-            int adjacentRooms = Random.Range(1, 16); // 1111 - 0001 
+            int adjacentRooms = UnityEngine.Random.Range(1, 16); // between 0001 (1) and 1111 (15) 
             for (int j = 0; j < 4; j++)
             {
-                if ((adjacentRooms >> j & 1) == 1 && availableRooms > 0)
+                if ((adjacentRooms >> j & 1) == 1 && availableRooms > 0) // a >> b <=> a / 2^b
                 {
                     switch (j)
                     {
                         case 0: // North
                             newRoom = new Room(current.x, current.y + 1, s: true);
+                            roomsToNorth += 1;
                             current.hasNorth = true;
 
                             break;
                         case 1: // East
                             newRoom = new Room(current.x + 1, current.y, w: true);
+                            roomsToEast += 1;
                             current.hasEast = true;
                             break;
                         case 2: // South
                             newRoom = new Room(current.x, current.y - 1, n: true);
+                            roomsToSouth += 1;
                             current.hasSouth = true;
                             break;
                         case 3: // West
                             newRoom = new Room(current.x - 1, current.y, e: true);
+                            roomsToWest += 1;
                             current.hasWest = true;
                             break;
                         default: break;
@@ -234,6 +248,18 @@ public class GenerateLevel : MonoBehaviour
         }
         return placedRooms;
     }
+
+    public void updateGraph()
+    {
+        var gg = AstarPath.active.data.gridGraph;
+        int width = Math.Max(roomsToWest, roomsToEast) * widthOfAStar; //change width according to furthest room to the west/east 
+        int depth = Math.Max(roomsToNorth, roomsToSouth) * depthOfAStar; //change depth according to furthest room to the north/south
+        width = width == 0 ? widthOfAStar : width; //check if there is no room to the west and east
+        depth = depth == 0 ? depthOfAStar : depth; //check if there is no room to the south and north
+        gg.SetDimensions(width, depth, 0.16f); //only calc new width + depth, nodeSize keeps the same
+        AstarPath.active.Scan();
+    }
+
 }
 
 
