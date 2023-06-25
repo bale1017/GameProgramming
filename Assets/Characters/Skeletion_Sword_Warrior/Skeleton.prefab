@@ -15,6 +15,7 @@ GameObject:
   - component: {fileID: 4873390302692472844}
   - component: {fileID: 5646379648878038990}
   - component: {fileID: 2954295673552907271}
+  - component: {fileID: 8397210486887149675}
   m_Layer: 0
   m_Name: Skeleton
   m_TagString: Enemy
@@ -40,7 +41,7 @@ Transform:
   - {fileID: 407210096569135}
   - {fileID: 1109432775400651038}
   m_Father: {fileID: 0}
-  m_RootOrder: -1
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!212 &3609696427226092851
 SpriteRenderer:
@@ -161,7 +162,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9d05e2d8eba9f384b93513fcd15a7bad, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  initialHealth: 10
   chaseRange: 1
   attackRange: 0.27
   damage: 1
@@ -246,6 +246,27 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 0.1501139, y: 0.5084682}
   m_EdgeRadius: 0
+--- !u!114 &8397210486887149675
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 256516355802191914}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6c361e8106ad6014abb58268ccf14ba0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  initHealth: 3
+  maxHealth: 3
+  vulnerable: 1
+  OnHealthChange:
+    m_PersistentCalls:
+      m_Calls: []
+  OnDeath:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!1 &991091372674597751
 GameObject:
   m_ObjectHideFlags: 0

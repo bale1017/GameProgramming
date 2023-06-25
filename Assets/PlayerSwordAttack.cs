@@ -42,10 +42,10 @@ public class PlayerSwordAttack : MonoBehaviour
         if (collision.tag == "Enemy")
         {
             //Deal damage to enemy
-            IController enemy = collision.GetComponent<IController>();
+            Health enemy = collision.GetComponent<Health>();
             if (enemy != null)
             {
-                enemy.health.ReduceHealth(damage);
+                enemy.AffectHealth(-damage);
             }
         }
     }

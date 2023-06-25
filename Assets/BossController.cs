@@ -5,7 +5,7 @@ using System;
 using System.Collections;
 using UnityEngine.UI;
 
-public class BossController : MonoBehaviour, IController
+public class BossController : MonoBehaviour
 {
     private Seeker seeker;
     private Animator animator;
@@ -13,7 +13,6 @@ public class BossController : MonoBehaviour, IController
 
     // generic values and values for state machine
     private EnemyState state;
-    public float initialHealth = 30;
     public float chaseRange = 1000;
     public float attackRangeX = 0.45F;
     public float attackRangeY = 0.1F;
@@ -34,13 +33,11 @@ public class BossController : MonoBehaviour, IController
     public float nextWaypointDistance = 0.2F;
     public float updatePathTime = 2;
 
+    private Health health;
     private Movement movement;
-    public Health health;
-    public RevanSwordAttackA attackA;
-    public RevanSwordAttackB attackB;
-    public RevanSwordAttackC attackC;
-
-    Health IController.health { get => health; }
+    public RevanSwordAttack attackA;
+    public RevanSwordAttack attackB;
+    public RevanSwordAttack attackC;
 
     // Start is called before the first frame update
     void Start()
@@ -50,7 +47,13 @@ public class BossController : MonoBehaviour, IController
         spriteRenderer = GetComponent<SpriteRenderer>();
 
         movement = new Movement(seeker, speed, nextWaypointDistance, updatePathTime);
-        health = new Health(initialHealth, ReceivedDamage, Defeated);
+        health = GetComponent<Health>();
+        if (health == null)
+        {
+            health = gameObject.AddComponent<Health>();
+        }
+        health.OnDeath.AddListener(Defeated);
+        health.OnHealthDecreaseBy.AddListener(ReceivedDamage);
 
         animator.SetFloat("attackAnimationSpeed", attackAnimationSpeed);
         movement.PreCalcPath(transform.position, transform.position);
@@ -249,16 +252,10 @@ public class BossController : MonoBehaviour, IController
     {
         Debug.Log("Revan received " + val + " damage!");
         animator.SetTrigger("receivesDamage");
-
-        var healthbar = GameObject.Find("HealthBar_Revan").GetComponent<Slider>();
-        healthbar.value = health.GetHealth()/initialHealth;
     }
 
-    private void Defeated(float val)
+    private void Defeated()
     {
-        var healthbar = GameObject.Find("HealthBar_Revan").GetComponent<Slider>();
-        healthbar.value = 0;
-
         if (!isFirstPhase)
         {
             Debug.Log("Revan has been slayed!");

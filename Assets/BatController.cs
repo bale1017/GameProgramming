@@ -6,14 +6,13 @@ using Pathfinding;
 using System.Collections;
 using BasePatterns;
 
-public class BatController : MonoBehaviour, IController
+public class BatController : MonoBehaviour
 {
     private Seeker seeker;
     private Animator animator;
     private SpriteRenderer spriteRenderer;
 
     private EnemyState state;
-    public float initialHealth = 3;
     public float chaseRange = 1;
     public float attackRange = 0.1F;
     public float damage = 1;
@@ -31,14 +30,10 @@ public class BatController : MonoBehaviour, IController
     public float distanceOffset = 2;
 
     private Movement movement;
-    public Health health;
-
 
     public AudioSource TakeDamage;
 
     private CircleCollider2D attackCollider;
-
-    Health IController.health { get => health; }
 
     public void Start()
     {
@@ -48,7 +43,12 @@ public class BatController : MonoBehaviour, IController
         attackCollider = GetComponent<CircleCollider2D>();
 
         movement = new Movement(seeker, speed, nextWaypointDistance, updatePathTime);
-        health = new Health(initialHealth, ReceivedDamage, Defeated);
+        Health health = GetComponent<Health>();
+        if (health != null)
+        {
+            health.OnDeath.AddListener(Defeated);
+            health.OnHealthDecreaseBy.AddListener(ReceivedDamage);
+        }
 
         movement.PreCalcPath(transform.position, transform.position);
         state = EnemyState.Idle;
@@ -167,7 +167,7 @@ public class BatController : MonoBehaviour, IController
         movement.UnlockMovement();
     }
 
-    public void Defeated(float val)
+    public void Defeated()
     {
         TakeDamage.Play();
         Debug.Log("Bat has been slayed");
@@ -193,8 +193,11 @@ public class BatController : MonoBehaviour, IController
         if (collision.tag == "Player")
         {
             //Deal damage to player
-            PlayerController player = collision.GetComponent<PlayerController>();
-            player.health.ReduceHealth(damage);
+            Health player = collision.GetComponent<Health>();
+            if (player != null)
+            {
+                player.AffectHealth(-damage);
+            }
         }
     }
 
