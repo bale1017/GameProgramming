@@ -20,7 +20,7 @@ public class BatController : MonoBehaviour
     public float attackRate = 0.1F; 
 
     // values for a* algorithm
-    public Transform targetPosition;
+    private Transform targetPosition;
     public float speed = 0.5F;
     public float nextWaypointDistance = 0.2F;
     public float updatePathTime = 2;
@@ -50,7 +50,7 @@ public class BatController : MonoBehaviour
             health.OnHealthDecreaseBy.AddListener(ReceivedDamage);
         }
 
-        movement.PreCalcPath(transform.position, targetPosition.position);
+        movement.PreCalcPath(transform.position, transform.position);
         state = EnemyState.Idle;
     }
 

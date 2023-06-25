@@ -21,7 +21,7 @@ public class SkeletonSwordWarriorController : MonoBehaviour
     private bool chooseAttackA = true;
 
     // values for a* algorithm
-    public Transform targetPosition;
+    private Transform targetPosition;
     public float speed = 0.2F;
     public float nextWaypointDistance = 0.2F;
     public float updatePathTime = 2;

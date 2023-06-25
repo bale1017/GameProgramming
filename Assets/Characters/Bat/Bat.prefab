@@ -37,7 +37,7 @@ Transform:
   m_Children:
   - {fileID: 7492595591337965246}
   m_Father: {fileID: 0}
-  m_RootOrder: 0
+  m_RootOrder: -1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!212 &3745555717046471821
 SpriteRenderer:
@@ -130,12 +130,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d84d894e43e43b447be9443a31683476, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  chaseRange: 1
+  chaseRange: 1.2
   attackRange: 0.06
   damage: 1
   attackRate: 1
-  targetPosition: {fileID: 0}
-  speed: 0.4
+  speed: 0.6
   nextWaypointDistance: 0.2
   updatePathTime: 2
   timeUntilSleeping: 2
@@ -241,6 +240,12 @@ MonoBehaviour:
   maxHealth: 1
   vulnerable: 1
   OnHealthChange:
+    m_PersistentCalls:
+      m_Calls: []
+  OnHealthDecreaseBy:
+    m_PersistentCalls:
+      m_Calls: []
+  OnHealthIncreaseBy:
     m_PersistentCalls:
       m_Calls: []
   OnDeath:
