@@ -154,12 +154,16 @@ public class ReTime : MonoBehaviour {
 	long StartTime;
 	long Now;
 
-	// Use this for initialization
-	void Start () {
+	ReTime()
+	{
         KeyFrames = new List<KeyFrame>();
-		StartTime = 0;
-		Now = StartTime;
+        StartTime = 0;
+        Now = StartTime;
+    }
 
+    // Use this for initialization
+    void Start () {
+        
         //if contains particle system, then cache and add comp.
         if (GetComponent<ParticleSystem> ())
 			Particles = GetComponent<ParticleSystem> ();
@@ -169,13 +173,19 @@ public class ReTime : MonoBehaviour {
 			hasAnimator = true;
 			animator = GetComponent<Animator> ();
 		}
-
-		//Add the time rewind script to all children - Bubbling
-		foreach(Transform child in transform){
-			child.gameObject.AddComponent<ReTime> ();
-			child.GetComponent<ReTime> ().RewindSpeed = RewindSpeed;
-		}
+		PassDown();
 	}
+
+	public void PassDown()
+	{
+		Debug.Log(RewindSpeed + " < " + gameObject.name);
+        //Add the time rewind script to all children - Bubbling
+        foreach (Transform child in transform)
+        {
+            ReTime time = child.gameObject.AddComponent<ReTime>();
+            time.RewindSpeed = RewindSpeed;
+        }
+    }
 
 	public void AddKeyFrame (KeyFrame frame)
 	{

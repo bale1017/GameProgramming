@@ -27,7 +27,7 @@ public class SpikeTrap : MonoBehaviour
             target.AffectHealth(-damage);
             GetComponent<ReTime>().AddKeyFrame(g => damaged = true, g => damaged = false);
         }
-        else
+        else if (!triggered)
         {
             StartCoroutine(activateSpike());
         }
@@ -35,12 +35,10 @@ public class SpikeTrap : MonoBehaviour
 
     private IEnumerator activateSpike()
     {
-        ReTime retime = GetComponent<ReTime>();
-        if (!retime)
+        if (!TryGetComponent<ReTime>(out var retime))
         {
             retime = gameObject.AddComponent<ReTime>();
         }
-
         retime.AddKeyFrame(g => triggered = true, g => triggered = false);
         retime.AddKeyFrame(g => damaged = true, g => damaged = false);
 
@@ -54,7 +52,7 @@ public class SpikeTrap : MonoBehaviour
         
         yield return new WaitForSeconds(activeTime);
         
-        retime.AddKeyFrame(g => triggered = true, g => triggered = false);
+        retime.AddKeyFrame(g => triggered = false, g => triggered = true);
         retime.AddKeyFrame(
             g => g.GetComponent<SpriteRenderer>().sprite = inactiveSpike,
             g => g.GetComponent<SpriteRenderer>().sprite = activeSpike
