@@ -3,6 +3,7 @@ using Lean.Transition.Method;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Runtime.ConstrainedExecution;
 using System.Security.Cryptography;
 using System.Xml;
 using Unity.Collections;
@@ -108,12 +109,15 @@ public class TransformKeyFrame : KeyFrame {
 
 public class AnimKeyFrame : KeyFrame
 {
-	public Animation anim;
+	public PlayableGraph graph;
 	public AnimationClip clip;
+	public float timeScale;
 
-    public AnimKeyFrame(long now, AnimationClip clip) : base(now, (int)(clip.length * 1000))
+    public AnimKeyFrame(long now, int length, PlayableGraph graph, AnimationClip clip, float timeScale) : base(now, length)
     {
+		this.graph = graph;
         this.clip = clip;
+		this.timeScale = timeScale;
     }
 
 	public override void PlayForwards(GameObject gameObject)
@@ -121,11 +125,11 @@ public class AnimKeyFrame : KeyFrame
 	}
     public override void PlayRewind(GameObject gameObject)
 	{
-		Animator anim = gameObject.GetComponent<Animator>();
-		if (anim == null) return;
-        var overrideCtl = new AnimatorOverrideController(anim.runtimeAnimatorController);
-		anim.runtimeAnimatorController = overrideCtl;
-	}
+        var playableOutput = AnimationPlayableOutput.Create(graph, "Animation", gameObject.GetComponent<Animator>());
+        var playableClip = AnimationClipPlayable.Create(graph, clip);
+		playableClip.SetSpeed(-timeScale);
+		playableOutput.SetSourcePlayable(playableClip);
+    }
 }
 
 public class AudioKeyFrame : KeyFrame {
@@ -171,6 +175,7 @@ public class ReTime : MonoBehaviour {
 	private bool hasAnimator = false;
     [HideInInspector]
     public Animator animator;
+	public PlayableGraph graph;
 
 	public float RewindSpeed = 1;
 	private bool isFeeding = true;
@@ -178,17 +183,20 @@ public class ReTime : MonoBehaviour {
 
 	long StartTime;
 	long Now;
+    long CurrentAnimationStart;
 
-	ReTime()
+    ReTime()
 	{
         KeyFrames = new List<KeyFrame>();
         StartTime = 0;
         Now = StartTime;
+		CurrentAnimationStart = StartTime;
     }
 
     // Use this for initialization
     void Start () {
-        
+        graph = PlayableGraph.Create();
+
         //if contains particle system, then cache and add comp.
         if (GetComponent<ParticleSystem> ())
 			Particles = GetComponent<ParticleSystem> ();
@@ -201,9 +209,13 @@ public class ReTime : MonoBehaviour {
 		PassDown();
 	}
 
-	public void PassDown()
+    private void OnDestroy()
+    {
+        graph.Destroy();
+    }
+
+    public void PassDown()
 	{
-		Debug.Log(RewindSpeed + " < " + gameObject.name);
         //Add the time rewind script to all children - Bubbling
         foreach (Transform child in transform)
         {
@@ -246,7 +258,7 @@ public class ReTime : MonoBehaviour {
 		AddKeyFrame(new AudioKeyFrame(Now, audioSource));
     }
 
-	private string lastAnim = "";
+	private AnimationClip lastAnim = null;
 
     void FixedUpdate()
     {
@@ -261,18 +273,26 @@ public class ReTime : MonoBehaviour {
                 AddKeyFrame(new TransformKeyFrame(Now, transform));
 				if (hasAnimator)
 				{
-                    AnimationClip cur = animator.GetCurrentAnimatorClipInfo(0)[0].clip;
-                    if (cur != null && cur.name != lastAnim)
-                    {
-                        // AddKeyFrame(new AnimKeyFrame(Now, cur));
-                    }
+					CreateAnimKeyFrame(false);
                 }
             }
         }
 	}
 
-	//The Rewind method
-	void Rewind(){
+	private void CreateAnimKeyFrame(bool forceSave)
+	{
+        AnimationClip cur = animator.GetCurrentAnimatorClipInfo(0)[0].clip;
+        if (forceSave || lastAnim == null || cur != null && cur.name != lastAnim.name)
+        {
+            if (lastAnim != null)
+                AddKeyFrame(new AnimKeyFrame(CurrentAnimationStart, (int)(Now - CurrentAnimationStart), graph, lastAnim, RewindSpeed));
+            lastAnim = cur;
+            CurrentAnimationStart = Now;
+        }
+    }
+
+    //The Rewind method
+    void Rewind(){
 
 		KeyFrames.Sort(KeyFrame.rewindSorter);
         while (KeyFrames.Count > 0 && KeyFrames[0].endTimeStamp > Now)
@@ -289,7 +309,10 @@ public class ReTime : MonoBehaviour {
 		isRewinding = true;
 
 		if (hasAnimator)
-			animator.SetFloat("retime", -RewindSpeed);
+        {
+            CreateAnimKeyFrame(true);
+            graph.Play();
+        }
 
 		if(transform.childCount > 0){
 			foreach (Transform child in transform)
@@ -301,13 +324,15 @@ public class ReTime : MonoBehaviour {
                 retime.StartTimeRewind();
             }
 		}
-	}
+    }
 
 	//exposed method to disable rewind
 	public void StopTimeRewind(){
 		isRewinding = false;
-		if(hasAnimator)
-            animator.SetFloat("retime", 1);
+		if(hasAnimator && graph.IsValid())
+		{
+            graph.Stop();
+        }
 
         if (transform.childCount > 0){
 			foreach (Transform child in transform) {
@@ -319,8 +344,8 @@ public class ReTime : MonoBehaviour {
 				}
                 retime.StopTimeRewind ();
 			}
-		}
-	}
+        }
+    }
 
 	//Check point end for parent obect
 	public void StopFeeding(){
