@@ -33,14 +33,14 @@ public class Health : MonoBehaviour
             GetComponent<ReTime>().AddKeyFrame(
                 g => {
                     health = 0;
-                    OnDeath.Invoke();
-                    OnHealthDecreaseBy.Invoke(cur);
                     OnHealthChange.Invoke(0);
+                    OnHealthDecreaseBy.Invoke(cur);
+                    OnDeath.Invoke();
                 },
                 g => {
                     health = cur;
-                    OnHealthIncreaseBy.Invoke(cur);
                     OnHealthChange.Invoke(health);
+                    OnHealthIncreaseBy.Invoke(cur);
                 }
                 );
             return;

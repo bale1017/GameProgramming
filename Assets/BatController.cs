@@ -15,9 +15,9 @@ public class BatController : MonoBehaviour
     private EnemyState state;
     public float chaseRange = 1;
     public float attackRange = 0.1F;
-    public float damage = 1;
     private float nextAttackTime;
-    public float attackRate = 0.1F; 
+    public float attackRate = 0.1F;
+    private bool isDead = false;
 
     // values for a* algorithm
     private Transform targetPosition;
@@ -29,18 +29,15 @@ public class BatController : MonoBehaviour
     private float sleepTime;
     public float distanceOffset = 2;
 
-    private Movement movement;
-
     public AudioSource TakeDamage;
-
-    private CircleCollider2D attackCollider;
+    public BatAttack batAttack;    
+    private Movement movement;
 
     public void Start()
     {
         seeker = GetComponent<Seeker>();
         animator = GetComponent<Animator>();
         spriteRenderer = GetComponent<SpriteRenderer>();
-        attackCollider = GetComponent<CircleCollider2D>();
 
         TakeDamage = GetComponentInChildren<AudioSource>();
 
@@ -73,7 +70,7 @@ public class BatController : MonoBehaviour
 
         if (Game.current.IsRunning())
         {
-            if (!Game.IsRewinding)
+            if (!isDead && !Game.IsRewinding)
             {
                 switch (state)
                 {
@@ -164,49 +161,59 @@ public class BatController : MonoBehaviour
     public void Attack()
     {
         movement.LockMovement();
-        attackCollider.enabled = true;
+        if (spriteRenderer.flipX == true)
+        {
+            batAttack.AttackLeft();
+        } else
+        {
+            batAttack.AttackRight();
+        }
         StartCoroutine(EndAttack());
     }
 
-    // Called at end of 'bat_attack' animation
     public IEnumerator EndAttack()
     {
         yield return new WaitForSeconds(1);
-        attackCollider.enabled = false;
+        batAttack.StopAttack();
         movement.UnlockMovement();
-    }
-
-    public void Defeated()
-    {
-        TakeDamage.Play();
-        Debug.Log("Bat has been slayed");
-        animator.SetTrigger("defeated");
     }
 
     public void ReceivedDamage(float val)
     {
+        if (val <= 0) return;
         TakeDamage.Play();
-        Debug.Log("Bat received " + val + " damage");
-        animator.SetTrigger("receivesDamage");
+        Debug.Log("Bat received damage, its new health is: " + val);
+        animator.SetTrigger("receivesDamage"); 
     }
 
-    public void RemoveEnemy()
-    { // called from inside "death"-animation
-        //Destroy(gameObject);
-        gameObject.SetActive(false);
-    }
-
-    private void OnTriggerEnter2D(Collider2D collision)
+    public void Defeated()
     {
-        Debug.Log("OnTriggerEnter2D was called");
-        if (collision.tag == "Player")
-        {
-            //Deal damage to player
-            Health player = collision.GetComponent<Health>();
-            if (player != null)
-            {
-                player.AffectHealth(-damage);
-            }
-        }
+        isDead = true;
+        Debug.Log("Bat has been slayed");
+        TakeDamage.Play();
+        animator.SetBool("defeated", true);
     }
+
+    public void BatDefeated()
+    {
+        GetComponent<ReTime>().AddKeyFrame(
+            g => g.GetComponent<BatController>().batIsDead(),
+            g => g.GetComponent<BatController>().batIsAlive()
+        );
+    }
+
+    public void batIsDead()
+    {
+        gameObject.GetComponent<SpriteRenderer>().enabled = false;
+        gameObject.GetComponent<CircleCollider2D>().enabled = false;
+        animator.SetBool("defeated", false);
+    }
+
+    public void batIsAlive()
+    {
+        gameObject.GetComponent<SpriteRenderer>().enabled = true;
+        gameObject.GetComponent<CircleCollider2D>().enabled = true;
+        isDead = false;
+    }
+
 }

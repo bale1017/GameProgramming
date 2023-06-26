@@ -694,12 +694,12 @@ PrefabInstance:
     - target: {fileID: 2130549007094471076, guid: dfe0c577415da6649a7df8d86a9f9373,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: -0.3165418
+      value: -6.35
       objectReference: {fileID: 0}
     - target: {fileID: 2130549007094471076, guid: dfe0c577415da6649a7df8d86a9f9373,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0.2671065
+      value: 0.46
       objectReference: {fileID: 0}
     - target: {fileID: 2130549007094471076, guid: dfe0c577415da6649a7df8d86a9f9373,
         type: 3}
@@ -22407,26 +22407,6 @@ PrefabInstance:
       propertyPath: m_IsTrigger
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 2351894445467350366, guid: ac8a5a8d72e441f44953033b88e8b60e,
-        type: 3}
-      propertyPath: attackRate
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 2351894445467350366, guid: ac8a5a8d72e441f44953033b88e8b60e,
-        type: 3}
-      propertyPath: attackRange
-      value: 0.06
-      objectReference: {fileID: 0}
-    - target: {fileID: 2351894445467350366, guid: ac8a5a8d72e441f44953033b88e8b60e,
-        type: 3}
-      propertyPath: targetPosition
-      value: 
-      objectReference: {fileID: 2140641646}
-    - target: {fileID: 2351894445467350366, guid: ac8a5a8d72e441f44953033b88e8b60e,
-        type: 3}
-      propertyPath: timeUntilSleeping
-      value: 2
-      objectReference: {fileID: 0}
     - target: {fileID: 4472583714360601358, guid: ac8a5a8d72e441f44953033b88e8b60e,
         type: 3}
       propertyPath: m_BodyType
@@ -22460,12 +22440,12 @@ PrefabInstance:
     - target: {fileID: 7407949557343737041, guid: ac8a5a8d72e441f44953033b88e8b60e,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: -4.22
+      value: -3.092
       objectReference: {fileID: 0}
     - target: {fileID: 7407949557343737041, guid: ac8a5a8d72e441f44953033b88e8b60e,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0.87
+      value: 1.326
       objectReference: {fileID: 0}
     - target: {fileID: 7407949557343737041, guid: ac8a5a8d72e441f44953033b88e8b60e,
         type: 3}
