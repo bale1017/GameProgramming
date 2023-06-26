@@ -11,7 +11,7 @@ public class NextLevel : MonoBehaviour
 
     public void OnTriggerEnter2D(Collider2D collision)
     {
-        if (isTriggered)
+        if (isTriggered && !Game.IsRewinding)
         {
             Game.current.WinGame();
             return;

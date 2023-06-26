@@ -205,20 +205,26 @@ public class SkeletonSwordWarriorController : MonoBehaviour
 
     private void Move(Vector3 dir)
     {
-        //Debug.Log(dir.ToString("F8"));
+        if (GetComponent<ReTime>().isRewinding) return;
         if (!Movement.Equal(dir, Vector3.zero))
         {
             //Debug.Log("Try to move");
             animator.SetBool("isMoving", true);
 
             //switch direction depending of the position of the next waypoint
-            if (dir.x <= 0)
+            if (dir.x < 0)
             {
-                spriteRenderer.flipX = true;
+                GetComponent<ReTime>().AddKeyFrame(
+                    g => spriteRenderer.flipX = true,
+                    g => spriteRenderer.flipX = false
+                );
             }
             else if (dir.x > 0)
             {
-                spriteRenderer.flipX = false;
+                GetComponent<ReTime>().AddKeyFrame(
+                    g => spriteRenderer.flipX = false,
+                    g => spriteRenderer.flipX = true
+                );
             }
 
             //Move the Skeleton Sword Warrior

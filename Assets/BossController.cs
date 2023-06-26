@@ -167,17 +167,25 @@ public class BossController : MonoBehaviour
 
     private void Move(Vector3 dir)
     {
-        if(!Movement.Equal(dir, Vector3.zero))
+        if (GetComponent<ReTime>().isRewinding) return;
+        if (!Movement.Equal(dir, Vector3.zero))
         {
             animator.SetBool("isMoving", true);
 
             //switch direction depending of the position of the next waypoint
-            if (dir.x <= 0)
+            if (dir.x < 0)
             {
-                spriteRenderer.flipX = true;
-            } else if (dir.x > 0)
+                GetComponent<ReTime>().AddKeyFrame(
+                    g => spriteRenderer.flipX = true,
+                    g => spriteRenderer.flipX = false
+                );
+            }
+            else if (dir.x > 0)
             {
-                spriteRenderer.flipX = false;
+                GetComponent<ReTime>().AddKeyFrame(
+                    g => spriteRenderer.flipX = false,
+                    g => spriteRenderer.flipX = true
+                );
             }
 
             //Move Revan

@@ -8,8 +8,8 @@ using BasePatterns;
 
 public class BatController : MonoBehaviour
 {
-    private Seeker seeker;
     private Animator animator;
+    private Seeker seeker;
     private SpriteRenderer spriteRenderer;
 
     private EnemyState state;
@@ -112,17 +112,24 @@ public class BatController : MonoBehaviour
 
     private void ChaseTarget()
     {
+        if (GetComponent<ReTime>().isRewinding) return;
         Vector3 dir = movement.Move(transform.position, targetPosition.position);
         if (dir != Vector3.zero)
         {
             animator.SetBool("isMoving", true);
             if (dir.x < 0)
             {
-                spriteRenderer.flipX = true;
+                GetComponent<ReTime>().AddKeyFrame(
+                    g => spriteRenderer.flipX = true,
+                    g => spriteRenderer.flipX = false
+                );
             }
             else if (dir.x > 0)
             {
-                spriteRenderer.flipX = false;
+                GetComponent<ReTime>().AddKeyFrame(
+                    g => spriteRenderer.flipX = false,
+                    g => spriteRenderer.flipX = true
+                );
             }
         }
 
@@ -202,5 +209,4 @@ public class BatController : MonoBehaviour
             }
         }
     }
-
 }
