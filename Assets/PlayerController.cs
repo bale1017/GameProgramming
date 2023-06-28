@@ -23,8 +23,6 @@ public class PlayerController : MonoBehaviour
     private bool isDead = false;
 
     Health health;
-    public AudioSource TakeDamage;
-    public AudioSource Death;
 
     public static PlayerController Instance { get; private set; }
 
@@ -75,15 +73,15 @@ public class PlayerController : MonoBehaviour
                 if (movementInput.x < 0 && !spriteRenderer.flipX)
                 {
                     GetComponent<ReTime>().AddKeyFrame(
-                        g => spriteRenderer.flipX = true,
-                        g => spriteRenderer.flipX = false
+                        g => g.GetComponent<SpriteRenderer>().flipX = true,
+                        g => g.GetComponent<SpriteRenderer>().flipX = false
                     );
                 }
                 else if (movementInput.x > 0 && spriteRenderer.flipX)
                 {
                     GetComponent<ReTime>().AddKeyFrame(
-                        g => spriteRenderer.flipX = false,
-                        g => spriteRenderer.flipX = true
+                        g => g.GetComponent<SpriteRenderer>().flipX = false,
+                        g => g.GetComponent<SpriteRenderer>().flipX = true
                     );
                 }
             }
@@ -173,13 +171,14 @@ public class PlayerController : MonoBehaviour
         // trigger death animation of player
         animator.SetBool("isMoving", false);
         animator.SetBool("defeated", true);
-        Death.Play();
+        SoundPlayer.current.PlaySound(Sound.PLAYER_DEATH);
         StartCoroutine(PlayerDefeated());
     }
 
     public void ReceivedDamage(float val)
     {
-        TakeDamage.Play();
+        // TakeDamage.Play();
+        SoundPlayer.current.PlaySound(Sound.PLAYER_DAMAGE);
         Debug.Log("Player received " + val + " damage");
         // trigger damage receiving animation of player
         animator.SetTrigger("receivesDamage");

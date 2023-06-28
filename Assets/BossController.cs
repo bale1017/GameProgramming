@@ -173,18 +173,18 @@ public class BossController : MonoBehaviour
             animator.SetBool("isMoving", true);
 
             //switch direction depending of the position of the next waypoint
-            if (dir.x < 0)
+            if (dir.x < 0 && !spriteRenderer.flipX)
             {
                 GetComponent<ReTime>().AddKeyFrame(
-                    g => spriteRenderer.flipX = true,
-                    g => spriteRenderer.flipX = false
+                    g => g.GetComponent<SpriteRenderer>().flipX = true,
+                    g => g.GetComponent<SpriteRenderer>().flipX = false
                 );
             }
-            else if (dir.x > 0)
+            else if (dir.x > 0 && spriteRenderer.flipX)
             {
                 GetComponent<ReTime>().AddKeyFrame(
-                    g => spriteRenderer.flipX = false,
-                    g => spriteRenderer.flipX = true
+                    g => g.GetComponent<SpriteRenderer>().flipX = false,
+                    g => g.GetComponent<SpriteRenderer>().flipX = true
                 );
             }
 

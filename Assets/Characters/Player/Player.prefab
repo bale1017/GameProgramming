@@ -516,7 +516,7 @@ Transform:
   - {fileID: 5224771690516590629}
   - {fileID: 4149825393289556452}
   m_Father: {fileID: 0}
-  m_RootOrder: 0
+  m_RootOrder: -1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!212 &9142519679611264784
 SpriteRenderer:
@@ -617,6 +617,12 @@ MonoBehaviour:
   maxHealth: 25
   vulnerable: 1
   OnHealthChange:
+    m_PersistentCalls:
+      m_Calls: []
+  OnHealthDecreaseBy:
+    m_PersistentCalls:
+      m_Calls: []
+  OnHealthIncreaseBy:
     m_PersistentCalls:
       m_Calls: []
   OnDeath:

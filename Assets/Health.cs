@@ -1,3 +1,4 @@
+using System;
 using System.Runtime.ConstrainedExecution;
 using UnityEngine;
 using UnityEngine.Events;
@@ -63,23 +64,29 @@ public class Health : MonoBehaviour
             
         } else
         {
-            GetComponent<ReTime>().AddKeyFrame(
-                g => {
-                    health += val;
-                    OnHealthChange.Invoke(health);
-                    if (val < 0)
-                    {
-                        OnHealthDecreaseBy.Invoke(val);
-                    }else
-                    {
-                        OnHealthIncreaseBy.Invoke(val);
-                    }
-                },
-                g => {
-                    health -= val;
-                    OnHealthChange.Invoke(health);
+            Action<GameObject> increase = g => {
+                health += val;
+                OnHealthChange.Invoke(health);
+                if (val < 0)
+                {
+                    OnHealthDecreaseBy.Invoke(val);
                 }
-            );
+                else
+                {
+                    OnHealthIncreaseBy.Invoke(val);
+                }
+            };
+            if (!TryGetComponent<ReTime>(out var retime))
+            {
+                increase(gameObject);
+            } else {
+                retime.AddKeyFrame(
+                    increase, g => {
+                        health -= val;
+                        OnHealthChange.Invoke(health);
+                    }
+                );
+            }
         }
     }
 

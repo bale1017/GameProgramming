@@ -28,6 +28,7 @@ public class GenerateLevel : MonoBehaviour
 
     public void GenerateLayout()
     {
+        level = Game.level;
         createdObjects = new List<GameObject>();
         int roomAmount;
         int roomLayer;

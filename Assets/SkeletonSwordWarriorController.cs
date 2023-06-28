@@ -39,11 +39,6 @@ public class SkeletonSwordWarriorController : MonoBehaviour
     private Movement movement;
     public SkeletonSword skeletonSword;
 
-    public AudioSource TakeDamage;
-    public AudioSource AttackFast;
-    public AudioSource AttackSlow;
-    public AudioSource Death;
-
     public void Start()
     {
         seeker = GetComponent<Seeker>();
@@ -180,14 +175,14 @@ public class SkeletonSwordWarriorController : MonoBehaviour
             if (chooseAttackA)
             {
                 //use attack A
-                AttackFast.Play();
+                SoundPlayer.current.PlaySound(Sound.SKELETON_SWORD_SLASH_FAST);
                 animator.SetTrigger("isAttackingA");
                 chooseAttackA = false;
             }
             else
             {
                 //use attack B
-                AttackSlow.Play();
+                SoundPlayer.current.PlaySound(Sound.SKELETON_SWORD_SLASH_FAST);
                 animator.SetTrigger("isAttackingB");
                 chooseAttackA = true;
             }
@@ -212,18 +207,18 @@ public class SkeletonSwordWarriorController : MonoBehaviour
             animator.SetBool("isMoving", true);
 
             //switch direction depending of the position of the next waypoint
-            if (dir.x < 0)
+            if (dir.x < 0 && !spriteRenderer.flipX)
             {
                 GetComponent<ReTime>().AddKeyFrame(
-                    g => spriteRenderer.flipX = true,
-                    g => spriteRenderer.flipX = false
+                    g => g.GetComponent<SpriteRenderer>().flipX = true,
+                    g => g.GetComponent<SpriteRenderer>().flipX = false
                 );
             }
-            else if (dir.x > 0)
+            else if (dir.x > 0 && spriteRenderer.flipX)
             {
                 GetComponent<ReTime>().AddKeyFrame(
-                    g => spriteRenderer.flipX = false,
-                    g => spriteRenderer.flipX = true
+                    g => g.GetComponent<SpriteRenderer>().flipX = false,
+                    g => g.GetComponent<SpriteRenderer>().flipX = true
                 );
             }
 
@@ -257,14 +252,14 @@ public class SkeletonSwordWarriorController : MonoBehaviour
     public void Defeated()
     {
         Debug.Log("Skeleton Sword Warrior has been slayed!");
-        Death.Play();
+        SoundPlayer.current.PlaySound(Sound.SKELETON_DEATH);
         animator.SetBool("defeated", true);
     }
 
     public void ReceivedDamage(float val)
     {
         Debug.Log("Skeleton Sword Warrior received " + val + " damage!");
-        TakeDamage.Play();
+        SoundPlayer.current.PlaySound(Sound.SKELETON_DAMAGE);
         animator.SetTrigger("receivesDamage");
     }
 

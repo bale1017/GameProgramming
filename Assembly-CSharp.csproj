@@ -103,9 +103,11 @@
     <Compile Include="Assets\Skripts\LevelLoader.cs" />
     <Compile Include="Assets\Movement.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\VertexZoom.cs" />
+    <Compile Include="Assets\GraphHolder.cs" />
     <Compile Include="Assets\Art\Pixel Art Top Down - Basic\Script\TopDownCharacterController.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\Benchmark02.cs" />
     <Compile Include="Assets\Scenes\scripts\MouseoverSystem.cs" />
+    <Compile Include="Assets\KeyFramePlayer.cs" />
     <Compile Include="Assets\SkeletonSword.cs" />
     <Compile Include="Assets\Skripts\Camera\CameraMovement.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\TMP_TextSelector_B.cs" />
@@ -133,6 +135,7 @@
     <Compile Include="Assets\ReTime\Core Scripts\ReTime.cs" />
     <Compile Include="Assets\Timer.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\TMP_TextInfoDebugTool.cs" />
+    <Compile Include="Assets\SoundPlayer.cs" />
     <Compile Include="Assets\Scenes\scripts\LoadLevelButton.cs" />
   </ItemGroup>
   <ItemGroup>

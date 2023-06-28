@@ -31,8 +31,6 @@ public class BatController : MonoBehaviour
 
     private Movement movement;
 
-    public AudioSource TakeDamage;
-
     private CircleCollider2D attackCollider;
 
     public void Start()
@@ -94,17 +92,17 @@ public class BatController : MonoBehaviour
 
     private void Idle()
     {
-        if (Vector3.Distance(transform.position, PlayerController.Instance.GetPosition()) < chaseRange)
+        foreach (PlayerController pc in FindObjectsByType<PlayerController>(FindObjectsSortMode.InstanceID))
         {
-            //Player within target range
-            state = EnemyState.ChaseTarget;
-        }
-        else
-        {
-            if (Time.time > sleepTime)
+            if ((transform.position - pc.transform.position).sqrMagnitude < chaseRange * chaseRange)
             {
-                animator.SetBool("isMoving", false);
+                state = EnemyState.ChaseTarget;
+                return;
             }
+        }
+        if (Time.time > sleepTime)
+        {
+            animator.SetBool("isMoving", false);
         }
     }
 
@@ -115,18 +113,18 @@ public class BatController : MonoBehaviour
         if (dir != Vector3.zero)
         {
             animator.SetBool("isMoving", true);
-            if (dir.x < 0)
+            if (dir.x < 0 && !spriteRenderer.flipX)
             {
                 GetComponent<ReTime>().AddKeyFrame(
-                    g => spriteRenderer.flipX = true,
-                    g => spriteRenderer.flipX = false
+                    g => g.GetComponent<SpriteRenderer>().flipX = true,
+                    g => g.GetComponent<SpriteRenderer>().flipX = false
                 );
             }
-            else if (dir.x > 0)
+            else if (dir.x > 0 && spriteRenderer.flipX)
             {
                 GetComponent<ReTime>().AddKeyFrame(
-                    g => spriteRenderer.flipX = false,
-                    g => spriteRenderer.flipX = true
+                    g => g.GetComponent<SpriteRenderer>().flipX = false,
+                    g => g.GetComponent<SpriteRenderer>().flipX = true
                 );
             }
         }
@@ -161,6 +159,7 @@ public class BatController : MonoBehaviour
     // Called at begin of 'bat_attack' animation
     public void Attack()
     {
+        SoundPlayer.current.PlaySound(Sound.BAT_ATTACK);
         movement.LockMovement();
         attackCollider.enabled = true;
         StartCoroutine(EndAttack());
@@ -176,14 +175,14 @@ public class BatController : MonoBehaviour
 
     public void Defeated()
     {
-        TakeDamage.Play();
+        SoundPlayer.current.PlaySound(Sound.BAT_DEATH);
         Debug.Log("Bat has been slayed");
         animator.SetTrigger("defeated");
     }
 
     public void ReceivedDamage(float val)
     {
-        TakeDamage.Play();
+        SoundPlayer.current.PlaySound(Sound.BAT_DAMAGE);
         Debug.Log("Bat received " + val + " damage");
         animator.SetTrigger("receivesDamage");
     }

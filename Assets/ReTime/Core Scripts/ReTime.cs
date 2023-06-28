@@ -11,8 +11,9 @@ using Unity.VisualScripting;
 using UnityEditor.Animations;
 using UnityEngine;
 using UnityEngine.Animations;
+using UnityEngine.InputSystem;
 using UnityEngine.Playables;
-
+	
 public class KeyFrameForwardSorter : IComparer<KeyFrame>
 {
     public int Compare(KeyFrame c1, KeyFrame c2)
@@ -90,14 +91,22 @@ public class TransformKeyFrame : KeyFrame {
 
 	public TransformKeyFrame(long startTimeStamp, Transform transform) : base(startTimeStamp, 0)
 	{
-		this.position = transform.position;
-		this.rotation = transform.rotation;
+	    this.position = transform.position;
+        this.rotation = transform.rotation;
 		this.scale = transform.localScale;
 	}
 
 	public override void PlayForwards(GameObject gameObject)
 	{
-		gameObject.transform.SetPositionAndRotation(position, rotation);
+        if (gameObject.TryGetComponent<Rigidbody2D>(out var rb) && rb.bodyType != RigidbodyType2D.Static)
+        {
+            rb.MovePosition(position);
+        }
+        else
+        {
+			gameObject.transform.position = position;
+        }
+        gameObject.transform.rotation = rotation;
 		gameObject.transform.localScale = scale;
 	}
 
@@ -109,25 +118,30 @@ public class TransformKeyFrame : KeyFrame {
 
 public class AnimKeyFrame : KeyFrame
 {
-	public PlayableGraph graph;
 	public AnimationClip clip;
 	public float timeScale;
 
-    public AnimKeyFrame(long now, int length, PlayableGraph graph, AnimationClip clip, float timeScale) : base(now, length)
+    public AnimKeyFrame(long now, int length, AnimationClip clip, float timeScale) : base(now, length)
     {
-		this.graph = graph;
         this.clip = clip;
 		this.timeScale = timeScale;
     }
 
 	public override void PlayForwards(GameObject gameObject)
 	{
+		Play(gameObject, 1);
 	}
     public override void PlayRewind(GameObject gameObject)
 	{
+		Play(gameObject, -timeScale);
+	}
+    void Play(GameObject gameObject, float ts)
+	{
+		if (!gameObject.TryGetComponent<GraphHolder>(out var graphHolder)) return;
+		PlayableGraph graph = graphHolder.graph;
         var playableOutput = AnimationPlayableOutput.Create(graph, "Animation", gameObject.GetComponent<Animator>());
         var playableClip = AnimationClipPlayable.Create(graph, clip);
-		playableClip.SetSpeed(-timeScale);
+		playableClip.SetSpeed(ts);
 		playableOutput.SetSourcePlayable(playableClip);
     }
 }
@@ -175,27 +189,26 @@ public class ReTime : MonoBehaviour {
 	private bool hasAnimator = false;
     [HideInInspector]
     public Animator animator;
-	public PlayableGraph graph;
+	// Set to true will create a zombie like clone that plays forwards once stopping to rewind
+	[HideInInspector]
+	public bool IsNewTimeline = false;
 
 	public float RewindSpeed = 1;
 	private bool isFeeding = true;
 	private ParticleSystem Particles;
 
-	long StartTime;
 	long Now;
     long CurrentAnimationStart;
 
     ReTime()
 	{
         KeyFrames = new List<KeyFrame>();
-        StartTime = 0;
-        Now = StartTime;
-		CurrentAnimationStart = StartTime;
+        Now = 0;
+		CurrentAnimationStart = 0;
     }
 
     // Use this for initialization
     void Start () {
-        graph = PlayableGraph.Create();
 
         //if contains particle system, then cache and add comp.
         if (GetComponent<ParticleSystem> ())
@@ -205,22 +218,22 @@ public class ReTime : MonoBehaviour {
 		if (GetComponent<Animator> ()) {
 			hasAnimator = true;
 			animator = GetComponent<Animator> ();
-		}
+            gameObject.AddComponent<GraphHolder>();
+        }
+
 		PassDown();
 	}
-
-    private void OnDestroy()
-    {
-        graph.Destroy();
-    }
 
     public void PassDown()
 	{
         //Add the time rewind script to all children - Bubbling
         foreach (Transform child in transform)
         {
-            ReTime time = child.gameObject.AddComponent<ReTime>();
-            time.RewindSpeed = RewindSpeed;
+			if (!child.gameObject.TryGetComponent<ReTime>(out var _))
+			{
+                ReTime time = child.gameObject.AddComponent<ReTime>();
+                time.RewindSpeed = RewindSpeed;
+            }
         }
     }
 
@@ -264,20 +277,15 @@ public class ReTime : MonoBehaviour {
     {
         Now += (long)(Time.deltaTime * 1000 * (isRewinding ? -RewindSpeed : 1));
 
-        if (isRewinding)
-        {
-            Rewind ();
-		}else{
-			if(isFeeding)
+		if(!isRewinding && isFeeding)
+		{
+            AddKeyFrame(new TransformKeyFrame(Now, transform));
+			if (hasAnimator)
 			{
-                AddKeyFrame(new TransformKeyFrame(Now, transform));
-				if (hasAnimator)
-				{
-					CreateAnimKeyFrame(false);
-                }
+				CreateAnimKeyFrame(false);
             }
         }
-	}
+    }
 
 	private void CreateAnimKeyFrame(bool forceSave)
 	{
@@ -285,24 +293,11 @@ public class ReTime : MonoBehaviour {
         if (forceSave || lastAnim == null || cur != null && cur.name != lastAnim.name)
         {
             if (lastAnim != null)
-                AddKeyFrame(new AnimKeyFrame(CurrentAnimationStart, (int)(Now - CurrentAnimationStart), graph, lastAnim, RewindSpeed));
+                AddKeyFrame(new AnimKeyFrame(CurrentAnimationStart, (int)(Now - CurrentAnimationStart), lastAnim, RewindSpeed));
             lastAnim = cur;
             CurrentAnimationStart = Now;
         }
     }
-
-    //The Rewind method
-    void Rewind(){
-
-		KeyFrames.Sort(KeyFrame.rewindSorter);
-        while (KeyFrames.Count > 0 && KeyFrames[0].endTimeStamp > Now)
-		{
-			KeyFrame val = KeyFrames[0];
-			val.PlayRewind(gameObject);
-			KeyFrames.Remove (val);
-
-        }
-	}
 
 	//exposed method to enable rewind
 	public void StartTimeRewind(){
@@ -311,7 +306,10 @@ public class ReTime : MonoBehaviour {
 		if (hasAnimator)
         {
             CreateAnimKeyFrame(true);
-            graph.Play();
+            if (TryGetComponent<GraphHolder>(out var graph))
+			{
+				graph.graph.Play();
+			}
         }
 
 		if(transform.childCount > 0){
@@ -324,16 +322,18 @@ public class ReTime : MonoBehaviour {
                 retime.StartTimeRewind();
             }
 		}
+
+		if (!TryGetComponent<KeyFramePlayer>(out var player))
+		{
+			player = gameObject.AddComponent<KeyFramePlayer>();
+		}
+		player.Play(KeyFrames, Now);
+        player.SetTimeScale(() => isRewinding ? -RewindSpeed : 1);
     }
 
 	//exposed method to disable rewind
 	public void StopTimeRewind(){
-		isRewinding = false;
-		if(hasAnimator && graph.IsValid())
-		{
-            graph.Stop();
-        }
-
+		
         if (transform.childCount > 0){
 			foreach (Transform child in transform) {
 
@@ -345,10 +345,54 @@ public class ReTime : MonoBehaviour {
                 retime.StopTimeRewind ();
 			}
         }
+
+		if (isRewinding && gameObject.CompareTag("Player"))
+		{
+			GameObject clone = Instantiate(gameObject);
+            Destroy(clone.GetComponent<ReTime>());
+            Destroy(clone.GetComponent<PlayerInput>());
+            clone.transform.position = transform.position;
+			if (!clone.TryGetComponent<KeyFramePlayer>(out var player))
+			{
+                player = clone.AddComponent<KeyFramePlayer>();
+
+            }
+			if (clone.TryGetComponent<Rigidbody2D>(out var rb))
+			{
+				rb.bodyType = RigidbodyType2D.Kinematic;
+			}
+			player.Stop();
+			long time = KeyFrames.FindLast(k => true).endTimeStamp;
+            var KeyFramesMod = new List<KeyFrame>(KeyFrames)
+            {
+                new RunnableKeyFrame(time, 0, g => Destroy(g))
+            };
+            player.Play(KeyFramesMod, Now);
+			player.SetTimeScale(() => isRewinding ? -RewindSpeed : 1);
+			if (clone.TryGetComponent<SpriteRenderer>(out var sprite))
+			{
+				sprite.color = new Color(95/255f, 146/255f, 1);
+			}
+            if (clone.TryGetComponent<GraphHolder>(out var cloneGraph))
+            {
+                cloneGraph.graph.Play();
+            }
+        }
+
+        if (hasAnimator && TryGetComponent<GraphHolder>(out var graph))
+		{
+            graph.graph.Stop();
+        }
+
+        if (TryGetComponent<KeyFramePlayer>(out var p)) { 
+			p.Stop();
+        }
+		KeyFrames.Clear();
+        isRewinding = false;
     }
 
-	//Check point end for parent obect
-	public void StopFeeding(){
+    //Check point end for parent obect
+    public void StopFeeding(){
 		isFeeding = false;
 
 		if(transform.childCount > 0) {
