@@ -109,7 +109,7 @@ public class SkeletonSwordWarriorController : MonoBehaviour
 
     private void Idle() 
     {
-        if (Vector3.Distance(transform.position, PlayerController.Instance.GetPosition()) < chaseRange)
+        if (Vector3.Distance(transform.position, targetPosition.position) < chaseRange)
         {
             //Player within target range
             state = EnemyState.ChaseTarget;
@@ -130,7 +130,7 @@ public class SkeletonSwordWarriorController : MonoBehaviour
 
     public void Roaming()
     {
-        if (Vector3.Distance(transform.position, PlayerController.Instance.GetPosition()) < chaseRange)
+        if (Vector3.Distance(transform.position, targetPosition.position) < chaseRange)
         {
             //Player within target range
             state = EnemyState.ChaseTarget;
@@ -157,15 +157,15 @@ public class SkeletonSwordWarriorController : MonoBehaviour
     {
         movement.speed = 0.5F;
         animator.SetFloat("movementSpeed", 0.6F);
-        Vector3 dir = movement.Move(transform.position, PlayerController.Instance.GetPosition());
+        Vector3 dir = movement.Move(transform.position, targetPosition.position);
         Move(dir);
 
-        if (Vector3.Distance(transform.position, PlayerController.Instance.GetPosition()) < attackRange)
+        if (Vector3.Distance(transform.position, targetPosition.position) < attackRange)
         {
             //Player inside attack range
             state = EnemyState.AttackTarget;
         }
-        else if (Vector3.Distance(transform.position, PlayerController.Instance.GetPosition()) + distanceOffset > chaseRange)
+        else if (Vector3.Distance(transform.position, targetPosition.position) + distanceOffset > chaseRange)
         {
             //Player outside of target range
             returnTime = Time.time + timeUntilReturning;

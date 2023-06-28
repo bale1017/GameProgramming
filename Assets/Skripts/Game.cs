@@ -9,6 +9,7 @@ using UnityEngine.SceneManagement;
 public class Game : MonoBehaviour
 {
     public static int level = 1;
+    public static float playerHealth = float.MinValue;
 
     enum GameState
     {
@@ -129,6 +130,8 @@ public class Game : MonoBehaviour
     public void FailGame()
     {
         gameState = GameState.FAILURE;
+        Game.level = 1;
+        Game.playerHealth = float.MinValue;
         OnGameFailure.Invoke();
         OnGameCompletion.Invoke();
     }
@@ -192,6 +195,7 @@ public class Game : MonoBehaviour
     public void activateBossUI()
     {
         Debug.Log("Activate Boss UI");
+        healthBarOfBoss.GetComponent<HealthBar>().health = GameObject.Find("Revan_the_Endboss").GetComponent<Health>();
         nametagOfBoss.SetActive(true);
         healthBarOfBoss.SetActive(true);
     }

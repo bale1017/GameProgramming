@@ -312,7 +312,7 @@ Transform:
   - {fileID: 5258695528696898733}
   - {fileID: 1867848266371577680}
   m_Father: {fileID: 0}
-  m_RootOrder: 0
+  m_RootOrder: -1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!212 &6655121769589303237
 SpriteRenderer:
@@ -378,10 +378,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6c361e8106ad6014abb58268ccf14ba0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  initHealth: 30
-  maxHealth: 30
+  initHealth: 50
+  maxHealth: 50
   vulnerable: 1
   OnHealthChange:
+    m_PersistentCalls:
+      m_Calls: []
+  OnHealthDecreaseBy:
+    m_PersistentCalls:
+      m_Calls: []
+  OnHealthIncreaseBy:
     m_PersistentCalls:
       m_Calls: []
   OnDeath:
@@ -399,15 +405,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d1cac15d8c7f9ed459357eb63b4f9b51, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  chaseRange: 1000
+  chaseRange: 4
+  distanceOffset: 10
   attackRangeX: 0.45
   attackRangeY: 0.1
   damage: 7
   timeToNextAttack: 2
   attackAnimationSpeed: 0.8
   rewindTimeInSec: 3
-  targetPosition: {fileID: 8303431347630341780, guid: d14b75de5ccb59944ace846c2fba62a4,
-    type: 3}
+  offsetUntilNextRewind: 10
+  chancesOfRewind: 16
   speed: 0.7
   nextWaypointDistance: 0.2
   updatePathTime: 2
@@ -440,7 +447,7 @@ Rigidbody2D:
   m_Interpolate: 0
   m_SleepingMode: 0
   m_CollisionDetection: 0
-  m_Constraints: 0
+  m_Constraints: 4
 --- !u!61 &8145153404293545114
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -473,7 +480,7 @@ BoxCollider2D:
   m_IsTrigger: 0
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: 0.022877902, y: -0.09077386}
+  m_Offset: {x: 0.019927029, y: -0.13601832}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0.5}
@@ -484,7 +491,7 @@ BoxCollider2D:
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 0.15971726, y: 0.28133246}
+  m_Size: {x: 0.16561902, y: 0.37182137}
   m_EdgeRadius: 0
 --- !u!95 &2109866603487428594
 Animator:
