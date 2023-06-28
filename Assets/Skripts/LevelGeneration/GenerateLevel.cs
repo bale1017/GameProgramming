@@ -4,16 +4,17 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using Pathfinding;
+using UnityEditor;
 using UnityEngine;
 
 
 public class GenerateLevel : MonoBehaviour
 {
-    public int level;
     public GameObject[] rooms;
     public GameObject[] interiors;
     public GameObject[] Walls;
     public GameObject exitRoom;
+    public GameObject bossRoom;
     public float RoomWidth;
     public float RoomHeight;
     [HideInInspector]
@@ -34,7 +35,7 @@ public class GenerateLevel : MonoBehaviour
         int roomLayer;
         float roomOffset = 0;
 
-        switch(level)
+        switch(Game.level)
         {
             case 1:
             case 2:
@@ -55,10 +56,19 @@ public class GenerateLevel : MonoBehaviour
                 break;
 
         }
-        List<(int, int)> roomList = new List<(int, int)>();
+
         for (int i = 0; i < roomAmount; i++)
         {
-            roomList.Add((roomLayer, UnityEngine.Random.Range(0, interiors.Length)));
+            Debug.Log("Interior with index " + i + ":" + interiors[i].name);
+        }
+
+        List<(int, int)> roomList = new List<(int, int)>();
+        var spawnBossRoom = 0;
+        for (int i = 0; i < roomAmount; i++)
+        {
+            var nextRoomInterior = UnityEngine.Random.Range(spawnBossRoom, interiors.Length);
+            roomList.Add((roomLayer, nextRoomInterior));
+            if (nextRoomInterior == 0) spawnBossRoom += 1; //spawn boss room max once per level
         }
         List<Room> roomLayouts = ChooseLayout(roomAmount);
         /*
@@ -72,7 +82,7 @@ public class GenerateLevel : MonoBehaviour
         int minX = 0;
         int maxY = 0;
         int minY = 0;
-
+        Debug.Log("level % 3:" + Game.level % 3);
         GameObject newObject = null;
         for (int i = 0; i < roomList.Count; i++)
         {
@@ -89,16 +99,25 @@ public class GenerateLevel : MonoBehaviour
 
             newObject = (GameObject) Instantiate(rooms[roomType], new Vector2(x, y + roomOffset), Quaternion.identity);
             createdObjects.Add(newObject);
+            
             if (i == roomList.Count - 1)
             {
                 newObject = (GameObject)Instantiate(exitRoom, new Vector2(x, y), Quaternion.identity);
                 createdObjects.Add(newObject);
+            } 
+            else if (Game.level % 3 == 0 && i == roomList.Count - 2) //spawn bossRoom every 3rd level
+            {
+                Debug.Log("Spawn boss");
+                newObject = (GameObject)Instantiate(bossRoom, new Vector2(x, y), Quaternion.identity);
+                createdObjects.Add(newObject);
+                
             }
             else if (i != 0)
             {
                 newObject = (GameObject)Instantiate(interiors[roomInterior], new Vector2(x, y), Quaternion.identity);
                 createdObjects.Add(newObject);
             }
+
             if (!item.hasNorth){
                 if (roomLayer == 0)
                 {
@@ -111,6 +130,7 @@ public class GenerateLevel : MonoBehaviour
                     createdObjects.Add(newObject);
                 }
             }
+
             if (!item.hasEast)
             {
                 if (roomLayer == 0)

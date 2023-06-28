@@ -9,6 +9,7 @@ public class Health : MonoBehaviour
     public float maxHealth = 1;
     public bool vulnerable = true;
     private float health;
+    private bool updatedPlayerHealth = false;
     public UnityEvent<float> OnHealthChange;
     public UnityEvent<float> OnHealthDecreaseBy;
     public UnityEvent<float> OnHealthIncreaseBy;
@@ -16,7 +17,10 @@ public class Health : MonoBehaviour
 
     private void Start()
     {
-        health = initHealth;
+        if (!updatedPlayerHealth)
+        {
+            health = initHealth;
+        }        
     }
 
     public float GetHealth()
@@ -34,14 +38,14 @@ public class Health : MonoBehaviour
             GetComponent<ReTime>().AddKeyFrame(
                 g => {
                     health = 0;
-                    OnDeath.Invoke();
-                    OnHealthDecreaseBy.Invoke(cur);
                     OnHealthChange.Invoke(0);
+                    OnHealthDecreaseBy.Invoke(cur);
+                    OnDeath.Invoke();
                 },
                 g => {
                     health = cur;
-                    OnHealthIncreaseBy.Invoke(cur);
                     OnHealthChange.Invoke(health);
+                    OnHealthIncreaseBy.Invoke(cur);
                 }
                 );
             return;
@@ -103,5 +107,12 @@ public class Health : MonoBehaviour
     public void MakeVulnerable()
     {
         vulnerable = true;
+    }
+
+    public void SetHealthOnLevelStart(float _health)
+    {
+        health = _health;
+        updatedPlayerHealth = true;
+        GameObject.Find("HealthBar_Player").GetComponent<HealthBar>().UpdateHealthBarOnLevelStart(_health);
     }
 }

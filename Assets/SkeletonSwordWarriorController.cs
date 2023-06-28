@@ -19,6 +19,7 @@ public class SkeletonSwordWarriorController : MonoBehaviour
 
     private float nextAttackTime;
     private bool chooseAttackA = true;
+    private bool isDead = false;
 
     // values for a* algorithm
     private Transform targetPosition;
@@ -76,7 +77,7 @@ public class SkeletonSwordWarriorController : MonoBehaviour
         targetPosition = closestTarget.transform;
 
         if (Game.current.IsRunning()) { 
-            if (!Game.IsRewinding)
+            if (!isDead && !Game.IsRewinding)
             {
                 switch (state)
                 {
@@ -103,7 +104,7 @@ public class SkeletonSwordWarriorController : MonoBehaviour
 
     private void Idle() 
     {
-        if (Vector3.Distance(transform.position, PlayerController.Instance.GetPosition()) < chaseRange)
+        if (Vector3.Distance(transform.position, targetPosition.position) < chaseRange)
         {
             //Player within target range
             state = EnemyState.ChaseTarget;
@@ -124,7 +125,7 @@ public class SkeletonSwordWarriorController : MonoBehaviour
 
     public void Roaming()
     {
-        if (Vector3.Distance(transform.position, PlayerController.Instance.GetPosition()) < chaseRange)
+        if (Vector3.Distance(transform.position, targetPosition.position) < chaseRange)
         {
             //Player within target range
             state = EnemyState.ChaseTarget;
@@ -151,15 +152,15 @@ public class SkeletonSwordWarriorController : MonoBehaviour
     {
         movement.speed = 0.5F;
         animator.SetFloat("movementSpeed", 0.6F);
-        Vector3 dir = movement.Move(transform.position, PlayerController.Instance.GetPosition());
+        Vector3 dir = movement.Move(transform.position, targetPosition.position);
         Move(dir);
 
-        if (Vector3.Distance(transform.position, PlayerController.Instance.GetPosition()) < attackRange)
+        if (Vector3.Distance(transform.position, targetPosition.position) < attackRange)
         {
             //Player inside attack range
             state = EnemyState.AttackTarget;
         }
-        else if (Vector3.Distance(transform.position, PlayerController.Instance.GetPosition()) + distanceOffset > chaseRange)
+        else if (Vector3.Distance(transform.position, targetPosition.position) + distanceOffset > chaseRange)
         {
             //Player outside of target range
             returnTime = Time.time + timeUntilReturning;
@@ -188,8 +189,7 @@ public class SkeletonSwordWarriorController : MonoBehaviour
             }
 
             nextAttackTime = Time.time + attackRate;
-
-            if (Vector3.Distance(transform.position, PlayerController.Instance.GetPosition()) + distanceOffset > chaseRange)
+            if (Vector3.Distance(transform.position, targetPosition.position) + distanceOffset > chaseRange)
             {
                 //Player outside of target range
                 returnTime = Time.time + timeUntilReturning;
@@ -251,6 +251,7 @@ public class SkeletonSwordWarriorController : MonoBehaviour
 
     public void Defeated()
     {
+        isDead = true;
         Debug.Log("Skeleton Sword Warrior has been slayed!");
         SoundPlayer.current.PlaySound(Sound.SKELETON_DEATH);
         animator.SetBool("defeated", true);
@@ -258,6 +259,7 @@ public class SkeletonSwordWarriorController : MonoBehaviour
 
     public void ReceivedDamage(float val)
     {
+        if (val <= 0) return;
         Debug.Log("Skeleton Sword Warrior received " + val + " damage!");
         SoundPlayer.current.PlaySound(Sound.SKELETON_DAMAGE);
         animator.SetTrigger("receivesDamage");
@@ -265,7 +267,23 @@ public class SkeletonSwordWarriorController : MonoBehaviour
 
     public void RemoveEnemy()
     { // called from inside "death"-animation
-        //Destroy(gameObject);
-        gameObject.SetActive(false);
+        GetComponent<ReTime>().AddKeyFrame(
+            g => g.GetComponent<SkeletonSwordWarriorController>().skeletonIsDead(),
+            g => g.GetComponent<SkeletonSwordWarriorController>().skeletonIsAlive()
+        );
+    }
+
+    public void skeletonIsDead()
+    {
+        gameObject.GetComponent<SpriteRenderer>().enabled = false;
+        gameObject.GetComponent<BoxCollider2D>().enabled = false;
+        animator.SetBool("defeated", false);
+    }
+
+    public void skeletonIsAlive()
+    {
+        gameObject.GetComponent<SpriteRenderer>().enabled = true;
+        gameObject.GetComponent<BoxCollider2D>().enabled = true;
+        isDead = false;
     }
 }

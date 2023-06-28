@@ -24,28 +24,32 @@ public class PlayerController : MonoBehaviour
 
     Health health;
 
-    public static PlayerController Instance { get; private set; }
-
     // Start is called before the first frame update
     void Start()
     {
         rb = GetComponent<Rigidbody2D>();
         animator = GetComponent<Animator>();
         spriteRenderer = GetComponent<SpriteRenderer>();
-        Instance = this;
+
         Health health = GetComponent<Health>();
-        if (health == null)
-        {
-            health = GetComponent<Health>();
-        }
         health.OnDeath.AddListener(Defeated);
         health.OnHealthDecreaseBy.AddListener(ReceivedDamage);
+        health.OnHealthChange.AddListener(UpdatePlayerHealthInGame);
+
+        if (Game.playerHealth != float.MinValue)
+        {
+            health.SetHealthOnLevelStart(Game.playerHealth);
+        }
+        else
+        {
+            Game.playerHealth = health.initHealth;
+        }
     }
 
     private void FixedUpdate()
     {
-        if (Game.current.IsRunning()) 
-        { 
+        if (Game.current.IsRunning())
+        {
             if (canMove && !isDead && !Game.IsRewinding)
             {
                 //If movement input is not 0, try to move
@@ -85,8 +89,8 @@ public class PlayerController : MonoBehaviour
                     );
                 }
             }
+        }
     }
-}
 
     private bool TryMove(Vector2 direction)
     {
@@ -185,7 +189,7 @@ public class PlayerController : MonoBehaviour
     }
 
     public IEnumerator PlayerDefeated()
-    { 
+    {
         yield return new WaitForSeconds(1);
         GetComponent<SpriteRenderer>().enabled = false;
         GetComponent<BoxCollider2D>().enabled = false;
@@ -193,8 +197,8 @@ public class PlayerController : MonoBehaviour
         Game.current.FailGame();
     }
 
-    public Vector3 GetPosition() 
+    public void UpdatePlayerHealthInGame(float health)
     {
-        return transform.position;
+        Game.playerHealth = health;
     }
 }

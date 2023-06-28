@@ -17,7 +17,6 @@ public class HealthBar : MonoBehaviour
     void Start()
     {
         slider = GetComponent<Slider>();
-
         UnityAction<float> a = h => {
             float before = slider.value;
             slider.value = h / health.maxHealth;
@@ -25,5 +24,10 @@ public class HealthBar : MonoBehaviour
         };
         a(health.initHealth);
         health.OnHealthChange.AddListener(a);
+    }
+
+    public void UpdateHealthBarOnLevelStart(float _health)
+    {
+        slider.value = _health / health.maxHealth;  //adapt value at beginning of next level
     }
 }
