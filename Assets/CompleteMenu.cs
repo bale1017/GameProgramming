@@ -41,6 +41,8 @@ public class CompleteMenu : MonoBehaviour
             .positionTransition_x(-Screen.width * 2, 0)
             .JoinTransition()
             .positionTransition_x(tPos.x, 0.15f);
+
+        SoundPlayer.current.PlaySound(Sound.UI_WHOOSH);
     }
 
     public void FadeOut()
@@ -59,6 +61,7 @@ public class CompleteMenu : MonoBehaviour
                 background.SetActive(false);
                 text.SetActive(false);
             }));
+
         }));
     }
 

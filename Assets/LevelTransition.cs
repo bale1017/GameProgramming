@@ -28,6 +28,8 @@ public class LevelTransition : MonoBehaviour
         panel.transform.position = center + offset;
         panel.transform.positionTransition(center, 0.5f);
         StartCoroutine(then(0.5f, OnFadeInComplete.Invoke));
+
+        SoundPlayer.current.PlaySound(Sound.UI_WHOOSH);
     }
 
     IEnumerator then(float sec, Action action)
@@ -38,6 +40,8 @@ public class LevelTransition : MonoBehaviour
 
     public void FadeOut()
     {
+
+        SoundPlayer.current.PlaySound(Sound.UI_WHOOSH);
         panel.transform.position = center;
         panel.transform.positionTransition(center - offset, 0.5f);
     }

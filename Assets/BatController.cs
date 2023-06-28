@@ -95,11 +95,8 @@ public class BatController : MonoBehaviour
     {
         if (Vector3.Distance(transform.position, targetPosition.position) < chaseRange)
         {
-            if ((transform.position - pc.transform.position).sqrMagnitude < chaseRange * chaseRange)
-            {
-                state = EnemyState.ChaseTarget;
-                return;
-            }
+            state = EnemyState.ChaseTarget;
+            return;
         }
         if (Time.time > sleepTime)
         {

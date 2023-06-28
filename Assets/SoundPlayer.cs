@@ -1,7 +1,9 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
+using static Unity.VisualScripting.Member;
 
 
 [Serializable]
@@ -21,11 +23,16 @@ public enum Sound
     SKELETON_SWORD_SLASH_SLOW,
     SKELETON_SWORD_SLASH_FAST,
 
+    SPIKE_OUT,
+    SPIKE_IN,
+
     VICTORY,
-    TIME_UP,
+    DEFEAT,
     TIME_TICKING,
 
-    TRAPDOOR_OPEN
+    TRAPDOOR_OPEN,
+
+    UI_WHOOSH,
 }
 
 [Serializable]
@@ -35,19 +42,29 @@ public struct SoundPair
     public AudioClip clip;
 }
 
+public struct PlayingSound { }
+
 public class SoundPlayer : MonoBehaviour
 {
     public static SoundPlayer current { get; private set; }
 
     [SerializeField]
-    public SoundPair[] soundFileArray;
+    public SoundPair[] soundFileArray = { };
     public Dictionary<Sound, AudioClip> soundFiles = new();
+    public Dictionary<PlayingSound, AudioSource> playingSounds = new();
 
     private AudioSource audioSource;
 
-    private void Start()
+    private void Awake()
     {
-        current = this;
+        if (current != null && current != this)
+        {
+            Destroy(this.gameObject);
+        }
+        else
+        {
+            current = this;
+        }
         foreach (SoundPair entry in soundFileArray)
         {
             soundFiles[entry.sound] = entry.clip;
@@ -58,10 +75,27 @@ public class SoundPlayer : MonoBehaviour
 
     public void PlaySound(Sound sound)
     {
-        Debug.Log("Play sound " + sound);
-        if (!soundFiles.TryGetValue(sound, out var clip)) return;
+        PlaySound(sound, false);
+    }
 
-        audioSource.clip = clip;
-        audioSource.Play();
+    public PlayingSound PlaySound(Sound sound, bool looped)
+    {
+        if (!soundFiles.TryGetValue(sound, out var clip)) return new PlayingSound();
+
+        Debug.Log("Play loop " + sound + ": " + looped);
+        if (!looped)
+        {
+            audioSource.PlayOneShot(clip);
+            return new PlayingSound();
+        }
+        PlayingSound soundRef = new();
+        GameObject go = new GameObject();
+        go.transform.SetParent(transform, false);
+        AudioSource source = go.AddComponent<AudioSource>();
+        playingSounds[soundRef] = source;
+        source.clip = clip;
+        source.loop = looped;
+        source.Play();
+        return soundRef;
     }
 }

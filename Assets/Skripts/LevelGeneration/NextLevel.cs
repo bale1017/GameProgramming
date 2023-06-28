@@ -20,6 +20,7 @@ public class NextLevel : MonoBehaviour
         {
             retime = gameObject.AddComponent<ReTime>();
         }
+        SoundPlayer.current.PlaySound(Sound.TRAPDOOR_OPEN);
         retime.AddKeyFrame(
             g =>
             {

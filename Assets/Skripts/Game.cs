@@ -119,6 +119,8 @@ public class Game : MonoBehaviour
         OnGameVictory.Invoke();
         OnGameCompletion.Invoke();
         StartCoroutine(EndGame());
+
+        SoundPlayer.current.PlaySound(Sound.VICTORY);
     }
 
     IEnumerator EndGame()
@@ -134,6 +136,8 @@ public class Game : MonoBehaviour
         Game.playerHealth = float.MinValue;
         OnGameFailure.Invoke();
         OnGameCompletion.Invoke();
+
+        SoundPlayer.current.PlaySound(Sound.DEFEAT);
     }
 
     public void PauseGame()

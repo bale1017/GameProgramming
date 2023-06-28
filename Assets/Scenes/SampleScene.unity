@@ -901,6 +901,18 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 1
         m_CallState: 2
+      - m_Target: {fileID: 670209699}
+        m_TargetAssemblyTypeName: SoundPlayer, Assembly-CSharp
+        m_MethodName: PlaySound
+        m_Mode: 3
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 1
+        m_CallState: 2
   OnGameFailure:
     m_PersistentCalls:
       m_Calls:
@@ -1080,6 +1092,18 @@ MonoBehaviour:
     clip: {fileID: 8300000, guid: e16b72032ec560344a9ad83fbca08979, type: 3}
   - sound: 3
     clip: {fileID: 8300000, guid: c8dd0795ad2a07e47a0daf7f283cdb90, type: 3}
+  - sound: 16
+    clip: {fileID: 8300000, guid: 6b09f74bfe751294b9b7c8141169b81c, type: 3}
+  - sound: 15
+    clip: {fileID: 8300000, guid: 7a33bd70a52372546b501fef5975cf07, type: 3}
+  - sound: 6
+    clip: {fileID: 8300000, guid: 5690daa11bb1d4445952c67e649ddd12, type: 3}
+  - sound: 13
+    clip: {fileID: 8300000, guid: f32a84ff861de29478fd87d9b2778449, type: 3}
+  - sound: 11
+    clip: {fileID: 8300000, guid: 59cd3db3c17b75e4da447cc74a71e922, type: 3}
+  - sound: 12
+    clip: {fileID: 8300000, guid: 11795519ac2549c428b571ffff638f90, type: 3}
 --- !u!1001 &686233279
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -6836,7 +6860,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e681e5f1fa876d04d86460963d1c78e7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  health: {fileID: 0}
+  health: {fileID: 1648143618}
   OnRaise:
     m_PersistentCalls:
       m_Calls:
@@ -7789,6 +7813,18 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 467996651}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &1648143618 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 4022281557343201453, guid: 276987d33a0b16644aa5980b54cd09b7,
+    type: 3}
+  m_PrefabInstance: {fileID: 467996651}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6c361e8106ad6014abb58268ccf14ba0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1676390761
 GameObject:
   m_ObjectHideFlags: 0

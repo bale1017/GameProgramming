@@ -19,12 +19,14 @@ public class BatAttack : MonoBehaviour
     {
         transform.localPosition = rightAttackOffset;
         attackCollider.enabled = true;
+        SoundPlayer.current.PlaySound(Sound.BAT_ATTACK);
     }
 
     public void AttackLeft()
     {
         transform.localPosition = new Vector3(rightAttackOffset.x * -1, rightAttackOffset.y);
         attackCollider.enabled = true;
+        SoundPlayer.current.PlaySound(Sound.BAT_ATTACK);
     }
 
     public void StopAttack()

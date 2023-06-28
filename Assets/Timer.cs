@@ -2,6 +2,7 @@ using Lean.Transition;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Threading;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.UI;
@@ -33,6 +34,8 @@ public class Timer : MonoBehaviour
         Game.current.OnGameCompletion.AddListener(() => timeScale = 0);
         Game.current.OnRewindStart.AddListener(() => timeScale = -1);
         Game.current.OnRewindEnd.AddListener(() => timeScale = 1);
+
+        SoundPlayer.current.PlaySound(Sound.TIME_TICKING, true);
     }
 
     // Update is called once per frame
