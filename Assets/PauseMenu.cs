@@ -71,6 +71,7 @@ public class PauseMenu : MonoBehaviour
 
         Time.timeScale = 1;
         Game.level = 1;
+        ScoreManager.score = 0;
         SceneManager.LoadScene("Menu");
     }
     public void Exit()
