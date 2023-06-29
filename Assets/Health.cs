@@ -71,7 +71,7 @@ public class Health : MonoBehaviour
         } else
         {
             Action<GameObject> increase = g => {
-                health += val;
+                g.GetComponent<Health>().health += val;
                 OnHealthChange.Invoke(health);
                 if (val < 0)
                 {
