@@ -351,6 +351,7 @@ public class ReTime : MonoBehaviour {
 			GameObject clone = Instantiate(gameObject);
             Destroy(clone.GetComponent<ReTime>());
             Destroy(clone.GetComponent<PlayerInput>());
+            Destroy(clone.GetComponent<AudioListener>());
             clone.transform.position = transform.position;
 			if (!clone.TryGetComponent<KeyFramePlayer>(out var player))
 			{
