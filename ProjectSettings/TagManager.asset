@@ -5,6 +5,7 @@ TagManager:
   serializedVersion: 2
   tags:
   - Enemy
+  - timeliner
   layers:
   - Default
   - TransparentFX

@@ -23,11 +23,11 @@ public class SpikeTrap : MonoBehaviour
 
         if (triggered && !damaged)
         {
-            PlayerController player = collision.GetComponent<PlayerController>();
-            player.health.ReduceHealth(damage);
+            Health target = collision.GetComponent<Health>();
+            target.AffectHealth(-damage);
             GetComponent<ReTime>().AddKeyFrame(g => damaged = true, g => damaged = false);
         }
-        else
+        else if (!triggered)
         {
             StartCoroutine(activateSpike());
         }
@@ -35,27 +35,29 @@ public class SpikeTrap : MonoBehaviour
 
     private IEnumerator activateSpike()
     {
-        ReTime retime = GetComponent<ReTime>();
-        if (!retime)
+        if (!TryGetComponent<ReTime>(out var retime))
         {
             retime = gameObject.AddComponent<ReTime>();
         }
+        retime.AddKeyFrame(g => triggered = true, g => triggered = false);
+        retime.AddKeyFrame(g => damaged = true, g => damaged = false);
 
         yield return new WaitForSeconds(triggerDelay);
 
         retime.AddKeyFrame(g => damaged = false, g => damaged = true);
-        retime.AddKeyFrame(g => triggered = true, g => triggered = false);
         retime.AddKeyFrame(
             g => g.GetComponent<SpriteRenderer>().sprite = activeSpike,
             g => g.GetComponent<SpriteRenderer>().sprite = inactiveSpike
         );
+        SoundPlayer.current.PlaySound(Sound.SPIKE_OUT, transform, .5f, .5f);
         
         yield return new WaitForSeconds(activeTime);
         
-        retime.AddKeyFrame(g => triggered = true, g => triggered = false);
+        retime.AddKeyFrame(g => triggered = false, g => triggered = true);
         retime.AddKeyFrame(
             g => g.GetComponent<SpriteRenderer>().sprite = inactiveSpike,
             g => g.GetComponent<SpriteRenderer>().sprite = activeSpike
         );
+        SoundPlayer.current.PlaySound(Sound.SPIKE_IN, transform, .5f, .5f);
     }
 }

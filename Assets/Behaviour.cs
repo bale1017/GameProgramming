@@ -7,9 +7,4 @@
         ChaseTarget,
         AttackTarget
     }
-
-    interface IController
-    {
-        public Health health { get; }
-    }
 }
