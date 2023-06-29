@@ -18,7 +18,7 @@ public class BatController : MonoBehaviour
     private float nextAttackTime;
     public float attackRate = 0.1F;
     private bool isDead = false;
-    public float scorePoints = 100;
+    public float scorePoints = 5;
 
     // values for a* algorithm
     private Transform targetPosition;

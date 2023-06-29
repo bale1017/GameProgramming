@@ -58,7 +58,6 @@ public class PauseMenu : MonoBehaviour
     }
     public void GoToMainMenu()
     {
-        //TODO
         UnityEngine.Debug.Log("saving highscore " + ScoreManager.Instance.score);
         if (HighscoreManager.Instance)
         {
