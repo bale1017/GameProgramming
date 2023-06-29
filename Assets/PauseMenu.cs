@@ -57,6 +57,10 @@ public class PauseMenu : MonoBehaviour
     }
     public void GoToMainMenu()
     {
+        //TODO
+        Debug.Log("saving highscore " + ScoreManager.Instance.score);
+        HighscoreManager.Instance.addHighscore(ScoreManager.Instance.score);
+
         SceneManager.LoadScene("Menu");
     }
     public void Exit()

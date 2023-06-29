@@ -172,6 +172,7 @@ public class BatController : MonoBehaviour, IController
         TakeDamage.Play();
         Debug.Log("Bat has been slayed");
         animator.SetTrigger("defeated");
+        ScoreManager.Instance.score += 10;
     }
 
     public void ReceivedDamage(float val)

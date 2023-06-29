@@ -39,6 +39,12 @@ public class CompleteMenu : MonoBehaviour
             .positionTransition_x(-Screen.width * 2, 0)
             .JoinTransition()
             .positionTransition_x(tPos.x, 0.15f);
+
+        //TODO
+        if (HighscoreManager.Instance && ScoreManager.Instance)
+        {
+            HighscoreManager.Instance.addHighscore(ScoreManager.Instance.score);
+        }
     }
 
     public void FadeOut()
