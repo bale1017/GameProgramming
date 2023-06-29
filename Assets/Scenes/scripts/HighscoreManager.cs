@@ -57,6 +57,7 @@ public class HighscoreManager : MonoBehaviour
                 XmlSerializer serializer = new XmlSerializer(typeof(SavedHighscores));
                 FileStream stream = new FileStream(Application.persistentDataPath + "/HighScores/highscores.xml", FileMode.Open);
                 savedHighscores = serializer.Deserialize(stream) as SavedHighscores;
+                stream.Close();
                 Highscores = savedHighscores.list;
             }
             else

@@ -18,6 +18,7 @@ public class BatController : MonoBehaviour
     private float nextAttackTime;
     public float attackRate = 0.1F;
     private bool isDead = false;
+    public float scorePoints = 100;
 
     // values for a* algorithm
     private Transform targetPosition;
@@ -192,6 +193,9 @@ public class BatController : MonoBehaviour
         isDead = true;
         Debug.Log("Bat has been slayed");
         animator.SetBool("defeated", true);
+
+        GetComponent<ReTime>().AddKeyFrame(g => ScoreManager.Instance.score += scorePoints, g => ScoreManager.Instance.score -= scorePoints);
+
     }
 
     public void BatDefeated()
