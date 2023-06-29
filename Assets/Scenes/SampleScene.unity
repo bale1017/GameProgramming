@@ -23132,7 +23132,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4cb5ea2a21ad6834d8ffc625a336b1e8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  maxDistance: 20
+  maxDistance: 2
   soundFileArray:
   - sound: 1
     clip: {fileID: 8300000, guid: 3eb0f12f4a78f544c8e1dfe223a309ce, type: 3}
