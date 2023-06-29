@@ -155,6 +155,13 @@ public class Game : MonoBehaviour
         OnGameCompletion.Invoke();
 
         SoundPlayer.current.PlaySound(Sound.DEFEAT);
+
+        StartCoroutine(then(2, () =>
+        {
+            Time.timeScale = 1;
+            Game.level = 1;
+            SceneManager.LoadScene("Menu");
+        }));
     }
 
     public void PauseGame()
