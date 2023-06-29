@@ -194,7 +194,7 @@ public class BatController : MonoBehaviour
             g => g.GetComponent<BatController>().isDead = true,
             g => g.GetComponent<BatController>().isDead = false
         );
-        Debug.Log("Bat has been slayed");
+        Debug.Log("Bat has been slain");
         animator.SetBool("defeated", true);
 
         GetComponent<ReTime>().AddKeyFrame(g => ScoreManager.Instance.score += scorePoints, g => ScoreManager.Instance.score -= scorePoints);
