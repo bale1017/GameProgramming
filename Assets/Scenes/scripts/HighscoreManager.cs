@@ -9,6 +9,7 @@ using UnityEngine.SocialPlatforms.Impl;
 using UnityEngine.SocialPlatforms;
 using System.Linq;
 using System;
+using static System.Net.Mime.MediaTypeNames;
 
 public class HighscoreManager : MonoBehaviour
 {
@@ -34,9 +35,9 @@ public class HighscoreManager : MonoBehaviour
             DontDestroyOnLoad(this.gameObject);
         }
         //save highscores in /HighScores/
-        if (!Directory.Exists(Application.persistentDataPath + "/HighScores/"))
+        if (!Directory.Exists(UnityEngine.Application.persistentDataPath + "/HighScores/"))
         {
-            Directory.CreateDirectory(Application.persistentDataPath + "/HighScores/");
+            Directory.CreateDirectory(UnityEngine.Application.persistentDataPath + "/HighScores/");
         }
     }
 
@@ -48,14 +49,14 @@ public class HighscoreManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        Debug.Log("Application starting, loading highscores");
+        Debug.Log("Application starting, loading highscores path is" + (" " + UnityEngine.Application.persistentDataPath));
         if (Highscores == null || Highscores.Count == 0)
         {
-            if (File.Exists(Application.persistentDataPath + "/HighScores/highscores.xml"))
+            if (File.Exists(UnityEngine.Application.persistentDataPath + "/HighScores/highscores.xml"))
             {
                 Debug.Log("highscore file exists");
                 XmlSerializer serializer = new XmlSerializer(typeof(SavedHighscores));
-                FileStream stream = new FileStream(Application.persistentDataPath + "/HighScores/highscores.xml", FileMode.Open);
+                FileStream stream = new FileStream(UnityEngine.Application.persistentDataPath + "/HighScores/highscores.xml", FileMode.Open);
                 savedHighscores = serializer.Deserialize(stream) as SavedHighscores;
                 stream.Close();
                 Highscores = savedHighscores.list;
@@ -71,7 +72,7 @@ public class HighscoreManager : MonoBehaviour
 
                 savedHighscores.list = Highscores;
                 XmlSerializer serializer = new XmlSerializer(typeof(SavedHighscores));
-                FileStream stream = new FileStream(Application.persistentDataPath + "/HighScores/highscores.xml", FileMode.Create);
+                FileStream stream = new FileStream(UnityEngine.Application.persistentDataPath + "/HighScores/highscores.xml", FileMode.Create);
                 serializer.Serialize(stream, savedHighscores);
                 stream.Close();
             }
@@ -115,7 +116,7 @@ public class HighscoreManager : MonoBehaviour
         Debug.Log("Application ending, saving highscores:");
         savedHighscores.list = Highscores;
         XmlSerializer serializer = new XmlSerializer(typeof(SavedHighscores));
-        FileStream stream = new FileStream(Application.persistentDataPath + "/HighScores/highscores.xml", FileMode.Create);
+        FileStream stream = new FileStream(UnityEngine.Application.persistentDataPath + "/HighScores/highscores.xml", FileMode.Create);
         serializer.Serialize(stream, savedHighscores);
         stream.Close();
     }

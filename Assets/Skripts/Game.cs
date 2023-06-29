@@ -149,6 +149,7 @@ public class Game : MonoBehaviour
             UnityEngine.Debug.Log("error saving highscore");
         }
 
+        ScoreManager.score = 0;
         gameState = GameState.FAILURE;
         Game.level = 1;
         Game.playerHealth = float.MinValue;
