@@ -37,6 +37,8 @@ public enum Sound
 
     UI_WHOOSH,
     PLAYER_TIMELINE_END
+
+    TORCH_CRACKLING,
 }
 
 [Serializable]

@@ -22621,7 +22621,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1845414775
 RectTransform:
   m_ObjectHideFlags: 0
@@ -22926,7 +22926,7 @@ MonoBehaviour:
   - sound: 0
     clip: {fileID: 8300000, guid: bd45579a1d210224c977c69faf0fb2ca, type: 3}
   - sound: 19
-    clip: {fileID: 8300000, guid: 303326d9e23c1e743a28adf829bc8e77, type: 3}
+    clip: {fileID: 8300000, guid: f2bfe5613b4e5484aa9450aa55f447e6, type: 3}
 --- !u!1 &1970198575
 GameObject:
   m_ObjectHideFlags: 0
