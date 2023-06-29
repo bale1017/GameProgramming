@@ -36,6 +36,7 @@ public enum Sound
     TRAPDOOR_OPEN,
 
     UI_WHOOSH,
+    PLAYER_TIMELINE_END
 }
 
 [Serializable]
@@ -113,6 +114,14 @@ public class SoundPlayer : MonoBehaviour
     }
 
     public PlayingSound PlaySound(Sound sound, Transform at, float pitch, float volume, bool loop)
+    {
+        if (at.gameObject.TryGetComponent<ReTime>(out var retime))
+        {
+        }
+        return PlaySoundAsKeyFrame(sound, at, pitch, volume, loop);
+    }
+
+    public PlayingSound PlaySoundAsKeyFrame(Sound sound, Transform at, float pitch, float volume, bool loop)
     {
         if (!soundFiles.TryGetValue(sound, out var clip)) return new PlayingSound();
 

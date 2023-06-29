@@ -365,7 +365,12 @@ public class ReTime : MonoBehaviour {
 			long time = KeyFrames.FindLast(k => true).endTimeStamp;
             var KeyFramesMod = new List<KeyFrame>(KeyFrames)
             {
-                new RunnableKeyFrame(time, 0, g => Destroy(g))
+                new RunnableKeyFrame(time, 0, g => {
+					GameObject clone = new();
+					clone.transform.position = g.transform.position;
+                    SoundPlayer.current.PlaySound(Sound.PLAYER_TIMELINE_END, clone.transform);
+                    Destroy(g);
+				})
             };
             player.Play(KeyFramesMod, Now);
 			player.SetTimeScale(() => isRewinding ? -RewindSpeed : 1);

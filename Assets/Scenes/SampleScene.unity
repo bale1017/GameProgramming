@@ -22925,6 +22925,8 @@ MonoBehaviour:
     clip: {fileID: 8300000, guid: 9355f396a32d12445a457bafdc73269c, type: 3}
   - sound: 0
     clip: {fileID: 8300000, guid: bd45579a1d210224c977c69faf0fb2ca, type: 3}
+  - sound: 19
+    clip: {fileID: 8300000, guid: 303326d9e23c1e743a28adf829bc8e77, type: 3}
 --- !u!1 &1970198575
 GameObject:
   m_ObjectHideFlags: 0

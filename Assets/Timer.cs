@@ -50,6 +50,7 @@ public class Timer : MonoBehaviour
         });
         Game.current.OnRewindEnd.AddListener(() => {
             timeScale = 1;
+            SoundPlayer.current.StopSound(ticking);
             ticking = SoundPlayer.current.PlaySound(Sound.TIME_TICKING, true);
         });
 
