@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 3680966893635214837}
   - component: {fileID: 3770255119064990331}
   - component: {fileID: 1526318104964353913}
-  m_Layer: 0
+  m_Layer: 21
   m_Name: Decorations
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -526,7 +526,7 @@ Transform:
   - {fileID: 1341974149655764136}
   - {fileID: 1974027845162175086}
   m_Father: {fileID: 0}
-  m_RootOrder: 10
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!156049354 &1374512021960771753
 Grid:
@@ -603,10 +603,20 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 4095979794884744321, guid: b4b6166e97ae86442a7d6a658f0cf98c,
+        type: 3}
+      propertyPath: m_Layer
+      value: 21
+      objectReference: {fileID: 0}
     - target: {fileID: 5204205494495760254, guid: b4b6166e97ae86442a7d6a658f0cf98c,
         type: 3}
       propertyPath: m_Name
       value: Fountain
+      objectReference: {fileID: 0}
+    - target: {fileID: 5204205494495760254, guid: b4b6166e97ae86442a7d6a658f0cf98c,
+        type: 3}
+      propertyPath: m_Layer
+      value: 21
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

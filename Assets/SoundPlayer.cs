@@ -40,6 +40,8 @@ public enum Sound
 
     TORCH_CRACKLING,
     FOUNTAIN_SPLASHING,
+
+    BACKGROUND_MUSIC,
 }
 
 [Serializable]
@@ -120,6 +122,11 @@ public class SoundPlayer : MonoBehaviour
     public PlayingSound PlaySound(Sound sound, Transform at, bool loop)
     {
         return PlaySound(sound, at, 1, 1, loop);
+    }
+
+    public PlayingSound PlaySound(Sound sound, float volume, bool loop)
+    {
+        return PlaySound(sound, transform, 1, volume, loop);
     }
 
     public PlayingSound PlaySound(Sound sound, Transform at, float pitch, float volume, bool loop)
