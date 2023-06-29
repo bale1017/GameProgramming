@@ -28,6 +28,6 @@ public class HealthBar : MonoBehaviour
 
     public void UpdateHealthBarOnLevelStart(float _health)
     {
-        slider.value = _health / health.maxHealth;  //adapt value at beginning of next level
+        //slider.value = _health / health.maxHealth;  //adapt value at beginning of next level
     }
 }

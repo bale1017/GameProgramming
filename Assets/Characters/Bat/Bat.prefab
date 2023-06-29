@@ -133,6 +133,7 @@ MonoBehaviour:
   chaseRange: 1.2
   attackRange: 0.06
   attackRate: 1
+  scorePoints: 5
   speed: 0.6
   nextWaypointDistance: 0.2
   updatePathTime: 2
@@ -239,6 +240,7 @@ MonoBehaviour:
   initHealth: 3
   maxHealth: 3
   vulnerable: 1
+  health: 0
   OnHealthChange:
     m_PersistentCalls:
       m_Calls: []

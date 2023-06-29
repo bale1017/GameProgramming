@@ -200,7 +200,7 @@ public class BatController : MonoBehaviour
         //animator.SetBool("defeated", true);
         animator.SetTrigger("defeated"); 
 
-        GetComponent<ReTime>().AddKeyFrame(g => ScoreManager.Instance.score += scorePoints, g => ScoreManager.Instance.score -= scorePoints);
+        GetComponent<ReTime>().AddKeyFrame(g => ScoreManager.score += scorePoints, g => ScoreManager.score -= scorePoints);
 
         StartCoroutine(BatDefeated());
     }
