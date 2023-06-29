@@ -17,6 +17,8 @@ public class Timer : MonoBehaviour
     public double timer = 60;
     private double _timer;
 
+    PlayingSound ticking;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -24,18 +26,33 @@ public class Timer : MonoBehaviour
         text = GetComponent<Text>();
         previousTime = _timer;
 
-        Game.current.OnGameStart.AddListener(() => timeScale = 1);
+        Game.current.OnGameStart.AddListener(() => {
+            timeScale = 1;
+            ticking = SoundPlayer.current.PlaySound(Sound.TIME_TICKING, true);
+        });
         double before = 0;
         Game.current.OnGamePause.AddListener(() => {
             before = timeScale;
             timeScale = 0;
+            SoundPlayer.current.StopSound(ticking);
         });
-        Game.current.OnGameUnpause.AddListener(() => timeScale = before);
-        Game.current.OnGameCompletion.AddListener(() => timeScale = 0);
-        Game.current.OnRewindStart.AddListener(() => timeScale = -1);
-        Game.current.OnRewindEnd.AddListener(() => timeScale = 1);
+        Game.current.OnGameUnpause.AddListener(() => {
+            timeScale = before;
+            ticking = SoundPlayer.current.PlaySound(Sound.TIME_TICKING, true);
+        });
+        Game.current.OnGameCompletion.AddListener(() => { 
+            timeScale = 0;
+            SoundPlayer.current.StopSound(ticking);
+        });
+        Game.current.OnRewindStart.AddListener(() => {
+            timeScale = -1;
+            SoundPlayer.current.StopSound(ticking);
+        });
+        Game.current.OnRewindEnd.AddListener(() => {
+            timeScale = 1;
+            ticking = SoundPlayer.current.PlaySound(Sound.TIME_TICKING, true);
+        });
 
-        SoundPlayer.current.PlaySound(Sound.TIME_TICKING, true);
     }
 
     // Update is called once per frame

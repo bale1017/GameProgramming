@@ -49,7 +49,7 @@ public class SpikeTrap : MonoBehaviour
             g => g.GetComponent<SpriteRenderer>().sprite = activeSpike,
             g => g.GetComponent<SpriteRenderer>().sprite = inactiveSpike
         );
-        SoundPlayer.current.PlaySound(Sound.SPIKE_OUT);
+        SoundPlayer.current.PlaySound(Sound.SPIKE_OUT, transform, .5f, .5f);
         
         yield return new WaitForSeconds(activeTime);
         
@@ -58,6 +58,6 @@ public class SpikeTrap : MonoBehaviour
             g => g.GetComponent<SpriteRenderer>().sprite = inactiveSpike,
             g => g.GetComponent<SpriteRenderer>().sprite = activeSpike
         );
-        SoundPlayer.current.PlaySound(Sound.SPIKE_IN);
+        SoundPlayer.current.PlaySound(Sound.SPIKE_IN, transform, .5f, .5f);
     }
 }

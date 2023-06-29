@@ -23,6 +23,7 @@ public class PlayerController : MonoBehaviour
     private bool isDead = false;
 
     Health health;
+    PlayingSound running;
 
     // Start is called before the first frame update
     void Start()
@@ -66,11 +67,24 @@ public class PlayerController : MonoBehaviour
                     }
                     //set "moving" animation
                     animator.SetBool("isMoving", success);
+                    if (success && running == null)
+                    {
+                        running = SoundPlayer.current.PlaySound(Sound.PLAYER_RUNNING, transform.transform, 0.7f, 1f, true);
+                    } else if (!success && running != null)
+                    {
+                        SoundPlayer.current.StopSound(running);
+                        running = null;
+                    }
                 }
                 else
                 {
                     //set "idle" animation
                     animator.SetBool("isMoving", false);
+                    if (running != null)
+                    {
+                        SoundPlayer.current.StopSound(running);
+                        running = null;
+                    }
                 }
 
                 //Set direction of sprite to movemnet direction
@@ -174,6 +188,7 @@ public class PlayerController : MonoBehaviour
         Debug.Log("Player has been defeated");
         // trigger death animation of player
         animator.SetBool("isMoving", false);
+        SoundPlayer.current.StopSound(running);
         animator.SetBool("defeated", true);
         SoundPlayer.current.PlaySound(Sound.PLAYER_DEATH);
         StartCoroutine(PlayerDefeated());

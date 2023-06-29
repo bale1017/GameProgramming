@@ -176,14 +176,14 @@ public class SkeletonSwordWarriorController : MonoBehaviour
             if (chooseAttackA)
             {
                 //use attack A
-                SoundPlayer.current.PlaySound(Sound.SKELETON_SWORD_SLASH_FAST);
+                SoundPlayer.current.PlaySound(Sound.SKELETON_SWORD_SLASH_FAST, transform);
                 animator.SetTrigger("isAttackingA");
                 chooseAttackA = false;
             }
             else
             {
                 //use attack B
-                SoundPlayer.current.PlaySound(Sound.SKELETON_SWORD_SLASH_FAST);
+                SoundPlayer.current.PlaySound(Sound.SKELETON_SWORD_SLASH_FAST, transform);
                 animator.SetTrigger("isAttackingB");
                 chooseAttackA = true;
             }
@@ -253,7 +253,7 @@ public class SkeletonSwordWarriorController : MonoBehaviour
     {
         isDead = true;
         Debug.Log("Skeleton Sword Warrior has been slayed!");
-        SoundPlayer.current.PlaySound(Sound.SKELETON_DEATH);
+        SoundPlayer.current.PlaySound(Sound.SKELETON_DEATH, transform);
         animator.SetBool("defeated", true);
     }
 
@@ -261,7 +261,7 @@ public class SkeletonSwordWarriorController : MonoBehaviour
     {
         if (val <= 0) return;
         Debug.Log("Skeleton Sword Warrior received " + val + " damage!");
-        SoundPlayer.current.PlaySound(Sound.SKELETON_DAMAGE);
+        SoundPlayer.current.PlaySound(Sound.SKELETON_DAMAGE, transform);
         animator.SetTrigger("receivesDamage");
     }
 

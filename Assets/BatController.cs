@@ -178,17 +178,19 @@ public class BatController : MonoBehaviour
 
     public void ReceivedDamage(float val)
     {
+        SoundPlayer.current.PlaySound(Sound.BAT_DAMAGE, transform);
+
         if (val <= 0) return;
-        TakeDamage.Play();
         Debug.Log("Bat received damage, its new health is: " + val);
         animator.SetTrigger("receivesDamage"); 
     }
 
     public void Defeated()
     {
+        SoundPlayer.current.PlaySound(Sound.BAT_DEATH, transform);
+
         isDead = true;
         Debug.Log("Bat has been slayed");
-        TakeDamage.Play();
         animator.SetBool("defeated", true);
     }
 

@@ -1,14 +1,17 @@
+using Lean.Transition;
 using System;
 using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.InputSystem;
 using static Unity.VisualScripting.Member;
 
 
 [Serializable]
 public enum Sound
 {
+    PLAYER_RUNNING,
     PLAYER_DAMAGE,
     PLAYER_DEATH,
     PLAYER_HEAL,
@@ -42,60 +45,116 @@ public struct SoundPair
     public AudioClip clip;
 }
 
-public struct PlayingSound { }
+public class PlayingSound {
+}
 
 public class SoundPlayer : MonoBehaviour
 {
     public static SoundPlayer current { get; private set; }
+
+    public float maxDistance = 12;
 
     [SerializeField]
     public SoundPair[] soundFileArray = { };
     public Dictionary<Sound, AudioClip> soundFiles = new();
     public Dictionary<PlayingSound, AudioSource> playingSounds = new();
 
-    private AudioSource audioSource;
-
     private void Awake()
     {
         if (current != null && current != this)
         {
             Destroy(this.gameObject);
+            return;
         }
         else
         {
             current = this;
         }
+        DontDestroyOnLoad(this.gameObject);
         foreach (SoundPair entry in soundFileArray)
         {
             soundFiles[entry.sound] = entry.clip;
         }
-        audioSource = gameObject.AddComponent<AudioSource>();
-        audioSource.playOnAwake = false;
     }
 
-    public void PlaySound(Sound sound)
+    public void StopSound(PlayingSound sound)
     {
-        PlaySound(sound, false);
+        if (playingSounds.TryGetValue(sound, out var source))
+        {
+            source.Stop();
+            Destroy(source.gameObject);
+            playingSounds.Remove(sound);
+        }
     }
 
-    public PlayingSound PlaySound(Sound sound, bool looped)
+    public PlayingSound PlaySound(Sound sound)
+    {
+        return PlaySound(sound, false);
+    }
+
+    public PlayingSound PlaySound(Sound sound, bool loop)
+    {
+        return PlaySound(sound, transform, 1, 1, loop);
+    }
+
+    public PlayingSound PlaySound(Sound sound, Transform at)
+    {
+        return PlaySound(sound, at, 1, 1);
+    }
+
+    public PlayingSound PlaySound(Sound sound, Transform at, float pitch, float volume)
+    {
+        return PlaySound(sound, at, pitch, volume, false);
+    }
+
+    public PlayingSound PlaySound(Sound sound, Transform at, bool loop)
+    {
+        return PlaySound(sound, at, 1, 1, loop);
+    }
+
+    public PlayingSound PlaySound(Sound sound, Transform at, float pitch, float volume, bool loop)
     {
         if (!soundFiles.TryGetValue(sound, out var clip)) return new PlayingSound();
 
-        Debug.Log("Play loop " + sound + ": " + looped);
-        if (!looped)
+        PlayerInput input = FindAnyObjectByType<PlayerInput>();
+        if (input == null)
+            throw new Exception("Cannot play sound at location while no player exists.");
+
+        bool global = at == transform;
+        float dist = (at.position - input.transform.position).magnitude;
+        if (!global && dist > maxDistance)
         {
-            audioSource.PlayOneShot(clip);
             return new PlayingSound();
         }
-        PlayingSound soundRef = new();
-        GameObject go = new GameObject();
-        go.transform.SetParent(transform, false);
-        AudioSource source = go.AddComponent<AudioSource>();
-        playingSounds[soundRef] = source;
+        GameObject audio = new();
+        DontDestroyOnLoad(audio);
+        audio.transform.SetParent(at, false);
+        AudioSource source = audio.AddComponent<AudioSource>();
         source.clip = clip;
-        source.loop = looped;
+        source.pitch = pitch;
+        source.volume = volume;
+        source.loop = loop;
+        source.spatialize = !global;
+        source.spatialBlend = 1;
+        source.maxDistance = global ? float.MaxValue : maxDistance;
         source.Play();
-        return soundRef;
+
+        PlayingSound p = new();
+        playingSounds[p] = source;
+
+        if (!loop)
+        {
+            StartCoroutine(Then(clip.length, () => {
+                Destroy(audio);
+                playingSounds.Remove(p);
+            }));
+        }
+        return p;
+    }
+
+    IEnumerator Then(float seconds, Action action)
+    {
+        yield return new WaitForSeconds(seconds);
+        action();
     }
 }
