@@ -2,9 +2,8 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Torch : MonoBehaviour
+public class Fountain : MonoBehaviour
 {
-
     public Sprite[] sprites;
     private Sprite currentSprite;
     private int counter;
@@ -14,7 +13,7 @@ public class Torch : MonoBehaviour
     {
         counter = 0;
         StartCoroutine("SwitchSprite");
-        SoundPlayer.current.PlaySound(Sound.TORCH_CRACKLING, at:this.transform, loop:true);
+        SoundPlayer.current.PlaySound(Sound.FOUNTAIN_SPLASHING,at:this.transform, loop: true);
     }
 
     void OnGUI()
@@ -37,5 +36,4 @@ public class Torch : MonoBehaviour
         yield return new WaitForSeconds(switchTime);
         StartCoroutine("SwitchSprite");
     }
-
 }
