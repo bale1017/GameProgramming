@@ -36,7 +36,7 @@ public enum Sound
     TRAPDOOR_OPEN,
 
     UI_WHOOSH,
-    PLAYER_TIMELINE_END
+    PLAYER_TIMELINE_END,
 
     TORCH_CRACKLING,
 }

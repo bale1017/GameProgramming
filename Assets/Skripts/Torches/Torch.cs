@@ -14,7 +14,7 @@ public class Torch : MonoBehaviour
     {
         counter = 0;
         StartCoroutine("SwitchSprite");
-        SoundPlayer.current.PlaySound(Sound.TORCH_CRACKLING, loop:true);
+        SoundPlayer.current.PlaySound(Sound.TORCH_CRACKLING, transform, loop:true);
     }
 
     void OnGUI()
