@@ -290,8 +290,8 @@ public class BossController : MonoBehaviour
                 g => g.GetComponent<BossController>().isDead = false
             );
             GetComponent<ReTime>().AddKeyFrame(
-                g => ScoreManager.Instance.score += scorePoints, 
-                g => ScoreManager.Instance.score -= scorePoints
+                g => ScoreManager.score += scorePoints, 
+                g => ScoreManager.score -= scorePoints
             );
             StartCoroutine(RemoveBoss());
         } else
