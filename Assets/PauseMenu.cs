@@ -2,6 +2,7 @@ using Lean.Transition;
 using Lean.Transition.Method;
 using System.Collections;
 using System.Collections.Generic;
+using System.Diagnostics;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -57,6 +58,17 @@ public class PauseMenu : MonoBehaviour
     }
     public void GoToMainMenu()
     {
+        //TODO
+        UnityEngine.Debug.Log("saving highscore " + ScoreManager.Instance.score);
+        if (HighscoreManager.Instance)
+        {
+            HighscoreManager.Instance.addHighscore(ScoreManager.Instance.score);
+        }
+        else
+        {
+            UnityEngine.Debug.Log("error saving highscore");
+        }
+
         SceneManager.LoadScene("Menu");
     }
     public void Exit()

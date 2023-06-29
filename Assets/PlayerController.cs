@@ -153,6 +153,7 @@ public class PlayerController : MonoBehaviour
     }
     public void SwordAttack()
     {
+        if (Game.IsRewinding) return;
         LockMovement();
         if (spriteRenderer.flipX == true)
         {

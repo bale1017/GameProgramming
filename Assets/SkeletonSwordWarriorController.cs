@@ -251,7 +251,10 @@ public class SkeletonSwordWarriorController : MonoBehaviour
 
     public void Defeated()
     {
-        isDead = true;
+        GetComponent<ReTime>().AddKeyFrame(
+              g => g.GetComponent<SkeletonSwordWarriorController>().isDead = true,
+              g => g.GetComponent<SkeletonSwordWarriorController>().isDead = false
+        );
         Debug.Log("Skeleton Sword Warrior has been slayed!");
         SoundPlayer.current.PlaySound(Sound.SKELETON_DEATH, transform);
         animator.SetBool("defeated", true);
@@ -267,6 +270,7 @@ public class SkeletonSwordWarriorController : MonoBehaviour
 
     public void RemoveEnemy()
     { // called from inside "death"-animation
+        animator.SetBool("defeated", false);
         GetComponent<ReTime>().AddKeyFrame(
             g => g.GetComponent<SkeletonSwordWarriorController>().skeletonIsDead(),
             g => g.GetComponent<SkeletonSwordWarriorController>().skeletonIsAlive()
@@ -277,13 +281,11 @@ public class SkeletonSwordWarriorController : MonoBehaviour
     {
         gameObject.GetComponent<SpriteRenderer>().enabled = false;
         gameObject.GetComponent<BoxCollider2D>().enabled = false;
-        animator.SetBool("defeated", false);
     }
 
     public void skeletonIsAlive()
     {
         gameObject.GetComponent<SpriteRenderer>().enabled = true;
         gameObject.GetComponent<BoxCollider2D>().enabled = true;
-        isDead = false;
     }
 }
