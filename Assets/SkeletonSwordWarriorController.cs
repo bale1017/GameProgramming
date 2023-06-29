@@ -20,6 +20,7 @@ public class SkeletonSwordWarriorController : MonoBehaviour, IController
 
     private float nextAttackTime;
     private bool chooseAttackA = true;
+    public float scorePoints = 100;
 
     // values for a* algorithm
     public Transform targetPosition;
@@ -252,6 +253,8 @@ public class SkeletonSwordWarriorController : MonoBehaviour, IController
         Debug.Log("Skeleton Sword Warrior has been slayed!");
         Death.Play();
         animator.SetBool("defeated", true);
+
+        GetComponent<ReTime>().AddKeyFrame(g => ScoreManager.Instance.score += scorePoints, g => ScoreManager.Instance.score -= scorePoints);
     }
 
     public void ReceivedDamage(float val)

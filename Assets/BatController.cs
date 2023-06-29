@@ -5,6 +5,7 @@ using UnityEngine;
 using Pathfinding;
 using System.Collections;
 using BasePatterns;
+using UnityEngine.SocialPlatforms.Impl;
 
 public class BatController : MonoBehaviour, IController
 {
@@ -18,7 +19,8 @@ public class BatController : MonoBehaviour, IController
     public float attackRange = 0.1F;
     public float damage = 1;
     private float nextAttackTime;
-    public float attackRate = 0.1F; 
+    public float attackRate = 0.1F;
+    public float scorePoints = 10;
 
     // values for a* algorithm
     public Transform targetPosition;
@@ -172,9 +174,9 @@ public class BatController : MonoBehaviour, IController
         TakeDamage.Play();
         Debug.Log("Bat has been slayed");
         animator.SetTrigger("defeated");
-        ScoreManager.Instance.score += 10;
-    }
 
+        GetComponent<ReTime>().AddKeyFrame(g => ScoreManager.Instance.score += scorePoints, g => ScoreManager.Instance.score -= scorePoints);
+    }
     public void ReceivedDamage(float val)
     {
         TakeDamage.Play();
