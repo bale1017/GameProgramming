@@ -1048,6 +1048,7 @@ MonoBehaviour:
   - {fileID: 1144024252966610086, guid: ba5fd657dc1376b49a0c5c7d3abe9fea, type: 3}
   - {fileID: 1268712315908506964, guid: 6ffa1d74021a30c4d9ef2c7bd6965282, type: 3}
   - {fileID: 1940878560661417867, guid: 45834ed6ece185340b5e5a3de1fd6e82, type: 3}
+  - {fileID: 9215709279040149023, guid: 5cf60b0487eb30d4784504f54cc276a7, type: 3}
   Walls:
   - {fileID: 8559213084617554464, guid: 62e189715d7c5d14fa3e5b82c6dd1e7d, type: 3}
   - {fileID: 5227599932738348201, guid: 736bd81580c55b54595752bf6bed63f7, type: 3}
@@ -22927,6 +22928,8 @@ MonoBehaviour:
     clip: {fileID: 8300000, guid: bd45579a1d210224c977c69faf0fb2ca, type: 3}
   - sound: 19
     clip: {fileID: 8300000, guid: f2bfe5613b4e5484aa9450aa55f447e6, type: 3}
+  - sound: 20
+    clip: {fileID: 8300000, guid: ae0b8aa68d223a24a8cfc625fbebe666, type: 3}
 --- !u!1 &1970198575
 GameObject:
   m_ObjectHideFlags: 0
