@@ -766,6 +766,11 @@ PrefabInstance:
       propertyPath: m_SortingOrder
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 4873390302692472844, guid: dfe0c577415da6649a7df8d86a9f9373,
+        type: 3}
+      propertyPath: scorePoints
+      value: 10
+      objectReference: {fileID: 0}
     - target: {fileID: 5006974888733650582, guid: dfe0c577415da6649a7df8d86a9f9373,
         type: 3}
       propertyPath: m_PlayOnAwake
@@ -1008,6 +1013,7 @@ MonoBehaviour:
           m_BoolArgument: 0
         m_CallState: 2
   RewindKey: 114
+  scorePoints: 50
 --- !u!4 &670209697
 Transform:
   m_ObjectHideFlags: 0
@@ -28619,6 +28625,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_IsTrigger
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2351894445467350366, guid: ac8a5a8d72e441f44953033b88e8b60e,
+        type: 3}
+      propertyPath: scorePoints
+      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 4472583714360601358, guid: ac8a5a8d72e441f44953033b88e8b60e,
         type: 3}

@@ -6,16 +6,9 @@ using UnityEngine.UIElements;
 
 public class ScoreManager : MonoBehaviour
 {
-    public static ScoreManager Instance { get; private set; }
     public static float score = 0;
 
     public Text scoreText;
-    private void Awake()
-    {
-
-        Destroy(Instance);
-        Instance = this;
-    }
 
     // Update is called once per frame
     void Update()
