@@ -45,6 +45,8 @@ public class Game : MonoBehaviour
     private GameObject healthBarOfBoss = null;
     private GameObject nametagOfBoss = null;
 
+    public float scorePoints = 50;
+
     public Game()
     {
         current = this;
@@ -108,6 +110,8 @@ public class Game : MonoBehaviour
 
     public void NextLevel()
     {
+        GetComponent<ReTime>().AddKeyFrame(g => ScoreManager.Instance.score += scorePoints, g => ScoreManager.Instance.score -= scorePoints);
+
         Game.level++;
         Scene scene = SceneManager.GetActiveScene();
         SceneManager.LoadScene(scene.name);
@@ -125,6 +129,15 @@ public class Game : MonoBehaviour
 
     IEnumerator EndGame()
     {
+        UnityEngine.Debug.Log("saving highscore " + ScoreManager.Instance.score);
+        if (HighscoreManager.Instance)
+        {
+            HighscoreManager.Instance.addHighscore(ScoreManager.Instance.score);
+        }
+        else
+        {
+            UnityEngine.Debug.Log("error saving highscore");
+        }
         yield return new WaitForSeconds(1);
         OnLevelEnd.Invoke();
     }
