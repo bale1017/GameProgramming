@@ -23,7 +23,9 @@ public class BossController : MonoBehaviour
     public float rewindTimeInSec = 3;
     public float offsetUntilNextRewind = 10;
     public float chancesOfRewind = 16;
+    public int scorePoints = 25;
 
+    private bool isDead = false;
     private bool isFirstPhase = true;
     private float nextAttackTime;
     private float nextRewindTime;
@@ -87,7 +89,7 @@ public class BossController : MonoBehaviour
         }
 
         if (Game.current.IsRunning()) { 
-            if (!Game.IsRewinding && !revanIsRewinding)
+            if (!Game.IsRewinding && !revanIsRewinding && !isDead)
             {
                 switch (state)
                 {
@@ -281,11 +283,17 @@ public class BossController : MonoBehaviour
     {
         if (!isFirstPhase)
         {
-            Debug.Log("Revan has been slayed!");
+            //SoundPlayer.current.PlaySound(Sound.)
+            animator.SetTrigger("defeated");
             GetComponent<ReTime>().AddKeyFrame(
-                g => g.GetComponent<BossController>().batIsDead(),
-                g => g.GetComponent<BossController>().batIsAlive()
+                g => g.GetComponent<BossController>().isDead = true,
+                g => g.GetComponent<BossController>().isDead = false
             );
+            GetComponent<ReTime>().AddKeyFrame(
+                g => ScoreManager.Instance.score += scorePoints, 
+                g => ScoreManager.Instance.score -= scorePoints
+            );
+            StartCoroutine(RemoveBoss());
         } else
         {
             //It's rewind time!
@@ -293,14 +301,26 @@ public class BossController : MonoBehaviour
         }
     }
 
-    public void batIsDead()
+    private IEnumerator RemoveBoss()
+    {
+        yield return new WaitForSeconds(0.3f);
+        if (!Game.IsRewinding)
+        {
+            Debug.Log("Revan has been slayed!");
+            GetComponent<ReTime>().AddKeyFrame(
+                g => g.GetComponent<BossController>().BossIsDead(),
+                g => g.GetComponent<BossController>().BossIsAlive()
+            );
+        }
+    }
+
+    public void BossIsDead()
     {
         gameObject.GetComponent<SpriteRenderer>().enabled = false;
         gameObject.GetComponent<BoxCollider2D>().enabled = false;
-        animator.SetBool("defeated", false);
     }
 
-    public void batIsAlive()
+    public void BossIsAlive()
     {
         gameObject.GetComponent<SpriteRenderer>().enabled = true;
         gameObject.GetComponent<BoxCollider2D>().enabled = true;

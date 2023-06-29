@@ -8,7 +8,8 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProductVersion>10.0.20506</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
-    <RootNamespace></RootNamespace>
+    <RootNamespace>
+    </RootNamespace>
     <ProjectGuid>{57AF5954-C716-583A-F0A4-168C112F3A19}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
@@ -931,31 +932,31 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="PackageToolsEditor.csproj">
-      <Project>{79C7CC4C-51E3-CFE9-5D67-734A2760A2C6}</Project>
+      <Project>{1D6D834C-3BAD-BB59-8D13-382F828D2B8D}</Project>
       <Name>PackageToolsEditor</Name>
     </ProjectReference>
     <ProjectReference Include="LeanTransition.Editor.csproj">
-      <Project>{3B6E6393-89C1-FE38-1DD3-3895D92CD908}</Project>
+      <Project>{5A93460A-A153-19EA-7140-6AA6325BB33E}</Project>
       <Name>LeanTransition.Editor</Name>
     </ProjectReference>
     <ProjectReference Include="AstarPathfindingProjectEditor.csproj">
-      <Project>{492B3A5C-880F-3440-9087-2A603AE1FCD4}</Project>
+      <Project>{A796BDB7-EFA7-D2C5-21AE-8C0B546E0377}</Project>
       <Name>AstarPathfindingProjectEditor</Name>
     </ProjectReference>
     <ProjectReference Include="LeanTransition.csproj">
-      <Project>{46350276-83EE-E2D1-844D-FF7BE405B038}</Project>
+      <Project>{54AE5487-84A2-454B-1FEB-A83CD1E29969}</Project>
       <Name>LeanTransition</Name>
     </ProjectReference>
     <ProjectReference Include="AstarPathfindingProject.csproj">
-      <Project>{A669236F-58B8-3559-0374-CC2C36040BB9}</Project>
+      <Project>{2809C93F-C366-45D6-FC69-96B73F69E755}</Project>
       <Name>AstarPathfindingProject</Name>
     </ProjectReference>
     <ProjectReference Include="CW.Common.csproj">
-      <Project>{A1448A62-79DF-FEFC-B5EE-076F4A6304D8}</Project>
+      <Project>{F1EFE84F-74EC-BEB8-FB7A-56CE279D6DF5}</Project>
       <Name>CW.Common</Name>
     </ProjectReference>
     <ProjectReference Include="LeanCommon.csproj">
-      <Project>{E06BED95-31A1-AE21-DB0A-16B80138EE0B}</Project>
+      <Project>{5907912C-13D4-B4C0-0FF3-B76631BAFAB0}</Project>
       <Name>LeanCommon</Name>
     </ProjectReference>
   </ItemGroup>

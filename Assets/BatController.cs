@@ -5,6 +5,7 @@ using UnityEngine;
 using Pathfinding;
 using System.Collections;
 using BasePatterns;
+using Unity.VisualScripting;
 
 public class BatController : MonoBehaviour
 {
@@ -188,27 +189,34 @@ public class BatController : MonoBehaviour
 
     public void Defeated()
     {
+        Debug.Log("Defeated() called");
         SoundPlayer.current.PlaySound(Sound.BAT_DEATH, transform);
 
         GetComponent<ReTime>().AddKeyFrame(
             g => g.GetComponent<BatController>().isDead = true,
             g => g.GetComponent<BatController>().isDead = false
         );
-        Debug.Log("Bat has been slain");
-        animator.SetBool("defeated", true);
+        Debug.Log("Bat has been slayed");
+        //animator.SetBool("defeated", true);
+        animator.SetTrigger("defeated"); 
 
         GetComponent<ReTime>().AddKeyFrame(g => ScoreManager.Instance.score += scorePoints, g => ScoreManager.Instance.score -= scorePoints);
 
+        StartCoroutine(BatDefeated());
     }
 
-    public void BatDefeated()
+    public IEnumerator BatDefeated()
     {
-        if (Game.IsRewinding) return;
-        animator.SetBool("defeated", false);
-        GetComponent<ReTime>().AddKeyFrame(
-            g => g.GetComponent<BatController>().batIsDead(),
-            g => g.GetComponent<BatController>().batIsAlive()
-        );
+        yield return new WaitForSeconds(0.7f);
+        Debug.Log("BatDefeated() called");
+        if (!Game.IsRewinding) 
+        {
+            //animator.SetBool("defeated", false);
+            GetComponent<ReTime>().AddKeyFrame(
+                g => g.GetComponent<BatController>().batIsDead(),
+                g => g.GetComponent<BatController>().batIsAlive()
+            );
+        }
     }
 
     public void batIsDead()

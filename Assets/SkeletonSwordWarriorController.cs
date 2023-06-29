@@ -258,9 +258,11 @@ public class SkeletonSwordWarriorController : MonoBehaviour
         );
         Debug.Log("Skeleton Sword Warrior has been slayed!");
         SoundPlayer.current.PlaySound(Sound.SKELETON_DEATH, transform);
-        animator.SetBool("defeated", true);
+        animator.SetTrigger("defeated");
 
         GetComponent<ReTime>().AddKeyFrame(g => ScoreManager.Instance.score += scorePoints, g => ScoreManager.Instance.score -= scorePoints);
+
+        StartCoroutine(RemoveEnemy());
     }
 
     public void ReceivedDamage(float val)
@@ -271,13 +273,16 @@ public class SkeletonSwordWarriorController : MonoBehaviour
         animator.SetTrigger("receivesDamage");
     }
 
-    public void RemoveEnemy()
+    public IEnumerator RemoveEnemy()
     { // called from inside "death"-animation
-        animator.SetBool("defeated", false);
-        GetComponent<ReTime>().AddKeyFrame(
-            g => g.GetComponent<SkeletonSwordWarriorController>().skeletonIsDead(),
-            g => g.GetComponent<SkeletonSwordWarriorController>().skeletonIsAlive()
-        );
+        yield return new WaitForSeconds(0.3f);
+        if (!Game.IsRewinding) { 
+            //animator.SetBool("defeated", false);
+            GetComponent<ReTime>().AddKeyFrame(
+                g => g.GetComponent<SkeletonSwordWarriorController>().skeletonIsDead(),
+                g => g.GetComponent<SkeletonSwordWarriorController>().skeletonIsAlive()
+            );
+        }
     }
 
     public void skeletonIsDead()
