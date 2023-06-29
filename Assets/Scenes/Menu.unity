@@ -1296,7 +1296,7 @@ GameObject:
   - component: {fileID: 1493903236}
   - component: {fileID: 1493903237}
   m_Layer: 0
-  m_Name: HighscoreList
+  m_Name: HighscoreManager
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

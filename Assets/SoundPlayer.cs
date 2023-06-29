@@ -2,6 +2,7 @@ using Lean.Transition;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Diagnostics;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -91,6 +92,11 @@ public class SoundPlayer : MonoBehaviour
 
     public void StopSound(PlayingSound sound)
     {
+        if (sound == null)
+        {
+            UnityEngine.Debug.Log("sound == null");
+            return;
+        }
         if (playingSounds.TryGetValue(sound, out var source))
         {
             source.Stop();

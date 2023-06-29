@@ -86,6 +86,7 @@ public class Game : MonoBehaviour
 
     public void LoadGame()
     {
+        Time.timeScale = 1;
         gameState = GameState.PENDING;
         OnGameLoad.Invoke();
 
@@ -99,18 +100,21 @@ public class Game : MonoBehaviour
         // Give some time so taht player can realize, then game over screen.
         yield return new WaitForSeconds(sec);
         f.Invoke();
+
     }
 
     public void StartGame()
     {
+
         gameState = GameState.RUNNING;
         Time.timeScale = 1;
         OnGameStart.Invoke();
+
     }
 
     public void NextLevel()
     {
-        GetComponent<ReTime>().AddKeyFrame(g => ScoreManager.Instance.score += scorePoints, g => ScoreManager.Instance.score -= scorePoints);
+        ScoreManager.score += scorePoints;
 
         Game.level++;
         Scene scene = SceneManager.GetActiveScene();
@@ -129,10 +133,10 @@ public class Game : MonoBehaviour
 
     IEnumerator EndGame()
     {
-        UnityEngine.Debug.Log("saving highscore " + ScoreManager.Instance.score);
+        UnityEngine.Debug.Log("saving highscore " + ScoreManager.score);
         if (HighscoreManager.Instance)
         {
-            HighscoreManager.Instance.addHighscore(ScoreManager.Instance.score);
+            HighscoreManager.Instance.addHighscore(ScoreManager.score);
         }
         else
         {
