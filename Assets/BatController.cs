@@ -5,25 +5,22 @@ using UnityEngine;
 using Pathfinding;
 using System.Collections;
 using BasePatterns;
-using UnityEngine.SocialPlatforms.Impl;
 
-public class BatController : MonoBehaviour, IController
+public class BatController : MonoBehaviour
 {
-    private Seeker seeker;
     private Animator animator;
+    private Seeker seeker;
     private SpriteRenderer spriteRenderer;
 
     private EnemyState state;
-    public float initialHealth = 3;
     public float chaseRange = 1;
     public float attackRange = 0.1F;
-    public float damage = 1;
     private float nextAttackTime;
     public float attackRate = 0.1F;
-    public float scorePoints = 10;
+    private bool isDead = false;
 
     // values for a* algorithm
-    public Transform targetPosition;
+    private Transform targetPosition;
     public float speed = 0.5F;
     public float nextWaypointDistance = 0.2F;
     public float updatePathTime = 2;
@@ -32,27 +29,27 @@ public class BatController : MonoBehaviour, IController
     private float sleepTime;
     public float distanceOffset = 2;
 
-    private Movement movement;
-    public Health health;
-
-
     public AudioSource TakeDamage;
-
-    private CircleCollider2D attackCollider;
-
-    Health IController.health { get => health; }
+    public BatAttack batAttack;    
+    private Movement movement;
 
     public void Start()
     {
         seeker = GetComponent<Seeker>();
         animator = GetComponent<Animator>();
         spriteRenderer = GetComponent<SpriteRenderer>();
-        attackCollider = GetComponent<CircleCollider2D>();
+
+        TakeDamage = GetComponentInChildren<AudioSource>();
 
         movement = new Movement(seeker, speed, nextWaypointDistance, updatePathTime);
-        health = new Health(initialHealth, ReceivedDamage, Defeated);
+        Health health = GetComponent<Health>();
+        if (health != null)
+        {
+            health.OnDeath.AddListener(Defeated);
+            health.OnHealthDecreaseBy.AddListener(ReceivedDamage);
+        }
 
-        movement.PreCalcPath(transform.position, targetPosition.position);
+        movement.PreCalcPath(transform.position, transform.position);
         state = EnemyState.Idle;
     }
 
@@ -73,7 +70,7 @@ public class BatController : MonoBehaviour, IController
 
         if (Game.current.IsRunning())
         {
-            if (!Game.IsRewinding)
+            if (!isDead && !Game.IsRewinding)
             {
                 switch (state)
                 {
@@ -96,45 +93,49 @@ public class BatController : MonoBehaviour, IController
 
     private void Idle()
     {
-        if (Vector3.Distance(transform.position, PlayerController.Instance.GetPosition()) < chaseRange)
+        if (Vector3.Distance(transform.position, targetPosition.position) < chaseRange)
         {
-            //Player within target range
             state = EnemyState.ChaseTarget;
+            return;
         }
-        else
+        if (Time.time > sleepTime)
         {
-            if (Time.time > sleepTime)
-            {
-                animator.SetBool("isMoving", false);
-            }
+            animator.SetBool("isMoving", false);
         }
     }
 
     private void ChaseTarget()
     {
+        if (GetComponent<ReTime>().isRewinding) return;
         Vector3 dir = movement.Move(transform.position, targetPosition.position);
         if (dir != Vector3.zero)
         {
             animator.SetBool("isMoving", true);
-            if (dir.x < 0)
+            if (dir.x < 0 && !spriteRenderer.flipX)
             {
-                spriteRenderer.flipX = true;
+                GetComponent<ReTime>().AddKeyFrame(
+                    g => g.GetComponent<SpriteRenderer>().flipX = true,
+                    g => g.GetComponent<SpriteRenderer>().flipX = false
+                );
             }
-            else if (dir.x > 0)
+            else if (dir.x > 0 && spriteRenderer.flipX)
             {
-                spriteRenderer.flipX = false;
+                GetComponent<ReTime>().AddKeyFrame(
+                    g => g.GetComponent<SpriteRenderer>().flipX = false,
+                    g => g.GetComponent<SpriteRenderer>().flipX = true
+                );
             }
         }
 
         // Move the bat
         transform.position += dir * Time.deltaTime;
 
-        if (Vector3.Distance(transform.position, PlayerController.Instance.GetPosition()) < attackRange)
+        if (Vector3.Distance(transform.position, targetPosition.position) < attackRange)
         {
             //Player inside attack range
             state = EnemyState.AttackTarget;
         }
-        else if (Vector3.Distance(transform.position, PlayerController.Instance.GetPosition()) + distanceOffset > chaseRange)
+        else if (Vector3.Distance(transform.position, targetPosition.position) + distanceOffset > chaseRange)
         {
             //Player outside of target range
             sleepTime = Time.time + timeUntilSleeping;
@@ -156,49 +157,63 @@ public class BatController : MonoBehaviour, IController
     // Called at begin of 'bat_attack' animation
     public void Attack()
     {
+        SoundPlayer.current.PlaySound(Sound.BAT_ATTACK);
         movement.LockMovement();
-        attackCollider.enabled = true;
+        if (spriteRenderer.flipX == true)
+        {
+            batAttack.AttackLeft();
+        } else
+        {
+            batAttack.AttackRight();
+        }
         StartCoroutine(EndAttack());
     }
 
-    // Called at end of 'bat_attack' animation
     public IEnumerator EndAttack()
     {
         yield return new WaitForSeconds(1);
-        attackCollider.enabled = false;
+        batAttack.StopAttack();
         movement.UnlockMovement();
     }
 
-    public void Defeated(float val)
-    {
-        TakeDamage.Play();
-        Debug.Log("Bat has been slayed");
-        animator.SetTrigger("defeated");
-
-        GetComponent<ReTime>().AddKeyFrame(g => ScoreManager.Instance.score += scorePoints, g => ScoreManager.Instance.score -= scorePoints);
-    }
     public void ReceivedDamage(float val)
     {
-        TakeDamage.Play();
-        Debug.Log("Bat received " + val + " damage");
-        animator.SetTrigger("receivesDamage");
+        SoundPlayer.current.PlaySound(Sound.BAT_DAMAGE, transform);
+
+        if (val <= 0) return;
+        Debug.Log("Bat received damage, its new health is: " + val);
+        animator.SetTrigger("receivesDamage"); 
     }
 
-    public void RemoveEnemy()
-    { // called from inside "death"-animation
-        //Destroy(gameObject);
-        gameObject.SetActive(false);
-    }
-
-    private void OnTriggerEnter2D(Collider2D collision)
+    public void Defeated()
     {
-        Debug.Log("OnTriggerEnter2D was called");
-        if (collision.tag == "Player")
-        {
-            //Deal damage to player
-            PlayerController player = collision.GetComponent<PlayerController>();
-            player.health.ReduceHealth(damage);
-        }
+        SoundPlayer.current.PlaySound(Sound.BAT_DEATH, transform);
+
+        isDead = true;
+        Debug.Log("Bat has been slayed");
+        animator.SetBool("defeated", true);
+    }
+
+    public void BatDefeated()
+    {
+        GetComponent<ReTime>().AddKeyFrame(
+            g => g.GetComponent<BatController>().batIsDead(),
+            g => g.GetComponent<BatController>().batIsAlive()
+        );
+    }
+
+    public void batIsDead()
+    {
+        gameObject.GetComponent<SpriteRenderer>().enabled = false;
+        gameObject.GetComponent<CircleCollider2D>().enabled = false;
+        animator.SetBool("defeated", false);
+    }
+
+    public void batIsAlive()
+    {
+        gameObject.GetComponent<SpriteRenderer>().enabled = true;
+        gameObject.GetComponent<CircleCollider2D>().enabled = true;
+        isDead = false;
     }
 
 }

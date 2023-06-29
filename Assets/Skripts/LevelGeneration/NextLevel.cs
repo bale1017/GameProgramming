@@ -1,41 +1,37 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class NextLevel : MonoBehaviour
 {
     private bool isTriggered = false;
+    public Sprite closeTrapDoor;
     public Sprite openTrapDoor;
 
     public void OnTriggerEnter2D(Collider2D collision)
     {
-        if (!isTriggered)
+        if (isTriggered && !Game.IsRewinding)
         {
-            this.GetComponent<SpriteRenderer>().sprite = openTrapDoor;
-            isTriggered = true;
+            Game.current.WinGame();
+            return;
         }
-        else
+        if (!TryGetComponent<ReTime>(out var retime))
         {
-            loadNextLevel();
+            retime = gameObject.AddComponent<ReTime>();
         }
-    }
-
-    private void loadNextLevel()
-    {
-        GameObject camera = GameObject.Find("Main Camera");
-        camera.GetComponentInChildren<SpriteRenderer>().enabled = true;
-        GenerateLevel generateLevel = GameObject.Find("Game").GetComponent<GenerateLevel>();
-        foreach (var obj in generateLevel.createdObjects)
-        {
-            Destroy(obj);
-        }
-        // move player and Camera
-        GameObject player = GameObject.Find("Player");
-        player.transform.position = new Vector2(-5, 0);
-        camera.transform.position = new Vector2(-5, 0);
-        generateLevel.level++;
-
-        generateLevel.GenerateLayout();
-        camera.GetComponentInChildren<SpriteRenderer>().enabled = false;
+        SoundPlayer.current.PlaySound(Sound.TRAPDOOR_OPEN, transform, 1f, 2f);
+        retime.AddKeyFrame(
+            g =>
+            {
+                g.GetComponent<SpriteRenderer>().sprite = openTrapDoor;
+                isTriggered = true;
+            },
+            g =>
+            {
+                g.GetComponent<SpriteRenderer>().sprite = closeTrapDoor;
+                isTriggered = false;
+            }
+        );
     }
 }

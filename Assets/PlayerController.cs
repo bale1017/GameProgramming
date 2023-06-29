@@ -7,13 +7,12 @@ using UnityEngine.InputSystem;
 using UnityEngine.InputSystem.Processors;
 using UnityEngine.UI;
 
-public class PlayerController : MonoBehaviour, IController
+public class PlayerController : MonoBehaviour
 {
     Animator animator;
     SpriteRenderer spriteRenderer;
     Rigidbody2D rb;
     public PlayerSwordAttack swordAttack; //import script
-    public Health health;
 
     Vector2 movementInput;
     public float moveSpeed = 1f;
@@ -22,13 +21,9 @@ public class PlayerController : MonoBehaviour, IController
     List<RaycastHit2D> castCollisions = new List<RaycastHit2D>();
     private bool canMove = true;
     private bool isDead = false;
-    public float healthAmount = 25;
 
-    public AudioSource TakeDamage;
-    public AudioSource Death;
-
-    public static PlayerController Instance { get; private set; }
-    Health IController.health { get => health; }
+    Health health;
+    PlayingSound running;
 
     // Start is called before the first frame update
     void Start()
@@ -36,14 +31,26 @@ public class PlayerController : MonoBehaviour, IController
         rb = GetComponent<Rigidbody2D>();
         animator = GetComponent<Animator>();
         spriteRenderer = GetComponent<SpriteRenderer>();
-        Instance = this;
-        health = new Health(healthAmount, ReceivedDamage, Defeated);
+
+        Health health = GetComponent<Health>();
+        health.OnDeath.AddListener(Defeated);
+        health.OnHealthDecreaseBy.AddListener(ReceivedDamage);
+        health.OnHealthChange.AddListener(UpdatePlayerHealthInGame);
+
+        if (Game.playerHealth != float.MinValue)
+        {
+            health.SetHealthOnLevelStart(Game.playerHealth);
+        }
+        else
+        {
+            Game.playerHealth = health.initHealth;
+        }
     }
 
     private void FixedUpdate()
     {
-        if (Game.current.IsRunning()) 
-        { 
+        if (Game.current.IsRunning())
+        {
             if (canMove && !isDead && !Game.IsRewinding)
             {
                 //If movement input is not 0, try to move
@@ -60,25 +67,44 @@ public class PlayerController : MonoBehaviour, IController
                     }
                     //set "moving" animation
                     animator.SetBool("isMoving", success);
+                    if (success && running == null)
+                    {
+                        running = SoundPlayer.current.PlaySound(Sound.PLAYER_RUNNING, transform.transform, 0.7f, 1f, true);
+                    } else if (!success && running != null)
+                    {
+                        SoundPlayer.current.StopSound(running);
+                        running = null;
+                    }
                 }
                 else
                 {
                     //set "idle" animation
                     animator.SetBool("isMoving", false);
+                    if (running != null)
+                    {
+                        SoundPlayer.current.StopSound(running);
+                        running = null;
+                    }
                 }
 
                 //Set direction of sprite to movemnet direction
-                if (movementInput.x < 0)
+                if (movementInput.x < 0 && !spriteRenderer.flipX)
                 {
-                    spriteRenderer.flipX = true;
+                    GetComponent<ReTime>().AddKeyFrame(
+                        g => g.GetComponent<SpriteRenderer>().flipX = true,
+                        g => g.GetComponent<SpriteRenderer>().flipX = false
+                    );
                 }
-                else if (movementInput.x > 0)
+                else if (movementInput.x > 0 && spriteRenderer.flipX)
                 {
-                    spriteRenderer.flipX = false;
+                    GetComponent<ReTime>().AddKeyFrame(
+                        g => g.GetComponent<SpriteRenderer>().flipX = false,
+                        g => g.GetComponent<SpriteRenderer>().flipX = true
+                    );
                 }
             }
+        }
     }
-}
 
     private bool TryMove(Vector2 direction)
     {
@@ -156,31 +182,29 @@ public class PlayerController : MonoBehaviour, IController
         canMove = true;
     }
 
-    public void Defeated(float val)
+    public void Defeated()
     {
-        var healthbar = GameObject.Find("HealthBar_Player").GetComponent<Slider>();
-        healthbar.value = 0;
         isDead = true;
         Debug.Log("Player has been defeated");
         // trigger death animation of player
         animator.SetBool("isMoving", false);
+        SoundPlayer.current.StopSound(running);
         animator.SetBool("defeated", true);
-        Death.Play();
+        SoundPlayer.current.PlaySound(Sound.PLAYER_DEATH);
         StartCoroutine(PlayerDefeated());
     }
 
     public void ReceivedDamage(float val)
     {
-        TakeDamage.Play();
+        // TakeDamage.Play();
+        SoundPlayer.current.PlaySound(Sound.PLAYER_DAMAGE);
         Debug.Log("Player received " + val + " damage");
         // trigger damage receiving animation of player
         animator.SetTrigger("receivesDamage");
-        var healthbar = GameObject.Find("HealthBar_Player").GetComponent<Slider>();
-        healthbar.value = health.GetHealth()/healthAmount;
     }
 
     public IEnumerator PlayerDefeated()
-    { 
+    {
         yield return new WaitForSeconds(1);
         GetComponent<SpriteRenderer>().enabled = false;
         GetComponent<BoxCollider2D>().enabled = false;
@@ -188,8 +212,8 @@ public class PlayerController : MonoBehaviour, IController
         Game.current.FailGame();
     }
 
-    public Vector3 GetPosition() 
+    public void UpdatePlayerHealthInGame(float health)
     {
-        return transform.position;
+        Game.playerHealth = health;
     }
 }

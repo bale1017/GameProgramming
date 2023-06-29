@@ -20,7 +20,7 @@ public class SkeletonSwordWarriorController : MonoBehaviour, IController
 
     private float nextAttackTime;
     private bool chooseAttackA = true;
-    public float scorePoints = 100;
+    public float scorePoints = 10;
 
     // values for a* algorithm
     public Transform targetPosition;

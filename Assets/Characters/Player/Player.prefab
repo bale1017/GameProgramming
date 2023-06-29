@@ -487,6 +487,7 @@ GameObject:
   - component: {fileID: 8303431347630341780}
   - component: {fileID: 9142519679611264784}
   - component: {fileID: 1507744289843872997}
+  - component: {fileID: 6668839162175184377}
   - component: {fileID: -6801898308520515085}
   - component: {fileID: 1718402103467401090}
   - component: {fileID: 3894965458839084759}
@@ -600,6 +601,33 @@ MonoBehaviour:
   m_DefaultActionMap: Player
   m_SplitScreenIndex: -1
   m_Camera: {fileID: 0}
+--- !u!114 &6668839162175184377
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7103884299703389329}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6c361e8106ad6014abb58268ccf14ba0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  initHealth: 25
+  maxHealth: 25
+  vulnerable: 1
+  OnHealthChange:
+    m_PersistentCalls:
+      m_Calls: []
+  OnHealthDecreaseBy:
+    m_PersistentCalls:
+      m_Calls: []
+  OnHealthIncreaseBy:
+    m_PersistentCalls:
+      m_Calls: []
+  OnDeath:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!114 &-6801898308520515085
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -629,7 +657,6 @@ MonoBehaviour:
     maxDepth: 0
     minNormalAngle: 0
     maxNormalAngle: 0
-  healthAmount: 25
   TakeDamage: {fileID: 4062612787869000377}
   Death: {fileID: 5439566440192674106}
 --- !u!50 &1718402103467401090

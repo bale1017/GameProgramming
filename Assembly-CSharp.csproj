@@ -58,7 +58,6 @@
     <Analyzer Include="C:\Program Files\Unity\Hub\Editor\2022.2.14f1\Editor\Data\Tools\Unity.SourceGenerators\Unity.Properties.SourceGenerator.dll" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Assets\RevanSwordAttackC.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\TMP_TextEventHandler.cs" />
     <Compile Include="Assets\ScoreManager.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\VertexShakeA.cs" />
@@ -71,6 +70,7 @@
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\DropdownSample.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\VertexColorCycler.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\EnvMapAnimator.cs" />
+    <Compile Include="Assets\BatAttack.cs" />
     <Compile Include="Assets\BatController.cs" />
     <Compile Include="Assets\PauseMenu.cs" />
     <Compile Include="Assets\ReTime\Demos\Checkpoint\GroundHit.cs" />
@@ -88,11 +88,10 @@
     <Compile Include="Assets\Behaviour.cs" />
     <Compile Include="Assets\Scenes\scripts\OptionsButton.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\VertexJitter.cs" />
-    <Compile Include="Assets\RevanSwordAttackA.cs" />
+    <Compile Include="Assets\Skripts\Torches\Torch.cs" />
     <Compile Include="Assets\Art\Pixel Art Top Down - Basic\Script\LayerTrigger.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\TMP_DigitValidator.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\TMP_FrameRateCounter.cs" />
-    <Compile Include="Assets\RevanSwordAttackB.cs" />
     <Compile Include="Assets\ReTime\Demos\Method Run\MethodRun.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\TextConsoleSimulator.cs" />
     <Compile Include="Assets\Skripts\LevelGeneration\GenerateLevel.cs" />
@@ -107,23 +106,28 @@
     <Compile Include="Assets\Skripts\LevelLoader.cs" />
     <Compile Include="Assets\Movement.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\VertexZoom.cs" />
+    <Compile Include="Assets\GraphHolder.cs" />
     <Compile Include="Assets\Art\Pixel Art Top Down - Basic\Script\TopDownCharacterController.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\Benchmark02.cs" />
     <Compile Include="Assets\Scenes\scripts\MouseoverSystem.cs" />
+    <Compile Include="Assets\KeyFramePlayer.cs" />
     <Compile Include="Assets\SkeletonSword.cs" />
     <Compile Include="Assets\Skripts\Camera\CameraMovement.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\TMP_TextSelector_B.cs" />
     <Compile Include="Assets\SpikeTrap.cs" />
+    <Compile Include="Assets\LevelTransition.cs" />
     <Compile Include="Assets\Scenes\scripts\HighscoreManager.cs" />
     <Compile Include="Assets\Skripts\LevelCounter.cs" />
     <Compile Include="Assets\Skripts\LevelGeneration\NextLevel.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\SkewTextExample.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\WarpTextExample.cs" />
+    <Compile Include="Assets\RevanSwordAttack.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\TextMeshProFloatingText.cs" />
     <Compile Include="Assets\Scenes\scripts\UiScaleOnHover.cs" />
     <Compile Include="Assets\Skripts\MapGenerator.cs" />
     <Compile Include="Assets\Scenes\scripts\HighscoreDisplay.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\ShaderPropAnimator.cs" />
+    <Compile Include="Assets\Skripts\HealthBar.cs" />
     <Compile Include="Assets\BossController.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\CameraController.cs" />
     <Compile Include="Assets\Skripts\Room.cs" />
@@ -136,6 +140,7 @@
     <Compile Include="Assets\ReTime\Core Scripts\ReTime.cs" />
     <Compile Include="Assets\Timer.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\TMP_TextInfoDebugTool.cs" />
+    <Compile Include="Assets\SoundPlayer.cs" />
     <Compile Include="Assets\Scenes\scripts\LoadLevelButton.cs" />
   </ItemGroup>
   <ItemGroup>

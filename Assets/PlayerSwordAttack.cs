@@ -3,7 +3,6 @@ using UnityEngine;
 
 public class PlayerSwordAttack : MonoBehaviour
 {
-    public AudioSource Slash;
     public float damage = 3;
     BoxCollider2D swordCollider;
     Vector2 rightAttackOffset;
@@ -17,8 +16,7 @@ public class PlayerSwordAttack : MonoBehaviour
 
     public void AttackRight()
     {
-        Slash.Play();
-        GetComponent<ReTime>().AddKeyFrameAudio(Slash);
+        SoundPlayer.current.PlaySound(Sound.PLAYER_SWORD_SLASH);
         Debug.Log("Sword attack right");
         transform.localPosition = rightAttackOffset;
         swordCollider.enabled = true;
@@ -26,7 +24,7 @@ public class PlayerSwordAttack : MonoBehaviour
 
     public void AttackLeft()
     {
-        Slash.Play();
+        SoundPlayer.current.PlaySound(Sound.PLAYER_SWORD_SLASH);
         Debug.Log("Sword attack left");
         transform.localPosition = new Vector3(rightAttackOffset.x * -1, rightAttackOffset.y);
         swordCollider.enabled = true;
@@ -42,10 +40,10 @@ public class PlayerSwordAttack : MonoBehaviour
         if (collision.tag == "Enemy")
         {
             //Deal damage to enemy
-            IController enemy = collision.GetComponent<IController>();
+            Health enemy = collision.GetComponent<Health>();
             if (enemy != null)
             {
-                enemy.health.ReduceHealth(damage);
+                enemy.AffectHealth(-damage);
             }
         }
     }

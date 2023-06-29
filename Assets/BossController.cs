@@ -5,7 +5,7 @@ using System;
 using System.Collections;
 using UnityEngine.UI;
 
-public class BossController : MonoBehaviour, IController
+public class BossController : MonoBehaviour
 {
     private Seeker seeker;
     private Animator animator;
@@ -13,34 +13,35 @@ public class BossController : MonoBehaviour, IController
 
     // generic values and values for state machine
     private EnemyState state;
-    public float initialHealth = 30;
-    public float chaseRange = 1000;
+    public float chaseRange = 4;
+    public float distanceOffset = 10;
     public float attackRangeX = 0.45F;
     public float attackRangeY = 0.1F;
     public float damage = 6;
     public float timeToNextAttack = 2;
     public float attackAnimationSpeed = 0.8F;
     public float rewindTimeInSec = 3;
+    public float offsetUntilNextRewind = 10;
+    public float chancesOfRewind = 16;
 
     private bool isFirstPhase = true;
     private float nextAttackTime;
+    private float nextRewindTime;
     private int randAttack;
     private bool activatedUI = false;
     private bool revanIsRewinding = false;
 
     // values for a* algorithm
-    public Transform targetPosition;
+    private Transform targetPosition;
     public float speed = 0.6F;
     public float nextWaypointDistance = 0.2F;
     public float updatePathTime = 2;
 
+    private Health health;
     private Movement movement;
-    public Health health;
-    public RevanSwordAttackA attackA;
-    public RevanSwordAttackB attackB;
-    public RevanSwordAttackC attackC;
-
-    Health IController.health { get => health; }
+    public RevanSwordAttack attackA;
+    public RevanSwordAttack attackB;
+    public RevanSwordAttack attackC;
 
     // Start is called before the first frame update
     void Start()
@@ -50,10 +51,16 @@ public class BossController : MonoBehaviour, IController
         spriteRenderer = GetComponent<SpriteRenderer>();
 
         movement = new Movement(seeker, speed, nextWaypointDistance, updatePathTime);
-        health = new Health(initialHealth, ReceivedDamage, Defeated);
+        health = GetComponent<Health>();
+        if (health == null)
+        {
+            health = gameObject.AddComponent<Health>();
+        }
+        health.OnDeath.AddListener(Defeated);
+        health.OnHealthDecreaseBy.AddListener(ReceivedDamage);
 
         animator.SetFloat("attackAnimationSpeed", attackAnimationSpeed);
-        movement.PreCalcPath(transform.position, targetPosition.position);
+        movement.PreCalcPath(transform.position, transform.position);
         state = EnemyState.Idle;
     }
 
@@ -104,7 +111,7 @@ public class BossController : MonoBehaviour, IController
     private void Idle()
     {
         //Debug.Log("Revan in Idle State");
-        if (Vector3.Distance(transform.position, PlayerController.Instance.GetPosition()) < chaseRange)
+        if (Vector3.Distance(transform.position, targetPosition.position) < chaseRange)
         {
             //Player within target range
             state = EnemyState.ChaseTarget;
@@ -119,14 +126,17 @@ public class BossController : MonoBehaviour, IController
     private void ChaseTarget()
     {
         //Debug.Log("Revan in Chase State");
-        Vector3 dir = movement.Move(transform.position, PlayerController.Instance.GetPosition());
+        Vector3 dir = movement.Move(transform.position, targetPosition.position);
         //Debug.Log(dir);
         Move(dir);
-        if (Math.Abs(transform.position.x - PlayerController.Instance.GetPosition().x) < attackRangeX &&
-            Math.Abs(transform.position.y - PlayerController.Instance.GetPosition().y) < attackRangeY)
+        if (Math.Abs(transform.position.x - targetPosition.position.x) < attackRangeX &&
+            Math.Abs(transform.position.y - targetPosition.position.y) < attackRangeY)
         {
             //Player inside attack range
             state = EnemyState.AttackTarget;
+        } else if (Vector3.Distance(transform.position, targetPosition.position) > chaseRange + distanceOffset)
+        {
+            state = EnemyState.Idle;
         }
     }
 
@@ -155,8 +165,15 @@ public class BossController : MonoBehaviour, IController
 
             nextAttackTime = Time.time + timeToNextAttack;
         }
-        if (Math.Abs(transform.position.x - PlayerController.Instance.GetPosition().x) >= attackRangeX ||
-            Math.Abs(transform.position.y - PlayerController.Instance.GetPosition().y) >= attackRangeY)
+
+        if (!isFirstPhase && UnityEngine.Random.Range(0, chancesOfRewind) == 0 && 
+            health.GetHealth() < health.initHealth * 0.25f && Time.deltaTime > nextRewindTime)
+        {
+            StartCoroutine(Rewind());
+        }
+
+        if (Math.Abs(transform.position.x - targetPosition.position.x) >= attackRangeX ||
+            Math.Abs(transform.position.y - targetPosition.position.y) >= attackRangeY)
         {
             state = EnemyState.Idle;
         }
@@ -164,17 +181,25 @@ public class BossController : MonoBehaviour, IController
 
     private void Move(Vector3 dir)
     {
-        if(!Movement.Equal(dir, Vector3.zero))
+        if (GetComponent<ReTime>().isRewinding) return;
+        if (!Movement.Equal(dir, Vector3.zero))
         {
             animator.SetBool("isMoving", true);
 
             //switch direction depending of the position of the next waypoint
-            if (dir.x <= 0)
+            if (dir.x < 0 && !spriteRenderer.flipX)
             {
-                spriteRenderer.flipX = true;
-            } else if (dir.x > 0)
+                GetComponent<ReTime>().AddKeyFrame(
+                    g => g.GetComponent<SpriteRenderer>().flipX = true,
+                    g => g.GetComponent<SpriteRenderer>().flipX = false
+                );
+            }
+            else if (dir.x > 0 && spriteRenderer.flipX)
             {
-                spriteRenderer.flipX = false;
+                GetComponent<ReTime>().AddKeyFrame(
+                    g => g.GetComponent<SpriteRenderer>().flipX = false,
+                    g => g.GetComponent<SpriteRenderer>().flipX = true
+                );
             }
 
             //Move Revan
@@ -241,6 +266,7 @@ public class BossController : MonoBehaviour, IController
 
         Game.current.StopRewind();
         animator.SetBool("isRewinding", false);
+        nextRewindTime = Time.deltaTime + offsetUntilNextRewind;
         health.MakeVulnerable();
         revanIsRewinding = false;
     }
@@ -249,24 +275,34 @@ public class BossController : MonoBehaviour, IController
     {
         Debug.Log("Revan received " + val + " damage!");
         animator.SetTrigger("receivesDamage");
-
-        var healthbar = GameObject.Find("HealthBar_Revan").GetComponent<Slider>();
-        healthbar.value = health.GetHealth()/initialHealth;
     }
 
-    private void Defeated(float val)
+    private void Defeated()
     {
-        var healthbar = GameObject.Find("HealthBar_Revan").GetComponent<Slider>();
-        healthbar.value = 0;
-
         if (!isFirstPhase)
         {
             Debug.Log("Revan has been slayed!");
-            animator.SetBool("defeated", true);
+            GetComponent<ReTime>().AddKeyFrame(
+                g => g.GetComponent<BossController>().batIsDead(),
+                g => g.GetComponent<BossController>().batIsAlive()
+            );
         } else
         {
             //It's rewind time!
             StartCoroutine(Rewind());
         }
+    }
+
+    public void batIsDead()
+    {
+        gameObject.GetComponent<SpriteRenderer>().enabled = false;
+        gameObject.GetComponent<BoxCollider2D>().enabled = false;
+        animator.SetBool("defeated", false);
+    }
+
+    public void batIsAlive()
+    {
+        gameObject.GetComponent<SpriteRenderer>().enabled = true;
+        gameObject.GetComponent<BoxCollider2D>().enabled = true;
     }
 }

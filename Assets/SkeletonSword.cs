@@ -36,8 +36,8 @@ public class SkeletonSword : MonoBehaviour
         if (collision.tag == "Player")
         {
             //Deal damage to player
-            PlayerController player = collision.GetComponent<PlayerController>();
-            player.health.ReduceHealth(damage);
+            Health player = collision.GetComponent<Health>();
+            player.AffectHealth(-damage);
         }
     }
 }
