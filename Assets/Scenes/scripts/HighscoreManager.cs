@@ -65,9 +65,9 @@ public class HighscoreManager : MonoBehaviour
                 Debug.Log("highscore didnt exists so create new ones");
 
                 addHighscore(1234);
-                addHighscore(2345);
-                addHighscore(3456);
                 addHighscore(1);
+                addHighscore(7);
+                addHighscore(13);
 
                 savedHighscores.list = Highscores;
                 XmlSerializer serializer = new XmlSerializer(typeof(SavedHighscores));

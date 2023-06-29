@@ -162,6 +162,7 @@ MonoBehaviour:
   attackRange: 0.27
   damage: 2
   attackRate: 2
+  scorePoints: 10
   speed: 0.2
   nextWaypointDistance: 0.2
   updatePathTime: 2
@@ -251,6 +252,7 @@ MonoBehaviour:
   initHealth: 3
   maxHealth: 3
   vulnerable: 1
+  health: 0
   OnHealthChange:
     m_PersistentCalls:
       m_Calls: []

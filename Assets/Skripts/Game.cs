@@ -133,6 +133,12 @@ public class Game : MonoBehaviour
 
     IEnumerator EndGame()
     {
+        yield return new WaitForSeconds(1);
+        OnLevelEnd.Invoke();
+    }
+
+    public void FailGame()
+    {
         UnityEngine.Debug.Log("saving highscore " + ScoreManager.score);
         if (HighscoreManager.Instance)
         {
@@ -142,12 +148,7 @@ public class Game : MonoBehaviour
         {
             UnityEngine.Debug.Log("error saving highscore");
         }
-        yield return new WaitForSeconds(1);
-        OnLevelEnd.Invoke();
-    }
 
-    public void FailGame()
-    {
         gameState = GameState.FAILURE;
         Game.level = 1;
         Game.playerHealth = float.MinValue;
