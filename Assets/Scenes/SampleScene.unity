@@ -22894,36 +22894,37 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   maxDistance: 3
-  panRange: 2
   soundFileArray:
-  - sound: 0
+  - sound: 1
     clip: {fileID: 8300000, guid: 3eb0f12f4a78f544c8e1dfe223a309ce, type: 3}
-  - sound: 7
-    clip: {fileID: 8300000, guid: c255d683d40eae04fb7fdba50b9ca7e1, type: 3}
   - sound: 8
-    clip: {fileID: 8300000, guid: 5b0f7c61baf9d7540b1c40870d979da7, type: 3}
+    clip: {fileID: 8300000, guid: c255d683d40eae04fb7fdba50b9ca7e1, type: 3}
   - sound: 9
-    clip: {fileID: 8300000, guid: 5d8aa5a2045e9b24aa0c0bfed1a642da, type: 3}
+    clip: {fileID: 8300000, guid: 5b0f7c61baf9d7540b1c40870d979da7, type: 3}
   - sound: 10
-    clip: {fileID: 8300000, guid: fa349ed8cf0a2324884037cd79b7dbef, type: 3}
-  - sound: 4
-    clip: {fileID: 8300000, guid: e16b72032ec560344a9ad83fbca08979, type: 3}
-  - sound: 3
-    clip: {fileID: 8300000, guid: c8dd0795ad2a07e47a0daf7f283cdb90, type: 3}
-  - sound: 16
-    clip: {fileID: 8300000, guid: 6b09f74bfe751294b9b7c8141169b81c, type: 3}
-  - sound: 15
-    clip: {fileID: 8300000, guid: 7a33bd70a52372546b501fef5975cf07, type: 3}
-  - sound: 6
-    clip: {fileID: 8300000, guid: 5690daa11bb1d4445952c67e649ddd12, type: 3}
-  - sound: 13
-    clip: {fileID: 8300000, guid: f32a84ff861de29478fd87d9b2778449, type: 3}
+    clip: {fileID: 8300000, guid: 5d8aa5a2045e9b24aa0c0bfed1a642da, type: 3}
   - sound: 11
-    clip: {fileID: 8300000, guid: 59cd3db3c17b75e4da447cc74a71e922, type: 3}
-  - sound: 12
-    clip: {fileID: 8300000, guid: 11795519ac2549c428b571ffff638f90, type: 3}
+    clip: {fileID: 8300000, guid: fa349ed8cf0a2324884037cd79b7dbef, type: 3}
+  - sound: 5
+    clip: {fileID: 8300000, guid: e16b72032ec560344a9ad83fbca08979, type: 3}
+  - sound: 4
+    clip: {fileID: 8300000, guid: c8dd0795ad2a07e47a0daf7f283cdb90, type: 3}
   - sound: 17
+    clip: {fileID: 8300000, guid: 6b09f74bfe751294b9b7c8141169b81c, type: 3}
+  - sound: 16
+    clip: {fileID: 8300000, guid: 7a33bd70a52372546b501fef5975cf07, type: 3}
+  - sound: 7
+    clip: {fileID: 8300000, guid: 5690daa11bb1d4445952c67e649ddd12, type: 3}
+  - sound: 14
+    clip: {fileID: 8300000, guid: f32a84ff861de29478fd87d9b2778449, type: 3}
+  - sound: 12
+    clip: {fileID: 8300000, guid: 59cd3db3c17b75e4da447cc74a71e922, type: 3}
+  - sound: 13
+    clip: {fileID: 8300000, guid: 11795519ac2549c428b571ffff638f90, type: 3}
+  - sound: 18
     clip: {fileID: 8300000, guid: 9355f396a32d12445a457bafdc73269c, type: 3}
+  - sound: 0
+    clip: {fileID: 8300000, guid: bd45579a1d210224c977c69faf0fb2ca, type: 3}
 --- !u!1 &1970198575
 GameObject:
   m_ObjectHideFlags: 0
