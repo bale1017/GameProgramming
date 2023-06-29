@@ -1,5 +1,6 @@
 using System;
 using System.Runtime.ConstrainedExecution;
+using Unity.Collections;
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -8,6 +9,7 @@ public class Health : MonoBehaviour
     public float initHealth = 1;
     public float maxHealth = 1;
     public bool vulnerable = true;
+    [SerializeField]
     private float health;
     private bool updatedPlayerHealth = false;
     public UnityEvent<float> OnHealthChange;
@@ -32,18 +34,18 @@ public class Health : MonoBehaviour
     {
         if (!vulnerable) return;
         Debug.Log("Reduce total health of " + health + " by " + val);
-        if (health + val < 0)
+        if (health + val <= 0)
         {
             float cur = health;
             GetComponent<ReTime>().AddKeyFrame(
                 g => {
-                    health = 0;
+                    g.GetComponent<Health>().health = 0;
                     OnHealthChange.Invoke(0);
                     OnHealthDecreaseBy.Invoke(cur);
                     OnDeath.Invoke();
                 },
                 g => {
-                    health = cur;
+                    g.GetComponent<Health>().health = cur;
                     OnHealthChange.Invoke(health);
                     OnHealthIncreaseBy.Invoke(cur);
                 }
@@ -55,12 +57,12 @@ public class Health : MonoBehaviour
             float cur = health;
             GetComponent<ReTime>().AddKeyFrame(
                 g => {
-                    health = maxHealth;
+                    g.GetComponent<Health>().health = maxHealth;
                     OnHealthChange.Invoke(maxHealth);
                     OnHealthIncreaseBy.Invoke(maxHealth - cur);
                 },
                 g => {
-                    health = cur;
+                    g.GetComponent<Health>().health = cur;
                     OnHealthChange.Invoke(health);
                     OnHealthDecreaseBy.Invoke(maxHealth - cur);
                 }
@@ -86,7 +88,7 @@ public class Health : MonoBehaviour
             } else {
                 retime.AddKeyFrame(
                     increase, g => {
-                        health -= val;
+                        g.GetComponent<Health>().health -= val;
                         OnHealthChange.Invoke(health);
                     }
                 );

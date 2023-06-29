@@ -68,7 +68,7 @@ public class BatController : MonoBehaviour
         }
         targetPosition = closestTarget.transform;
 
-        if (Game.current.IsRunning())
+        if (Game.current.IsRunning() && !Game.IsRewinding)
         {
             if (!isDead && !Game.IsRewinding)
             {
@@ -106,7 +106,7 @@ public class BatController : MonoBehaviour
 
     private void ChaseTarget()
     {
-        if (GetComponent<ReTime>().isRewinding) return;
+        if (Game.IsRewinding) return;
         Vector3 dir = movement.Move(transform.position, targetPosition.position);
         if (dir != Vector3.zero)
         {
@@ -157,6 +157,7 @@ public class BatController : MonoBehaviour
     // Called at begin of 'bat_attack' animation
     public void Attack()
     {
+        if (Game.IsRewinding) return;
         SoundPlayer.current.PlaySound(Sound.BAT_ATTACK);
         movement.LockMovement();
         if (spriteRenderer.flipX == true)
@@ -181,7 +182,6 @@ public class BatController : MonoBehaviour
         SoundPlayer.current.PlaySound(Sound.BAT_DAMAGE, transform);
 
         if (val <= 0) return;
-        Debug.Log("Bat received damage, its new health is: " + val);
         animator.SetTrigger("receivesDamage"); 
     }
 
@@ -189,13 +189,18 @@ public class BatController : MonoBehaviour
     {
         SoundPlayer.current.PlaySound(Sound.BAT_DEATH, transform);
 
-        isDead = true;
+        GetComponent<ReTime>().AddKeyFrame(
+            g => g.GetComponent<BatController>().isDead = true,
+            g => g.GetComponent<BatController>().isDead = false
+        );
         Debug.Log("Bat has been slayed");
         animator.SetBool("defeated", true);
     }
 
     public void BatDefeated()
     {
+        if (Game.IsRewinding) return;
+        animator.SetBool("defeated", false);
         GetComponent<ReTime>().AddKeyFrame(
             g => g.GetComponent<BatController>().batIsDead(),
             g => g.GetComponent<BatController>().batIsAlive()
@@ -206,14 +211,12 @@ public class BatController : MonoBehaviour
     {
         gameObject.GetComponent<SpriteRenderer>().enabled = false;
         gameObject.GetComponent<CircleCollider2D>().enabled = false;
-        animator.SetBool("defeated", false);
     }
 
     public void batIsAlive()
     {
         gameObject.GetComponent<SpriteRenderer>().enabled = true;
         gameObject.GetComponent<CircleCollider2D>().enabled = true;
-        isDead = false;
     }
 
 }
