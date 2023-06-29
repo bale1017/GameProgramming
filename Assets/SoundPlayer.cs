@@ -50,6 +50,12 @@ public struct SoundPair
 }
 
 public class PlayingSound {
+    public AudioSource source;
+
+    public PlayingSound(AudioSource source)
+    {
+        this.source = source;
+    }   
 }
 
 public class SoundPlayer : MonoBehaviour
@@ -118,15 +124,13 @@ public class SoundPlayer : MonoBehaviour
 
     public PlayingSound PlaySound(Sound sound, Transform at, float pitch, float volume, bool loop)
     {
-        if (at.gameObject.TryGetComponent<ReTime>(out var retime))
-        {
-        }
+        // TODO rewind sounds
         return PlaySoundAsKeyFrame(sound, at, pitch, volume, loop);
     }
 
     public PlayingSound PlaySoundAsKeyFrame(Sound sound, Transform at, float pitch, float volume, bool loop)
     {
-        if (!soundFiles.TryGetValue(sound, out var clip)) return new PlayingSound();
+        if (!soundFiles.TryGetValue(sound, out var clip)) return new PlayingSound(null);
 
         PlayerInput input = FindAnyObjectByType<PlayerInput>();
         if (input == null)
@@ -148,7 +152,7 @@ public class SoundPlayer : MonoBehaviour
         source.maxDistance = global ? float.MaxValue : maxDistance;
         source.Play();
 
-        PlayingSound p = new();
+        PlayingSound p = new(source);
         playingSounds[p] = source;
 
         if (!loop)
