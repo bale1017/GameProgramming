@@ -2,6 +2,7 @@ using Lean.Transition;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Diagnostics;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -40,6 +41,8 @@ public enum Sound
 
     TORCH_CRACKLING,
     FOUNTAIN_SPLASHING,
+
+    BACKGROUND_MUSIC,
 }
 
 [Serializable]
@@ -89,6 +92,11 @@ public class SoundPlayer : MonoBehaviour
 
     public void StopSound(PlayingSound sound)
     {
+        if (sound == null)
+        {
+            UnityEngine.Debug.Log("sound == null");
+            return;
+        }
         if (playingSounds.TryGetValue(sound, out var source))
         {
             source.Stop();
@@ -120,6 +128,11 @@ public class SoundPlayer : MonoBehaviour
     public PlayingSound PlaySound(Sound sound, Transform at, bool loop)
     {
         return PlaySound(sound, at, 1, 1, loop);
+    }
+
+    public PlayingSound PlaySound(Sound sound, float volume, bool loop)
+    {
+        return PlaySound(sound, transform, 1, volume, loop);
     }
 
     public PlayingSound PlaySound(Sound sound, Transform at, float pitch, float volume, bool loop)
