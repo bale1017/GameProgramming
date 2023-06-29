@@ -24,10 +24,16 @@ public class HealthBar : MonoBehaviour
         };
         a(health.initHealth);
         health.OnHealthChange.AddListener(a);
+        StartCoroutine(UpdateHealthBarOnLevelStart());
     }
 
-    public void UpdateHealthBarOnLevelStart(float _health)
+    public IEnumerator UpdateHealthBarOnLevelStart()
     {
-        //slider.value = _health / health.maxHealth;  //adapt value at beginning of next level
+        yield return new WaitForFixedUpdate();
+        var _health = health.GetHealth();
+        if (_health > 0)
+        {
+            slider.value = _health / health.maxHealth;  //adapt value at beginning of next level
+        }
     }
 }

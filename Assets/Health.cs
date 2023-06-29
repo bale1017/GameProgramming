@@ -115,6 +115,6 @@ public class Health : MonoBehaviour
     {
         health = _health;
         updatedPlayerHealth = true;
-        GameObject.Find("HealthBar_Player").GetComponent<HealthBar>().UpdateHealthBarOnLevelStart(_health);
+        //GameObject.Find("HealthBar_Player").GetComponent<HealthBar>().UpdateHealthBarOnLevelStart(_health);
     }
 }

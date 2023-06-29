@@ -17,6 +17,7 @@ public class SkeletonSwordWarriorController : MonoBehaviour
     public float damage = 5;
     public float attackRate = 0.1F;
 
+    private bool isAttacking = false;
     private float nextAttackTime;
     private bool chooseAttackA = true;
     private bool isDead = false;
@@ -179,6 +180,7 @@ public class SkeletonSwordWarriorController : MonoBehaviour
                 //use attack A
                 SoundPlayer.current.PlaySound(Sound.SKELETON_SWORD_SLASH_FAST, transform);
                 animator.SetTrigger("isAttackingA");
+                StartCoroutine(Attack());
                 chooseAttackA = false;
             }
             else
@@ -186,6 +188,7 @@ public class SkeletonSwordWarriorController : MonoBehaviour
                 //use attack B
                 SoundPlayer.current.PlaySound(Sound.SKELETON_SWORD_SLASH_FAST, transform);
                 animator.SetTrigger("isAttackingB");
+                StartCoroutine(Attack());
                 chooseAttackA = true;
             }
 
@@ -229,8 +232,10 @@ public class SkeletonSwordWarriorController : MonoBehaviour
     }
 
     // Called at begin of attack animation
-    public void Attack()
+    public IEnumerator Attack()
     {
+        isAttacking = true;
+        yield return new WaitForSeconds(0.3f);
         movement.LockMovement();
         if (spriteRenderer.flipX == true)
         {
@@ -245,6 +250,7 @@ public class SkeletonSwordWarriorController : MonoBehaviour
     // Called at end of attack animation
     public IEnumerator EndAttack()
     {
+        isAttacking = false;
         yield return new WaitForSeconds(1);
         skeletonSword.StopAttack();
         movement.UnlockMovement();
@@ -269,8 +275,11 @@ public class SkeletonSwordWarriorController : MonoBehaviour
     {
         if (val <= 0) return;
         Debug.Log("Skeleton Sword Warrior received " + val + " damage!");
-        SoundPlayer.current.PlaySound(Sound.SKELETON_DAMAGE, transform);
-        animator.SetTrigger("receivesDamage");
+        if (!isAttacking)
+        {
+            SoundPlayer.current.PlaySound(Sound.SKELETON_DAMAGE, transform);
+            animator.SetTrigger("receivesDamage");
+        }
     }
 
     public IEnumerator RemoveEnemy()

@@ -25,6 +25,7 @@ public class BossController : MonoBehaviour
     public float chancesOfRewind = 16;
     public int scorePoints = 25;
 
+    private bool isAttacking = false;
     private bool isDead = false;
     private bool isFirstPhase = true;
     private float nextAttackTime;
@@ -155,14 +156,17 @@ public class BossController : MonoBehaviour
             {
                 //use attack A
                 animator.SetTrigger("isAttackingA");
+                StartCoroutine(Attack());
             } else if (randAttack == 1)
             {
                 //use attack B
                 animator.SetTrigger("isAttackingB");
+                StartCoroutine(Attack());
             } else
             {
                 //use attack C
                 animator.SetTrigger("isAttackingC");
+                StartCoroutine(Attack());
             }
 
             nextAttackTime = Time.time + timeToNextAttack;
@@ -209,8 +213,10 @@ public class BossController : MonoBehaviour
         }
     }
 
-    public void Attack()
+    public IEnumerator Attack()
     {
+        isAttacking = true;
+        yield return new WaitForSeconds(0.3f);
         movement.LockMovement();
         if (randAttack == 0)
         {
@@ -247,6 +253,7 @@ public class BossController : MonoBehaviour
 
     public IEnumerator EndAttack()
     {
+        isAttacking = false;
         yield return new WaitForSeconds(1);
         movement.UnlockMovement();
         attackA.StopAttack();
@@ -276,7 +283,10 @@ public class BossController : MonoBehaviour
     private void ReceivedDamage(float val)
     {
         Debug.Log("Revan received " + val + " damage!");
-        animator.SetTrigger("receivesDamage");
+        if (!isAttacking)
+        {
+            animator.SetTrigger("receivesDamage");
+        }
     }
 
     private void Defeated()

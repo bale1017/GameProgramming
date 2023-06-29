@@ -27,6 +27,7 @@ public class BatController : MonoBehaviour
     public float nextWaypointDistance = 0.2F;
     public float updatePathTime = 2;
 
+    private bool isAttacking = false;
     public float timeUntilSleeping = 2;
     private float sleepTime;
     public float distanceOffset = 2;
@@ -151,15 +152,17 @@ public class BatController : MonoBehaviour
         if (Time.time > nextAttackTime)
         {
             animator.SetTrigger("isAttacking");
+            StartCoroutine(Attack());
             nextAttackTime = Time.time + attackRate;
             state = EnemyState.ChaseTarget;
         }
     }
 
     // Called at begin of 'bat_attack' animation
-    public void Attack()
+    public IEnumerator Attack()
     {
-        if (Game.IsRewinding) return;
+        isAttacking = true;
+        yield return new WaitForSeconds(0.4f);
         SoundPlayer.current.PlaySound(Sound.BAT_ATTACK);
         movement.LockMovement();
         if (spriteRenderer.flipX == true)
@@ -174,6 +177,7 @@ public class BatController : MonoBehaviour
 
     public IEnumerator EndAttack()
     {
+        isAttacking = false;
         yield return new WaitForSeconds(1);
         batAttack.StopAttack();
         movement.UnlockMovement();
