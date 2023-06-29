@@ -38,6 +38,7 @@ public enum Sound
     UI_WHOOSH,
 
     TORCH_CRACKLING,
+    FOUNTAIN_SPLASHING,
 }
 
 [Serializable]
@@ -123,11 +124,7 @@ public class SoundPlayer : MonoBehaviour
             throw new Exception("Cannot play sound at location while no player exists.");
 
         bool global = at == transform;
-        float dist = (at.position - input.transform.position).magnitude;
-        if (!global && dist > maxDistance)
-        {
-            return new PlayingSound();
-        }
+        
         GameObject audio = new();
         DontDestroyOnLoad(audio);
         audio.transform.SetParent(at, false);
@@ -139,6 +136,7 @@ public class SoundPlayer : MonoBehaviour
         source.spatialize = !global;
         source.spatialBlend = 1;
         source.maxDistance = global ? float.MaxValue : maxDistance;
+        // source.rolloffMode = AudioRolloffMode.Custom;
         source.Play();
 
         PlayingSound p = new();

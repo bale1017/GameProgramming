@@ -1603,6 +1603,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: Skeleton
       objectReference: {fileID: 0}
+    - target: {fileID: 256516355802191914, guid: dfe0c577415da6649a7df8d86a9f9373,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 2130549007094471076, guid: dfe0c577415da6649a7df8d86a9f9373,
         type: 3}
       propertyPath: m_RootOrder
