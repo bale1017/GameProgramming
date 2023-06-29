@@ -3,6 +3,7 @@ using Lean.Transition.Method;
 using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Threading;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -58,16 +59,18 @@ public class PauseMenu : MonoBehaviour
     }
     public void GoToMainMenu()
     {
-        UnityEngine.Debug.Log("saving highscore " + ScoreManager.Instance.score);
+        UnityEngine.Debug.Log("saving highscore " + ScoreManager.score);
         if (HighscoreManager.Instance)
         {
-            HighscoreManager.Instance.addHighscore(ScoreManager.Instance.score);
+            HighscoreManager.Instance.addHighscore(ScoreManager.score);
         }
         else
         {
             UnityEngine.Debug.Log("error saving highscore");
         }
 
+        Time.timeScale = 1;
+        Game.level = 1;
         SceneManager.LoadScene("Menu");
     }
     public void Exit()

@@ -260,7 +260,7 @@ public class SkeletonSwordWarriorController : MonoBehaviour
         SoundPlayer.current.PlaySound(Sound.SKELETON_DEATH, transform);
         animator.SetBool("defeated", true);
 
-        GetComponent<ReTime>().AddKeyFrame(g => ScoreManager.Instance.score += scorePoints, g => ScoreManager.Instance.score -= scorePoints);
+        GetComponent<ReTime>().AddKeyFrame(g => ScoreManager.score += scorePoints, g => ScoreManager.score -= scorePoints);
     }
 
     public void ReceivedDamage(float val)
