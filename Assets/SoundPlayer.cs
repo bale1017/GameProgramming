@@ -36,6 +36,8 @@ public enum Sound
     TRAPDOOR_OPEN,
 
     UI_WHOOSH,
+
+    TORCH_CRACKLING,
 }
 
 [Serializable]

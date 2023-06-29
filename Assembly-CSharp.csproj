@@ -87,6 +87,7 @@
     <Compile Include="Assets\Behaviour.cs" />
     <Compile Include="Assets\Scenes\scripts\OptionsButton.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\VertexJitter.cs" />
+    <Compile Include="Assets\Skripts\Torches\Torch.cs" />
     <Compile Include="Assets\Art\Pixel Art Top Down - Basic\Script\LayerTrigger.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\TMP_DigitValidator.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\TMP_FrameRateCounter.cs" />
