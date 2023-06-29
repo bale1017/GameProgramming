@@ -57,10 +57,6 @@ public class GenerateLevel : MonoBehaviour
 
         }
 
-        for (int i = 0; i < roomAmount; i++)
-        {
-            Debug.Log("Interior with index " + i + ":" + interiors[i].name);
-        }
 
         List<(int, int)> roomList = new List<(int, int)>();
         var spawnBossRoom = 0;
@@ -82,7 +78,6 @@ public class GenerateLevel : MonoBehaviour
         int minX = 0;
         int maxY = 0;
         int minY = 0;
-        Debug.Log("level % 3:" + Game.level % 3);
         GameObject newObject = null;
         for (int i = 0; i < roomList.Count; i++)
         {
