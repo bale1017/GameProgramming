@@ -142,10 +142,10 @@ public class SoundPlayer : MonoBehaviour
         source.pitch = pitch;
         source.volume = volume;
         source.loop = loop;
+        source.rolloffMode = AudioRolloffMode.Linear;
         source.spatialize = !global;
         source.spatialBlend = 1;
         source.maxDistance = global ? float.MaxValue : maxDistance;
-        // source.rolloffMode = AudioRolloffMode.Custom;
         source.Play();
 
         PlayingSound p = new();

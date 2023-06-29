@@ -474,7 +474,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f0cf1991c4e28024aa02c73299aa0ca8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Slash: {fileID: 6996206583714718645}
   damage: 3
 --- !u!1 &7103884299703389329
 GameObject:
@@ -492,6 +491,7 @@ GameObject:
   - component: {fileID: 1718402103467401090}
   - component: {fileID: 3894965458839084759}
   - component: {fileID: 8006137486223461078}
+  - component: {fileID: 8972043395594239945}
   m_Layer: 0
   m_Name: Player
   m_TagString: Player
@@ -616,6 +616,7 @@ MonoBehaviour:
   initHealth: 25
   maxHealth: 25
   vulnerable: 1
+  health: 0
   OnHealthChange:
     m_PersistentCalls:
       m_Calls: []
@@ -657,8 +658,6 @@ MonoBehaviour:
     maxDepth: 0
     minNormalAngle: 0
     maxNormalAngle: 0
-  TakeDamage: {fileID: 4062612787869000377}
-  Death: {fileID: 5439566440192674106}
 --- !u!50 &1718402103467401090
 Rigidbody2D:
   serializedVersion: 4
@@ -752,3 +751,11 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
+--- !u!81 &8972043395594239945
+AudioListener:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7103884299703389329}
+  m_Enabled: 1
